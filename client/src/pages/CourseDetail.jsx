@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import Navbar from '../components/Navbar.jsx';
 import { courseFallback, courseMap } from '../data/courses.js';
+import './CourseDetail.css';
 
 const CourseDetail = () => {
   const { id } = useParams();

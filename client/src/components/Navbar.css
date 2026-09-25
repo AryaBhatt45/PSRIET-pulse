@@ -1,0 +1,70 @@
+.site-header {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid #e4e7ec;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-shell {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 0 16px;
+  min-height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  margin-left: -22px; /* Logo ko aur left shift karne ke liye */
+}
+
+/* Wide banner logo ke liye width zyada aur height auto rakhein */
+.brand-logo {
+  width: 175px; 
+  height: auto;
+  max-height: 55px;
+  object-fit: contain;
+}
+
+.site-header nav {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.nav-link {
+  color: #475467;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.2s;
+  font-size: 15px;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: #1769e0;
+}
+
+.institution-label {
+  font-size: 13px;
+  color: #667085;
+  background: #f8f9fc;
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1px solid #eaecf0;
+}
+
+@media (max-width: 768px) {
+  .institution-label {
+    display: none;
+  }
+  .brand-logo {
+    width: 130px;
+  }
+}
