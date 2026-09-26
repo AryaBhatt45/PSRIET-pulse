@@ -1,0 +1,160 @@
+/* D.El.Ed Unique Styling Theme (Teal/Cyan Tone) */
+.dled-unique-page {
+  background-color: #0b0f19;
+  color: #f1f5f9;
+  min-height: 100vh;
+  padding: 30px 40px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.dled-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.dled-unique-page .back-dash-btn {
+  background: #1e293b;
+  color: #2dd4bf;
+  padding: 8px 16px;
+  border-radius: 8px;
+  text-decoration: none;
+  border: 1px solid #334155;
+  transition: 0.2s;
+}
+
+.dled-unique-page .back-dash-btn:hover {
+  background: #0d9488;
+  color: #ffffff;
+}
+
+.dled-unique-page .badge {
+  background: rgba(13, 148, 136, 0.15);
+  color: #2dd4bf;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  border: 1px solid rgba(45, 212, 191, 0.3);
+}
+
+.dled-hero {
+  background: linear-gradient(135deg, #134e4a 0%, #042f2e 100%);
+  padding: 50px;
+  border-radius: 16px;
+  border: 1px solid #0f766e;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.dled-icon {
+  font-size: 3.5rem;
+  display: inline-block;
+  margin-bottom: 15px;
+  background: rgba(13, 148, 136, 0.2);
+  padding: 15px;
+  border-radius: 50%;
+}
+
+.dled-hero h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  color: #ffffff;
+}
+
+.dled-hero p {
+  color: #99f6e4;
+  max-width: 600px;
+  margin: 0 auto 25px auto;
+}
+
+.dled-meta-tags {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.dled-meta-tags span {
+  background: rgba(15, 23, 42, 0.6);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  border: 1px solid #334155;
+  color: #cbd5e1;
+}
+
+.dled-section h2 {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  color: #f8fafc;
+}
+
+.dled-sem-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.dled-sem-card {
+  background: #111827;
+  border: 1px solid #1f2937;
+  padding: 20px;
+  border-radius: 12px;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.dled-sem-card:hover {
+  transform: translateY(-4px);
+  border-color: #2dd4bf;
+}
+
+.dled-sem-card h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: #2dd4bf;
+}
+
+.dled-links {
+  display: flex;
+  gap: 10px;
+}
+
+.dled-btn {
+  flex: 1;
+  text-align: center;
+  padding: 8px 0;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.dled-hod-card {
+  display: flex;
+  align-items: center;
+  background: #111827;
+  border: 1px solid #1f2937;
+  padding: 25px;
+  border-radius: 12px;
+  gap: 25px;
+}
+
+.dled-hod-card h3 {
+  margin: 0 0 5px 0;
+  color: #ffffff;
+}
+
+.dled-unique-page .hod-title {
+  color: #2dd4bf;
+  font-size: 0.9rem;
+  margin: 0 0 8px 0;
+}
+
+.dled-unique-page .hod-desc {
+  color: #94a3b8;
+  font-size: 0.85rem;
+  margin: 0;
+  font-style: italic;
+}

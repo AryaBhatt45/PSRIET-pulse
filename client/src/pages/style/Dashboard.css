@@ -1,0 +1,168 @@
+/* Dashboard Global Reset & Theme */
+.dashboard-container {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #0f172a;
+    color: #f8fafc;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Navbar Styling */
+.dashboard-navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background: rgba(15, 23, 42, 0.9);
+    border-bottom: 1px solid #1e293b;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(8px);
+}
+
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px; /* Logo aur text ke beech ki spacing */
+}
+
+.nav-logo {
+    width: 42px;
+    height: 42px;
+    object-fit: contain;
+    border-radius: 8px; /* Thoda rounded look dene ke liye */
+}
+
+.nav-brand h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    background: linear-gradient(135deg, #60a5fa, #3b82f6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.portal-tag {
+    background: #1e293b;
+    color: #94a3b8;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    border: 1px solid #334155;
+}
+/* Glory Slide / Hero Section */
+.glory-slide-hero {
+    padding: 80px 20px;
+    text-align: center;
+    background: linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%);
+    border-bottom: 1px solid #1e293b;
+}
+
+.hero-content h1 {
+    font-size: 2.8rem;
+    margin-bottom: 15px;
+    color: #ffffff;
+}
+
+.hero-content p {
+    font-size: 1.15rem;
+    color: #94a3b8;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Courses Access Section */
+.courses-access-section {
+    padding: 60px 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    flex: 1;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.courses-access-section h2 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 10px;
+    color: #f1f5f9;
+}
+
+.section-sub {
+    text-align: center;
+    color: #94a3b8;
+    margin-bottom: 40px;
+}
+
+/* Course Buttons Grid */
+.course-btn-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.course-btn {
+    display: flex;
+    align-items: center;
+    background: #1e293b;
+    padding: 20px;
+    border-radius: 12px;
+    text-decoration: none;
+    color: #ffffff;
+    border: 1px solid #334155;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.course-btn:hover {
+    transform: translateY(-4px);
+    background: #2563eb;
+    border-color: #60a5fa;
+    box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3);
+}
+
+.course-btn .icon {
+    font-size: 2.5rem;
+    margin-right: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.course-btn h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: #ffffff;
+}
+
+.course-btn p {
+    margin: 4px 0 0 0;
+    font-size: 0.85rem;
+    color: #cbd5e1;
+}
+
+/* Footer Section */
+.dashboard-footer {
+    text-align: center;
+    padding: 25px;
+    background: #090d16;
+    border-top: 1px solid #1e293b;
+    color: #64748b;
+    font-size: 0.9rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .dashboard-navbar {
+        padding: 15px 20px;
+    }
+
+    .hero-content h1 {
+        font-size: 2rem;
+    }
+
+    .courses-access-section {
+        padding: 40px 20px;
+    }
+}
