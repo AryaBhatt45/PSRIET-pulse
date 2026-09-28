@@ -3,10 +3,22 @@ import { Link } from 'react-router-dom';
 import "./style/Dashboard.css";
 
 const bannerImages = [
-    'https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=1920&q=80',
-    'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1920&q=80',
-    'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1920&q=80',
-    'https://images.unsplash.com/photo-1592280771190-3e2e4d571952?auto=format&fit=crop&w=1920&q=80'
+    'https://images.jdmagicbox.com/v2/comp/pratapgarh-uttar_pradesh/j4/9999p5342.5342.200926233607.t6j4/catalogue/pt-sukhraj-raghunathi-institute-of-edu-and-technology-ranjitpur-chilbila-pratapgarh-uttar-pradesh-colleges-uzb1fjcrht.jpg',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQa6X6p_wr1B8BoHsZEqs4a2VvU_BBN5wixZmKiU91IQLVh4YqhOFTvOrUr&s=10',
+    'https://content3.jdmagicbox.com/v2/comp/pratapgarh-uttar_pradesh/j4/9999p5342.5342.200926233607.t6j4/catalogue/pt-sukhraj-raghunathi-institute-of-edu-and-technology-ranjitpur-chilbila-pratapgarh-uttar-pradesh-colleges-zzeboxk7ia.jpg',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6lMChRn8vOqw01PpJXA7_RvDkavz6HDZwGARyORogmyMOrsVO6z5ZTXc&s=10'
+];
+
+// College Facilities / Features for Infinite Slider
+const collegeFacilities = [
+    { title: "Advanced Computer Lab", icon: "💻", desc: "High-speed systems & coding setup" },
+    { title: "High-Speed Campus Wi-Fi", icon: "📶", desc: "24/7 internet connectivity for students" },
+    { title: "BSc Science Laboratories", icon: "🔬", desc: "Fully equipped Physics, Chem & Bio labs" },
+    { title: "Pure Drinking Water", icon: "🚰", desc: "RO purified water coolers across campus" },
+    { title: "Smart Digital Classrooms", icon: "🏛️", desc: "Interactive boards & modern learning" },
+    { title: "Rich Central Library", icon: "📚", desc: "Thousands of books & digital journals" },
+    { title: "Moot Court & Law Hall", icon: "⚖️", desc: "Practical training setup for LLB students" },
+    { title: "Sports & Playground", icon: "⚽", desc: "Indoor & outdoor games facilities" }
 ];
 
 const Dashboard = () => {
@@ -28,12 +40,7 @@ const Dashboard = () => {
             {/* 1. Clean Top Bar */}
             <header className="top-college-header">
                 <div className="header-left">
-                    <img
-                        src="/college .png"
-                        alt="College Logo"
-                        className="college-seal-icon"
-                        style={{ width: '48px', height: '48px', objectFit: 'contain', borderRadius: '8px' }}
-                    />
+                    <span className="college-seal-icon">🏛️</span>
                     <div>
                         <h1 className="header-college-title">Pt. Sukhraj Raghunathi Institute of Education & Technology</h1>
                         <span className="header-subtitle">Approved by NCTE & Affiliated to State University</span>
@@ -46,18 +53,16 @@ const Dashboard = () => {
 
             {/* 2. Hero Section with Background Slider */}
             <section className="glory-slide-hero">
-                {/* Background Slider */}
                 <div className="slider-bg-wrapper">
                     {bannerImages.map((imgUrl, index) => (
                         <div
                             key={index}
                             className={`bg-slide ${index === currentIdx ? 'active' : ''}`}
-                            style={{ backgroundImage: `linear-gradient(rgba(10, 25, 47, 0.75), rgba(10, 25, 47, 0.82)), url(${imgUrl})` }}
+                            style={{ backgroundImage: `linear-gradient(rgba(30, 10, 14, 0.5), rgba(30, 10, 14, 0.6)), url(${imgUrl})` }}
                         />
                     ))}
                 </div>
 
-                {/* Hero Foreground Card */}
                 <div className="hero-floating-card">
                     <span className="welcome-tag">Digital Learning Platform</span>
                     <h2>Welcome to PTSRIET Digital Campus</h2>
@@ -73,11 +78,9 @@ const Dashboard = () => {
                     </div>
                 </div>
 
-                {/* Arrow Controls */}
                 <button className="slider-arrow arrow-left" onClick={prevSlide} aria-label="Previous">&#10094;</button>
                 <button className="slider-arrow arrow-right" onClick={nextSlide} aria-label="Next">&#10095;</button>
 
-                {/* Dots */}
                 <div className="slider-dots-nav">
                     {bannerImages.map((_, index) => (
                         <button
@@ -90,7 +93,25 @@ const Dashboard = () => {
                 </div>
             </section>
 
-            {/* 3. Course Access Buttons Section */}
+            {/* 3. INFINITE SCROLLING FACILITIES SLIDER (Naya Section) */}
+            <section className="infinite-facilities-section">
+                <div className="infinite-header">
+                    <h2>🌟 Campus Facilities & Infrastructure</h2>
+                    <p>Experience world-class amenities designed for student success</p>
+                </div>
+                <div className="infinite-slider-track">
+                    {/* Items are duplicated twice to create a seamless infinite loop effect */}
+                    {[...collegeFacilities, ...collegeFacilities].map((facility, index) => (
+                        <div className="facility-card" key={index}>
+                            <div className="facility-icon">{facility.icon}</div>
+                            <h3>{facility.title}</h3>
+                            <p>{facility.desc}</p>
+                        </div>
+                    ))}
+                </div>
+            </section>
+
+            {/* 4. Course Access Buttons Section */}
             <section className="courses-access-section" id="courses">
                 <div className="courses-header">
                     <h2>Explore Our Courses</h2>
@@ -172,7 +193,7 @@ const Dashboard = () => {
                 </div>
             </section>
 
-            {/* 4. Complete Footer Section */}
+            {/* 5. Complete Footer Section */}
             <footer className="college-main-footer" id="about">
                 <div className="footer-top-grid">
                     <div className="footer-col about-col">

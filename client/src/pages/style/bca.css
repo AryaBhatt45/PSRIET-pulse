@@ -39,21 +39,12 @@
 }
 
 .bca-hero {
-  position: relative;
-  overflow: hidden;
+  background: linear-gradient(135deg, #1e1b4b 0%, #172554 100%);
+  padding: 50px;
   border-radius: 16px;
-  border: 1px solid #4338ca;
-  padding: 50px 20px;
+  border: 1px solid #1d4ed8;
   text-align: center;
-  min-height: 280px;
-  background-color: #0b0f19;
-  /* Glowing tech grid pattern jo coding/developer vibe dega */
-  background-image:
-    linear-gradient(to right, rgba(99, 102, 241, 0.07) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(99, 102, 241, 0.07) 1px, transparent 1px),
-    radial-gradient(circle at 50% 50%, rgba(79, 70, 229, 0.2) 0%, transparent 70%);
-  background-size: 30px 30px, 30px 30px, 100% 100%;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  margin-bottom: 40px;
 }
 
 .bca-icon {
@@ -140,20 +131,9 @@
   font-weight: 600;
 }
 
-.notes {
-  background: #1e3a8a;
-  color: #93c5fd;
-}
-
-.syllabus {
-  background: #065f46;
-  color: #6ee7b7;
-}
-
-.result {
-  background: #7c2d12;
-  color: #fca5a5;
-}
+.notes { background: #1e3a8a; color: #93c5fd; }
+.syllabus { background: #065f46; color: #6ee7b7; }
+.result { background: #7c2d12; color: #fca5a5; }
 
 .bca-hod-card {
   display: flex;
@@ -189,72 +169,4 @@
   font-size: 0.85rem;
   margin: 0;
   font-style: italic;
-}
-
-.sem-subjects {
-  font-size: 12px;
-  color: #94a3b8;
-  line-height: 1.4;
-}
-
-/* Futuristic Glowing Tech Logo Container */
-.bca-logo-container {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 70px;
-  height: 70px;
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(30, 27, 75, 0.8));
-  border: 1.5px solid #6366f1;
-  border-radius: 50%;
-  margin-bottom: 15px;
-  box-shadow: 0 0 20px rgba(99, 102, 241, 0.4), inset 0 0 10px rgba(99, 102, 241, 0.3);
-  animation: pulse-glow 3s infinite ease-in-out;
-}
-
-.bca-tech-svg {
-  width: 34px;
-  height: 34px;
-  stroke: #818cf8;
-  filter: drop-shadow(0 0 4px #6366f1);
-}
-
-/* Subtle glowing animation for high-tech feel */
-@keyframes pulse-glow {
-  0% {
-    box-shadow: 0 0 15px rgba(99, 102, 241, 0.3), inset 0 0 8px rgba(99, 102, 241, 0.2);
-  }
-
-  50% {
-    box-shadow: 0 0 25px rgba(99, 102, 241, 0.6), inset 0 0 15px rgba(99, 102, 241, 0.4);
-  }
-
-  100% {
-    box-shadow: 0 0 15px rgba(99, 102, 241, 0.3), inset 0 0 8px rgba(99, 102, 241, 0.2);
-  }
-}
-
-.bca-section-header {
-  margin-bottom: 25px;
-}
-
-.section-badge {
-  display: inline-block;
-  background: rgba(99, 102, 241, 0.15);
-  color: #818cf8;
-  border: 1px solid rgba(99, 102, 241, 0.3);
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 1px;
-  margin-bottom: 8px;
-  text-transform: uppercase;
-}
-
-.bca-section h2 {
-  font-size: 1.8rem;
-  margin: 0;
-  color: #f8fafc;
-  font-weight: 700;
 }
