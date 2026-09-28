@@ -39,13 +39,13 @@ const HeroSlider = () => {
 
       {/* College Intro & About Section */}
       <div className="hero-overlay-content">
-        <span className="portal-badge">PTSRIET Pulse Portal</span>
-        <h1 className="hero-main-title">Welcome to PTSRIET Digital Campus</h1>
+        <span className="portal-badge">PSRIET Pulse Portal</span>
+        <h1 className="hero-main-title">Welcome to PSRIET Digital Campus</h1>
         <p className="college-full-name">
           Pt. Sukhraj Raghunathi Institute of Education & Technology
         </p>
         <p className="college-about-text">
-          Empowering future educators and technocrats with world-class academic standards, 
+          Empowering future educators and technocrats with world-class academic standards,
           hands-on training labs, modern infrastructure, and holistic personality development.
         </p>
         <div className="hero-btn-group">
