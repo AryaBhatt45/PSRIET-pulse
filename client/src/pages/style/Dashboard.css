@@ -6,20 +6,21 @@
 
 .dashboard-container {
   min-height: 100vh;
-  background-color: #0b1120;
-  color: #f8fafc;
+  background-color: #c9e4ea; /* Clean Light/White background */
+  color: #1e293b;
   display: flex;
   flex-direction: column;
 }
 
 /* Top Header */
 .top-college-header {
-  background: #070d18;
+  background: #e9e7d2;
   padding: 16px 28px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 2px solid #f59e0b; /* Yellow accent line */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
 .header-left {
@@ -30,28 +31,29 @@
 
 .college-seal-icon {
   font-size: 2.2rem;
-  background: rgba(37, 99, 235, 0.2);
+  background: rgba(220, 38, 38, 0.1);
   padding: 6px 10px;
   border-radius: 8px;
-  border: 1px solid rgba(37, 99, 235, 0.4);
+  border: 1px solid rgba(220, 38, 38, 0.3);
 }
 
 .header-college-title {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #ffffff;
+  color: #1a0507;
   margin: 0;
 }
 
 .header-subtitle {
   font-size: 0.8rem;
-  color: #94a3b8;
+  color: #b91c1c; /* Deep Red accent */
+  font-weight: 500;
 }
 
 .session-pill {
-  background: rgba(245, 158, 11, 0.15);
-  color: #f59e0b;
-  border: 1px solid rgba(245, 158, 11, 0.4);
+  background: #fef3c7;
+  color: #d97706; /* Rich Yellow/Gold */
+  border: 1px solid #f59e0b;
   padding: 6px 14px;
   border-radius: 20px;
   font-size: 0.82rem;
@@ -103,17 +105,17 @@
   max-width: 860px;
   text-align: center;
   padding: 36px 28px;
-  background: rgba(15, 23, 42, 0.65);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(26, 5, 7, 0.82); /* Dark rich glassmorphism card for contrast on images */
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(245, 158, 11, 0.4);
   border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
 .welcome-tag {
   display: inline-block;
-  background: #2563eb;
+  background: #dc2626;
   color: #ffffff;
   padding: 4px 14px;
   border-radius: 12px;
@@ -132,14 +134,14 @@
 
 .hero-subtext {
   font-size: 1.15rem;
-  color: #93c5fd;
+  color: #fde047;
   font-weight: 600;
   margin-bottom: 14px;
 }
 
 .hero-description {
   font-size: 0.98rem;
-  color: #cbd5e1;
+  color: #f1f5f9;
   line-height: 1.6;
   max-width: 720px;
   margin: 0 auto 22px auto;
@@ -152,7 +154,7 @@
 }
 
 .hero-btn-primary {
-  background: #2563eb;
+  background: #dc2626;
   color: #ffffff;
   padding: 10px 22px;
   border-radius: 8px;
@@ -160,16 +162,17 @@
   font-weight: 600;
   font-size: 0.95rem;
   transition: background 0.2s;
+  border: 1px solid #ef4444;
 }
 
 .hero-btn-primary:hover {
-  background: #1d4ed8;
+  background: #b91c1c;
 }
 
 .hero-btn-outline {
   background: transparent;
-  color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.6);
+  color: #fde047;
+  border: 1px solid rgba(245, 158, 11, 0.6);
   padding: 10px 22px;
   border-radius: 8px;
   text-decoration: none;
@@ -179,8 +182,8 @@
 }
 
 .hero-btn-outline:hover {
-  background: #ffffff;
-  color: #0b1120;
+  background: #f59e0b;
+  color: #1a0507;
 }
 
 /* Slider Controls */
@@ -188,9 +191,9 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(15, 23, 42, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #ffffff;
+  background: rgba(26, 5, 7, 0.7);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  color: #fde047;
   font-size: 1.5rem;
   padding: 10px 14px;
   border-radius: 8px;
@@ -200,7 +203,8 @@
 }
 
 .slider-arrow:hover {
-  background: #2563eb;
+  background: #dc2626;
+  color: #ffffff;
 }
 
 .arrow-left { left: 20px; }
@@ -221,7 +225,7 @@
   height: 10px;
   border-radius: 50%;
   border: none;
-  background: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.5);
   cursor: pointer;
   padding: 0;
   transition: all 0.2s;
@@ -232,7 +236,91 @@
   transform: scale(1.3);
 }
 
-/* Courses Access Grid */
+/* --- Infinite Facilities Slider Styles --- */
+.infinite-facilities-section {
+    background: #ffffff;
+    padding: 40px 0;
+    overflow: hidden;
+    width: 100%;
+    border-top: 1px solid #e2e8f0;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.infinite-header {
+    text-align: center;
+    margin-bottom: 25px;
+    padding: 0 20px;
+}
+
+.infinite-header h2 {
+    font-size: 1.8rem;
+    color: #1a0507;
+    margin-bottom: 6px;
+}
+
+.infinite-header p {
+    color: #b91c1c;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+.infinite-slider-track {
+    display: flex;
+    width: max-content;
+    gap: 20px;
+    animation: scrollInfinite 30s linear infinite;
+}
+
+.infinite-slider-track:hover {
+    animation-play-state: paused;
+}
+
+.facility-card {
+    background: #fffbeb; /* Light warm creamy yellow tint */
+    border: 1px solid #fde68a;
+    padding: 20px 24px;
+    border-radius: 12px;
+    width: 270px;
+    flex-shrink: 0;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.facility-card:hover {
+    transform: translateY(-5px);
+    border-color: #f59e0b;
+    box-shadow: 0 8px 20px rgba(245, 158, 11, 0.15);
+}
+
+.facility-icon {
+    font-size: 2.2rem;
+    margin-bottom: 10px;
+}
+
+.facility-card h3 {
+    font-size: 1.1rem;
+    color: #1a0507;
+    margin-bottom: 6px;
+}
+
+.facility-card p {
+    font-size: 0.82rem;
+    color: #475569;
+    margin: 0;
+    line-height: 1.4;
+}
+
+@keyframes scrollInfinite {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(calc(-50% - 10px));
+    }
+}
+
+/* Courses Access Grid - MODERN STYLISH CARDS */
 .courses-access-section {
   padding: 50px 30px;
   max-width: 1200px;
@@ -242,62 +330,80 @@
 
 .courses-header h2 {
   font-size: 1.8rem;
-  color: #ffffff;
+  color: #1a0507;
   margin-bottom: 6px;
 }
 
 .section-sub {
-  color: #94a3b8;
+  color: #b91c1c;
   font-size: 0.95rem;
+  font-weight: 500;
   margin-bottom: 25px;
 }
 
 .course-btn-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 16px;
+  gap: 20px;
 }
 
+/* Best Premium Course Button Design */
 .course-btn {
   display: flex;
   align-items: center;
   gap: 16px;
-  background: #111a2e;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 18px 20px;
-  border-radius: 12px;
+  background: #ffffff; /* Clean white card */
+  border: 2px solid #fef3c7; /* Subtle warm border */
+  border-left: 5px solid #dc2626; /* Striking red accent strip on left */
+  padding: 20px;
+  border-radius: 14px;
   text-decoration: none;
-  color: #ffffff;
-  transition: all 0.25s ease;
+  color: #1e293b;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
 }
 
 .course-btn:hover {
-  transform: translateY(-3px);
-  border-color: #2563eb;
-  background: #17233d;
+  transform: translateY(-5px);
+  border-color: #f59e0b; /* Turns golden yellow on hover */
+  border-left-color: #f59e0b;
+  background: #fffdf4; /* Soft warm hover background */
+  box-shadow: 0 10px 25px rgba(245, 158, 11, 0.2);
 }
 
 .course-btn .icon {
-  font-size: 1.8rem;
+  font-size: 2.2rem;
+  background: #fef2f2;
+  padding: 10px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #fee2e2;
 }
 
 .course-btn h3 {
-  font-size: 1.2rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1a0507;
   margin: 0 0 4px 0;
 }
 
 .course-btn p {
   font-size: 0.85rem;
-  color: #94a3b8;
+  color: #64748b;
   margin: 0;
 }
 
 /* Footer Section */
 .college-main-footer {
-  background: #070d18;
+  background: #f4f4ec;
   padding: 50px 30px 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 3px solid #f50b0b;
   margin-top: auto;
+  color: #3a77b5;
 }
 
 .footer-top-grid {
@@ -309,13 +415,13 @@
 }
 
 .footer-col h3 {
-  color: #ffffff;
+  color: #161414;
   font-size: 1.2rem;
   margin-bottom: 12px;
 }
 
 .footer-col h4 {
-  color: #f1f5f9;
+  color: #d85753;
   font-size: 1rem;
   margin-bottom: 14px;
 }
@@ -323,7 +429,7 @@
 .footer-col p {
   font-size: 0.9rem;
   line-height: 1.6;
-  color: #94a3b8;
+  color: #e97b82;
   margin-bottom: 8px;
 }
 
@@ -338,24 +444,24 @@
 }
 
 .footer-col ul li a {
-  color: #94a3b8;
+  color: #0b1b2e;
   text-decoration: none;
   font-size: 0.9rem;
   transition: color 0.2s;
 }
 
 .footer-col ul li a:hover {
-  color: #38bdf8;
+  color: #fde047;
 }
 
 .footer-bottom-bar {
   max-width: 1200px;
   margin: 35px auto 0;
   padding-top: 18px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
   text-align: center;
   font-size: 0.85rem;
-  color: #64748b;
+  color: #bc2ea9;
 }
 
 @media (max-width: 850px) {

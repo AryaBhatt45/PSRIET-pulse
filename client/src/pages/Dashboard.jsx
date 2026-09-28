@@ -28,7 +28,12 @@ const Dashboard = () => {
             {/* 1. Clean Top Bar */}
             <header className="top-college-header">
                 <div className="header-left">
-                    <span className="college-seal-icon">🏛️</span>
+                    <img
+                        src="/college .png"
+                        alt="College Logo"
+                        className="college-seal-icon"
+                        style={{ width: '48px', height: '48px', objectFit: 'contain', borderRadius: '8px' }}
+                    />
                     <div>
                         <h1 className="header-college-title">Pt. Sukhraj Raghunathi Institute of Education & Technology</h1>
                         <span className="header-subtitle">Approved by NCTE & Affiliated to State University</span>
