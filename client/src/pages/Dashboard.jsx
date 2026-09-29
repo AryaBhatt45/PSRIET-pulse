@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import './style/Dashboard.css';
 
 const bannerImages = [
@@ -40,7 +41,41 @@ const Dashboard = () => {
 
     const nextSlide = () => setCurrentIdx((prev) => (prev + 1) % bannerImages.length);
     const prevSlide = () => setCurrentIdx((prev) => (prev - 1 + bannerImages.length) % bannerImages.length);
+    // Alumni Slider State & Logic
+    const [alumniIndex, setAlumniIndex] = React.useState(0);
 
+    const alumniList = [
+        {
+            name: "Amitabh Kumar",
+            batch: "BCA Batch of 2024",
+            role: "Software Engineer at TCS",
+            quote: "PTSRIET ka coding environment aur practical labs ki wajah se aaj main TCS mein Software Engineer hoon. Faculty ka support sabse best tha!",
+            image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=600&auto=format&fit=crop"
+        },
+        {
+            name: "Sneha Pandey",
+            batch: "LLB Batch of 2023",
+            role: "High Court Advocate",
+            quote: "College ka Moot Court setup aur regular court visit training ne mujhe court trials aur legal drafting me expert bana diya.",
+            image: "https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=600&auto=format&fit=crop"
+        },
+        {
+            name: "Rohit Sharma",
+            batch: "BBA Batch of 2024",
+            role: "Business Analyst at HDFC",
+            quote: "Management fest aur industrial visits ne meri corporate skills ko polish kiya. Yahan ka campus life sach me unmatched hai.",
+            image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=600&auto=format&fit=crop"
+        }
+    ];
+
+    React.useEffect(() => {
+        const timer = setInterval(() => {
+            setAlumniIndex((prev) => (prev + 1) % alumniList.length);
+        }, 4000);
+        return () => clearInterval(timer);
+    }, [alumniList.length]);
+
+    const currentAlumni = alumniList[alumniIndex];
     return (
         <div className="dashboard-container">
 
@@ -265,54 +300,37 @@ const Dashboard = () => {
                     </form>
                 </div>
             </section>
-
-            {/* 5. Alumni Success Stories / Testimonials */}
+            {/* 5. Alumni Success Stories / Sliding Wall of Fame */}
             <section className="dashboard-section-box">
                 <div className="section-header-wrap text-center">
-                    <span className="badge-tag">🌟 ALUMNI SUCCESS STORIES</span>
-                    <h2>Where Our Students Are Today</h2>
-                    <p className="section-sub">Hear from our proud graduates who started their journey at PTSRIET.</p>
+                    <span className="badge-tag">🌟 WALL OF FAME</span>
+                    <h2>Our Proud Achievers & Alumni</h2>
+                    <p className="section-sub">Hear from our brilliant graduates who started their journey at PTSRIET.</p>
                 </div>
 
-                <div className="alumni-grid">
-                    <div className="alumni-card">
-                        <div className="alumni-profile">
-                            <img src="/student1.jpg" alt="Alumni" className="alumni-avatar" />
-                            <div>
-                                <h3>Amitabh Kumar</h3>
-                                <span className="alumni-batch">BCA Batch of 2024</span>
-                            </div>
-                        </div>
-                        <p className="alumni-quote">"PTSRIET ka coding environment aur practical labs ki wajah se aaj main TCS mein Software Engineer hoon. Faculty ka support sabse best tha!"</p>
-                        <div className="alumni-company">🏢 Software Engineer at TCS</div>
+                <div className="alumni-single-slider-card">
+                    <div className="slider-image-side">
+                        <img src={currentAlumni.image} alt={currentAlumni.name} />
+                        <p className="slider-role-text">{currentAlumni.role}</p>
+                        <div className="slider-company-badge">{currentAlumni.role}</div>
                     </div>
+                    <div className="slider-content-side">
+                        <span className="slider-batch-tag">{currentAlumni.batch}</span>
+                        <h3>{currentAlumni.name}</h3>
+                        <p className="slider-quote">"{currentAlumni.quote}"</p>
 
-                    <div className="alumni-card">
-                        <div className="alumni-profile">
-                            <img src="/student2.jpg" alt="Alumni" className="alumni-avatar" />
-                            <div>
-                                <h3>Sneha Pandey</h3>
-                                <span className="alumni-batch">LLB Batch of 2023</span>
-                            </div>
+                        <div className="slider-dots">
+                            {alumniList.map((_, idx) => (
+                                <span
+                                    key={idx}
+                                    className={`dot ${alumniIndex === idx ? 'active' : ''}`}
+                                    onClick={() => setAlumniIndex(idx)}
+                                ></span>
+                            ))}
                         </div>
-                        <p className="alumni-quote">"College ka Moot Court setup aur regular court visit training ne mujhe court trials aur legal drafting me expert bana diya."</p>
-                        <div className="alumni-company">⚖️ High Court Advocate</div>
-                    </div>
-
-                    <div className="alumni-card">
-                        <div className="alumni-profile">
-                            <img src="/student3.jpg" alt="Alumni" className="alumni-avatar" />
-                            <div>
-                                <h3>Rohit Sharma</h3>
-                                <span className="alumni-batch">BBA Batch of 2024</span>
-                            </div>
-                        </div>
-                        <p className="alumni-quote">"Management fest aur industrial visits ne meri corporate skills ko polish kiya. Yahan ka campus life sach me unmatched hai."</p>
-                        <div className="alumni-company">💼 Business Analyst at HDFC</div>
                     </div>
                 </div>
             </section>
-
             {/* 5. College Main Footer */}
             <footer className="college-main-footer">
                 <div className="footer-top-grid">
@@ -337,9 +355,11 @@ const Dashboard = () => {
                         </ul>
                     </div>
                     <div className="footer-col">
-                        <h4>Contact Info</h4>
-                        <p>Pt. Sukhraj Raghunathi Institute of Education & Technology</p>
-                        <p>Academic Session 2026</p>
+                        <h4>Legal & Policy</h4>
+                        <ul>
+                            <li><Link to="/privacy-policy">Privacy Policy</Link></li>
+                            <li><Link to="/terms-conditions">Terms & Conditions</Link></li>
+                        </ul>
                     </div>
                 </div>
                 <div className="footer-bottom-bar">

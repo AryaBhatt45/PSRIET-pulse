@@ -13,6 +13,8 @@ import BscPage from "./src/pages/bsc";
 import DledPage from "./src/pages/dled";
 import LlbPage from "./src/pages/llb";
 import MaPage from "./src/pages/ma";
+import PrivacyPolicy from './src/pages/PrivacyPolicy';
+import TermsConditions from './src/pages/TermsConditions';
 
 function App() {
     return (
@@ -31,6 +33,8 @@ function App() {
                 <Route path="/dled" element={<DledPage />} />
                 <Route path="/llb" element={<LlbPage />} />
                 <Route path="/ma" element={<MaPage />} />
+                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                <Route path="/terms-conditions" element={<TermsConditions />} />
             </Routes>
         </Router>
     );
