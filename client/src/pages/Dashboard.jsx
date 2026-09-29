@@ -111,6 +111,18 @@ const Dashboard = () => {
 
                 </div>
             </section>
+            {/* Hindi Important Notice / Samarth Portal Alert */}
+            <div className="hindi-notice-banner">
+                <div className="hindi-notice-badge">⚠️ ZAROORI SUCHNA</div>
+                <div className="hindi-ticker-container">
+                    <div className="hindi-ticker-track">
+                        <span>📢 Samarth Portal par student login aur registration start ho chuka hai, sabhi vidyarthi apna profile update karein.</span>
+                        <span>💡 National Scholarship Portal (NSP) ka form bharne ki antim tithi nazdeek hai, jaldi apply karein.</span>
+                        <span>📝 Samast sankay (Departments) ke back exam aur assignment ki jankari ke liye apne department head se sampark karein.</span>
+                        <span>🚀 Naye satra 2026 ke pravesh (Admission) ke liye online enquiry form niche bharein.</span>
+                    </div>
+                </div>
+            </div>
 
             {/* 3. Infinite Facilities Slider Section */}
             <section className="infinite-facilities-section">
@@ -169,6 +181,135 @@ const Dashboard = () => {
                             </div>
                         </a>
                     ))}
+                </div>
+            </section>
+
+            {/* Upcoming Events & Notice Board Section */}
+            <section className="dashboard-section-box">
+                <div className="section-header-wrap">
+                    <div className="title-with-badge">
+                        <span className="badge-tag">📢 LIVE NOTICE BOARD</span>
+                        <span className="live-pulse-dot"></span>
+                    </div>
+                    <h2>Upcoming Events & Important Updates</h2>
+                </div>
+
+                {/* Top Scrolling Ticker Bar for Quick Alerts */}
+                <div className="notice-ticker-bar">
+                    <span className="ticker-badge">LATEST</span>
+                    <div className="ticker-content-box">
+                        <div className="ticker-animation-track">
+                            <span>🎓 Odd Semester Examination forms are now available. Last date is 15th July 2026.</span>
+                            <span>⚡ National Scholarship Portal (NSP) verification is live for all departments.</span>
+                            <span>🏆 Annual Tech Fest "TechnoPulse 2026" registration starts from next week!</span>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Detailed Event Cards Grid */}
+                <div className="events-notice-grid">
+                    <div className="notice-card highlight-card">
+                        <div className="notice-date-box">
+                            <span className="date-num">15</span>
+                            <span className="date-mon">JUL</span>
+                        </div>
+                        <div className="notice-content">
+                            <span className="event-category tech">Tech Fest</span>
+                            <h3>Annual Tech Fest - "TechnoPulse 2026"</h3>
+                            <p>Coding competition, web design hackathon, and AI model showcase for all departments.</p>
+                            <div className="notice-footer">
+                                <span className="notice-time">⏰ 10:00 AM onwards</span>
+                                <span className="notice-location">📍 Main Auditorium</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="notice-card">
+                        <div className="notice-date-box">
+                            <span className="date-num">22</span>
+                            <span className="date-mon">JUL</span>
+                        </div>
+                        <div className="notice-content">
+                            <span className="event-category sports">Sports & Culture</span>
+                            <h3>Inter-Department Sports Meet</h3>
+                            <p>Cricket, volleyball tournaments, and cultural dance competitions across faculties.</p>
+                            <div className="notice-footer">
+                                <span className="notice-time">⏰ 09:00 AM</span>
+                                <span className="notice-location">📍 College Ground</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            {/* 4. Quick Admission Enquiry / Callback Form Card */}
+            <section className="dashboard-section-box">
+                <div className="admission-enquiry-card">
+                    <div className="enquiry-text">
+                        <span className="badge-tag">🎓 ADMISSIONS OPEN 2026</span>
+                        <h2>Want to Join PTSRIET?</h2>
+                        <p>Fill out this quick form and our admission counsellor will call you back within 24 hours with complete details and fee structure.</p>
+                    </div>
+                    <form className="enquiry-form" onSubmit={(e) => { e.preventDefault(); alert('Query submitted successfully! Admission cell will contact you soon.'); }}>
+                        <input type="text" placeholder="Your Full Name" required className="enquiry-input" />
+                        <input type="tel" placeholder="Phone Number" required className="enquiry-input" />
+                        <select className="enquiry-input" required>
+                            <option value="">Select Interested Course</option>
+                            <option value="bca">BCA (Computer Applications)</option>
+                            <option value="bsc">BSc (Bachelor of Science)</option>
+                            <option value="bba">BBA (Business Administration)</option>
+                            <option value="bcom">B.Com (Commerce)</option>
+                            <option value="llb">LLB (Faculty of Law)</option>
+                            <option value="bed">B.Ed / D.El.Ed (Education)</option>
+                        </select>
+                        <button type="submit" className="enquiry-submit-btn">Request Callback 🚀</button>
+                    </form>
+                </div>
+            </section>
+
+            {/* 5. Alumni Success Stories / Testimonials */}
+            <section className="dashboard-section-box">
+                <div className="section-header-wrap text-center">
+                    <span className="badge-tag">🌟 ALUMNI SUCCESS STORIES</span>
+                    <h2>Where Our Students Are Today</h2>
+                    <p className="section-sub">Hear from our proud graduates who started their journey at PTSRIET.</p>
+                </div>
+
+                <div className="alumni-grid">
+                    <div className="alumni-card">
+                        <div className="alumni-profile">
+                            <img src="/student1.jpg" alt="Alumni" className="alumni-avatar" />
+                            <div>
+                                <h3>Amitabh Kumar</h3>
+                                <span className="alumni-batch">BCA Batch of 2024</span>
+                            </div>
+                        </div>
+                        <p className="alumni-quote">"PTSRIET ka coding environment aur practical labs ki wajah se aaj main TCS mein Software Engineer hoon. Faculty ka support sabse best tha!"</p>
+                        <div className="alumni-company">🏢 Software Engineer at TCS</div>
+                    </div>
+
+                    <div className="alumni-card">
+                        <div className="alumni-profile">
+                            <img src="/student2.jpg" alt="Alumni" className="alumni-avatar" />
+                            <div>
+                                <h3>Sneha Pandey</h3>
+                                <span className="alumni-batch">LLB Batch of 2023</span>
+                            </div>
+                        </div>
+                        <p className="alumni-quote">"College ka Moot Court setup aur regular court visit training ne mujhe court trials aur legal drafting me expert bana diya."</p>
+                        <div className="alumni-company">⚖️ High Court Advocate</div>
+                    </div>
+
+                    <div className="alumni-card">
+                        <div className="alumni-profile">
+                            <img src="/student3.jpg" alt="Alumni" className="alumni-avatar" />
+                            <div>
+                                <h3>Rohit Sharma</h3>
+                                <span className="alumni-batch">BBA Batch of 2024</span>
+                            </div>
+                        </div>
+                        <p className="alumni-quote">"Management fest aur industrial visits ne meri corporate skills ko polish kiya. Yahan ka campus life sach me unmatched hai."</p>
+                        <div className="alumni-company">💼 Business Analyst at HDFC</div>
+                    </div>
                 </div>
             </section>
 
