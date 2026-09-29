@@ -126,4 +126,4 @@ const BcomPage = () => {
   );
 };
 
-export default BcomPage;
+export default BcomPage;s
