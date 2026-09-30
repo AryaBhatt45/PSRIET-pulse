@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import './style/bca.css';
+import './style/bca.css'; // agar CSS file hai toh
 
 const BcaPage = () => {
   const semesters = [
@@ -24,6 +24,35 @@ const BcaPage = () => {
     "📝 Semester Back Exam Form filling started - Submit before 30th June",
     "🚀 New Practical Lab Sessions scheduled for odd semesters."
   ];
+  const [jobList, setJobList] = useState([
+    {
+      id: 1,
+      title: "Junior Software Engineer",
+      company: "Tata Consultancy Services (TCS)",
+      package: "3.6 - 4.5 LPA",
+      location: "Noida / Remote",
+      deadline: "15 July 2026",
+      applyLink: "https://www.tcs.com/careers"
+    },
+    {
+      id: 2,
+      title: "React Developer Intern",
+      company: "Tech Mahindra",
+      package: "25,000 / month",
+      location: "Bangalore",
+      deadline: "20 July 2026",
+      applyLink: "https://www.techmahindra.com/careers"
+    },
+    {
+      id: 3,
+      title: "Associate System Engineer",
+      company: "Wipro",
+      package: "3.5 LPA",
+      location: "Hyderabad",
+      deadline: "25 July 2026",
+      applyLink: "https://careers.wipro.com"
+    }
+  ]);
 
   return (
     <div className="bca-dashboard-theme">
@@ -86,6 +115,41 @@ const BcaPage = () => {
           ))}
         </div>
       </div>
+      {/* --- LIVE JOB OPPORTUNITIES TICKER SECTION --- */}
+      <div style={{ background: '#ffffff', borderRadius: '16px', padding: '25px', boxShadow: '0 4px 20px rgba(0,0,0,0.03)', border: '1px solid #e2e8f0', marginBottom: '30px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
+          <h3 style={{ margin: 0, color: '#0f172a', fontSize: '1.2rem', fontWeight: '700' }}>🚀 Live Job & Internship Openings</h3>
+          <span style={{ background: '#dcfce7', color: '#15803d', fontSize: '0.75rem', fontWeight: '700', padding: '4px 10px', borderRadius: '20px' }}>Updated Daily</span>
+        </div>
+        <p style={{ fontSize: '0.85rem', color: '#64748b', marginBottom: '20px' }}>Exclusive placement and internship opportunities for final year and passed-out BCA students.</p>
+
+        {/* Moving / Scrolling Container */}
+        <div className="job-ticker-wrapper" style={{ overflow: 'hidden', height: '220px', position: 'relative' }}>
+          <div className="job-ticker-track">
+            {jobList.map((job) => (
+              <div key={job.id} style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '16px 20px', marginBottom: '14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', transition: 'all 0.3s' }}>
+                <div>
+                  <span style={{ fontSize: '0.72rem', fontWeight: '700', color: '#2563eb', background: '#eff6ff', padding: '2px 8px', borderRadius: '4px' }}>{job.company}</span>
+                  <h4 style={{ margin: '6px 0 4px 0', color: '#0f172a', fontSize: '1.05rem' }}>{job.title}</h4>
+                  <p style={{ margin: 0, fontSize: '0.8rem', color: '#64748b' }}>💰 {job.package} &nbsp;|&nbsp; 📍 {job.location} &nbsp;|&nbsp; ⏳ Apply by: {job.deadline}</p>
+                </div>
+                <div>
+                  <a
+                    href={job.applyLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ background: '#2563eb', color: '#ffffff', padding: '8px 16px', borderRadius: '8px', textDecoration: 'none', fontSize: '0.85rem', fontWeight: '650', display: 'inline-block', boxShadow: '0 4px 12px rgba(37, 99, 235, 0.2)' }}
+                  >
+                    Apply Now →
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      {/* --- END JOB TICKER --- */}
+
 
       {/* Glory Infinite Slider Section with Student Photos */}
       <div className="bca-section glory-wrapper">
