@@ -1,8 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-
-// app.jsx ke andar imports ko aise update karein:
+// Main Portal & Courses Imports
 import Dashboard from "./src/pages/Dashboard";
 import BaPage from "./src/pages/ba";
 import BbaPage from "./src/pages/bba";
@@ -16,11 +15,16 @@ import MaPage from "./src/pages/ma";
 import PrivacyPolicy from './src/pages/PrivacyPolicy';
 import TermsConditions from './src/pages/TermsConditions';
 
+// Admin Panel Imports & Protected Route
+import AdminLogin from './src/pages/AdminLogin';
+import AdminDashboard from './src/pages/AdminDashboard';
+import ProtectedAdminRoute from './src/components/ProtectedAdminRoute';
+
 function App() {
     return (
         <Router>
             <Routes>
-                {/* Main Dashboard Page jahan glory slide aur sabhi courses ke buttons honge */}
+                {/* Main Dashboard Page */}
                 <Route path="/" element={<Dashboard />} />
 
                 {/* Sabhi Courses ke alag-alag independent pages */}
@@ -35,6 +39,17 @@ function App() {
                 <Route path="/ma" element={<MaPage />} />
                 <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                 <Route path="/terms-conditions" element={<TermsConditions />} />
+
+                {/* Separate Admin Panel Routes */}
+                <Route path="/admin/login" element={<AdminLogin />} />
+                <Route
+                    path="/admin/dashboard"
+                    element={
+                        <ProtectedAdminRoute>
+                            <AdminDashboard />
+                        </ProtectedAdminRoute>
+                    }
+                />
             </Routes>
         </Router>
     );
