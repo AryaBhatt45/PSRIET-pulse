@@ -299,6 +299,25 @@
   border: 1px solid #fecaca;
 }
 .result-l:hover { background: #dc2626; color: #fff; }
+/* Job Ticker Animation */
+.job-ticker-track {
+  display: flex;
+  flex-direction: column;
+  animation: scrollUp 12s linear infinite;
+}
+
+.job-ticker-track:hover {
+  animation-play-state: paused; /* Jab mouse le kar jayein toh ruk jaye taaki student easily click kar sake */
+}
+
+@keyframes scrollUp {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-50%);
+  }
+}
 
 /* Glory Infinite Slider Section */
 .glory-wrapper {

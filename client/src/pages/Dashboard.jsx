@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import AboutUsPage from './AboutUsPage';
 import './style/Dashboard.css';
 
 const bannerImages = [
@@ -31,6 +32,7 @@ const coursesList = [
 
 const Dashboard = () => {
     const [currentIdx, setCurrentIdx] = useState(0);
+    const [showFullAbout, setShowFullAbout] = useState(false);
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -38,6 +40,11 @@ const Dashboard = () => {
         }, 4000);
         return () => clearInterval(timer);
     }, []);
+    // Agar button click hua hai toh yeh AboutUsPage return kar dega
+    if (showFullAbout) {
+        return <AboutUsPage onBack={() => setShowFullAbout(false)} />;
+    }
+
 
     const nextSlide = () => setCurrentIdx((prev) => (prev + 1) % bannerImages.length);
     const prevSlide = () => setCurrentIdx((prev) => (prev - 1 + bannerImages.length) % bannerImages.length);
@@ -89,7 +96,19 @@ const Dashboard = () => {
                         style={{ width: '150px', height: 'auto', objectFit: 'contain', borderRadius: '8px' }}
                     />
                 </div>
-                <div className="header-right">
+                <div className="header-right" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    {/* Yeh raha naya Result Button */}
+                    <a
+                        href="https://mresult.prsuprayagraj.in/prsu_Results.aspx"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="header-result-btn"
+                    >
+                        <span>Check Result</span>
+                        {/* Sirf ek direction wala bold bouncing arrow */}
+                        <span className="bouncing-arrow">↙️</span>
+                    </a>
+
                     <span className="session-pill">Academic Session 2026</span>
                 </div>
             </header>
@@ -331,6 +350,55 @@ const Dashboard = () => {
                     </div>
                 </div>
             </section>
+            {/* About Institute Section - Similar to University Design */}
+            <section className="university-about-section" id="about">
+                <div className="about-header-title">
+                    <span className="about-subtitle-tag">ABOUT THE INSTITUTE</span>
+                    <h2>Pt. Sukhraj Raghunathi Institute of Education & Technology</h2>
+                </div>
+
+                <div className="university-about-grid">
+                    {/* Left Side: Description and Read More Button */}
+                    <div className="about-text-content">
+                        <p>
+                            Pt. Sukhraj Raghunathi Institute of Education & Technology is a premier institution dedicated to academic excellence, professional innovation, technical proficiency, and holistic student development. Established to foster higher education in Uttar Pradesh, the institute serves as a dynamic hub offering undergraduate and professional programs across Computer Applications, Sciences, Commerce, Arts, Law, and Teacher Education.
+                        </p>
+                        <p>
+                            Guided by strong core values of discipline, integrity, and social responsibility, the institute provides a vibrant learning environment equipped with modern labs, expert faculty, and structured career pathways to empower the youth.
+                        </p>
+                        <a href="#more-about" className="read-more-btn">
+                            Read More About Us
+                        </a>
+                    </div>
+
+                    {/* Right Side: Profile Cards with Images */}
+                    <div className="about-cards-wrapper">
+                        {/* Card 1 */}
+                        <div className="uni-profile-card">
+                            <div className="uni-card-img-container">
+                                <img src="/college .png" alt="Chairman / Principal" className="uni-profile-img" />
+                            </div>
+                            <h3>Dr. R. K. Vishwakarma</h3>
+                            <p className="uni-role">Managing Director & Patron</p>
+                            <p className="uni-subtext">PTSRIET Institution, U.P.</p>
+                            <a href="#profile-1" className="view-profile-btn">VIEW PROFILE</a>
+                        </div>
+
+                        {/* Card 2 */}
+                        <div className="uni-profile-card">
+                            <div className="uni-card-img-container">
+                                <img src="/nilesh.jpg" alt="HOD / Academic Head" className="uni-profile-img" />
+                            </div>
+                            <h3>Pradeep Pandey</h3>
+                            <p className="uni-role">HOD - Computer Science</p>
+                            <p className="uni-subtext">Technical & Academic Cell</p>
+                            <a href="#profile-2" className="view-profile-btn">VIEW PROFILE & MESSAGE</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
             {/* 5. College Main Footer */}
             <footer className="college-main-footer">
                 <div className="footer-top-grid">
