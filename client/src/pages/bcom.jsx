@@ -83,7 +83,7 @@ const BcomPage = () => {
                 <a href="#notes" className="bca-btn notes-l">Notes</a>
                 <a href="#quick-notes" className="bca-btn quick-l">Quick Notes ✨</a>
                 <a href={item.syllabusPdf} target="_blank" rel="noopener noreferrer" className="bca-btn syllabus-l">Syllabus PDF</a>
-                <a href="/result-dummy" className="bca-btn result-l">Result</a>
+                
               </div>
             </div>
           ))}
@@ -126,4 +126,4 @@ const BcomPage = () => {
   );
 };
 
-export default BcomPage;s
+export default BcomPage;
