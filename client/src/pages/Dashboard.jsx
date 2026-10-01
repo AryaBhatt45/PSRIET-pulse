@@ -33,23 +33,21 @@ const coursesList = [
 const Dashboard = () => {
     const [currentIdx, setCurrentIdx] = useState(0);
     const [showFullAbout, setShowFullAbout] = useState(false);
+    const [dynamicNotices, setDynamicNotices] = useState([]);
+    const [alumniIndex, setAlumniIndex] = useState(0);
+    const [selectedNotice, setSelectedNotice] = useState(null);
 
     useEffect(() => {
         const timer = setInterval(() => {
             setCurrentIdx((prev) => (prev + 1) % bannerImages.length);
         }, 4000);
+
+        // Load dynamic notices from admin localStorage
+        const savedNotices = JSON.parse(localStorage.getItem('pt_notices')) || [];
+        setDynamicNotices(savedNotices);
+
         return () => clearInterval(timer);
     }, []);
-    // Agar button click hua hai toh yeh AboutUsPage return kar dega
-    if (showFullAbout) {
-        return <AboutUsPage onBack={() => setShowFullAbout(false)} />;
-    }
-
-
-    const nextSlide = () => setCurrentIdx((prev) => (prev + 1) % bannerImages.length);
-    const prevSlide = () => setCurrentIdx((prev) => (prev - 1 + bannerImages.length) % bannerImages.length);
-    // Alumni Slider State & Logic
-    const [alumniIndex, setAlumniIndex] = React.useState(0);
 
     const alumniList = [
         {
@@ -75,14 +73,21 @@ const Dashboard = () => {
         }
     ];
 
-    React.useEffect(() => {
+    useEffect(() => {
         const timer = setInterval(() => {
             setAlumniIndex((prev) => (prev + 1) % alumniList.length);
         }, 4000);
         return () => clearInterval(timer);
     }, [alumniList.length]);
 
+    if (showFullAbout) {
+        return <AboutUsPage onBack={() => setShowFullAbout(false)} />;
+    }
+
+    const nextSlide = () => setCurrentIdx((prev) => (prev + 1) % bannerImages.length);
+    const prevSlide = () => setCurrentIdx((prev) => (prev - 1 + bannerImages.length) % bannerImages.length);
     const currentAlumni = alumniList[alumniIndex];
+
     return (
         <div className="dashboard-container">
 
@@ -97,27 +102,22 @@ const Dashboard = () => {
                     />
                 </div>
                 <div className="header-right" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    {/* Yeh raha naya Result Button */}
                     <a
-                        href="https://mresult.prsuprayagraj.in/prsu_Results.aspx"
+                        href="http://mresult.prsuprayagraj.in/prsu_Results.aspx"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="header-result-btn"
                     >
                         <span>Check Result</span>
-                        {/* Sirf ek direction wala bold bouncing arrow */}
                         <span className="bouncing-arrow">↙️</span>
                     </a>
-
                     <span className="session-pill">Academic Session 2026</span>
                 </div>
             </header>
 
-            {/* 2. Split Hero Section (Left Text, Right Image Slider) */}
+            {/* 2. Split Hero Section */}
             <section className="split-hero-section">
                 <div className="split-hero-container">
-
-                    {/* Left Text Content */}
                     <div className="hero-text-content">
                         <span className="welcome-tag">Digital Learning Platform</span>
                         <h2>Welcome to PTSRIET Digital Campus</h2>
@@ -133,7 +133,6 @@ const Dashboard = () => {
                         </div>
                     </div>
 
-                    {/* Right Image Slider Card */}
                     <div className="hero-slider-card">
                         <div className="slider-img-wrapper">
                             {bannerImages.map((imgUrl, index) => (
@@ -145,12 +144,8 @@ const Dashboard = () => {
                                 />
                             ))}
                         </div>
-
-                        {/* Arrow Controls */}
                         <button className="slider-arrow arrow-left" onClick={prevSlide} aria-label="Previous">&#10094;</button>
                         <button className="slider-arrow arrow-right" onClick={nextSlide} aria-label="Next">&#10095;</button>
-
-                        {/* Dots Indicator */}
                         <div className="slider-dots-nav">
                             {bannerImages.map((_, index) => (
                                 <button
@@ -162,18 +157,22 @@ const Dashboard = () => {
                             ))}
                         </div>
                     </div>
-
                 </div>
             </section>
-            {/* Hindi Important Notice / Samarth Portal Alert */}
+
+            {/* Hindi Important Notice */}
             <div className="hindi-notice-banner">
                 <div className="hindi-notice-badge">⚠️ ZAROORI SUCHNA</div>
                 <div className="hindi-ticker-container">
                     <div className="hindi-ticker-track">
-                        <span>📢 Samarth Portal par student login aur registration start ho chuka hai, sabhi vidyarthi apna profile update karein.</span>
+                        {dynamicNotices.length > 0 ? (
+                            dynamicNotices.map((n, idx) => (
+                                <span key={idx}>🚨 [{n.date}] {n.title}: {n.content} &nbsp;&nbsp;&nbsp;&nbsp;</span>
+                            ))
+                        ) : (
+                            <span>📢 Samarth Portal par student login aur registration start ho chuka hai, sabhi vidyarthi apna profile update karein. &nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        )}
                         <span>💡 National Scholarship Portal (NSP) ka form bharne ki antim tithi nazdeek hai, jaldi apply karein.</span>
-                        <span>📝 Samast sankay (Departments) ke back exam aur assignment ki jankari ke liye apne department head se sampark karein.</span>
-                        <span>🚀 Naye satra 2026 ke pravesh (Admission) ke liye online enquiry form niche bharein.</span>
                     </div>
                 </div>
             </div>
@@ -185,7 +184,6 @@ const Dashboard = () => {
                     <p>Explore world-class amenities designed for student growth</p>
                 </div>
                 <div className="infinite-slider-track">
-                    {/* Double mapping for seamless infinite loop */}
                     {[...facilitiesList, ...facilitiesList].map((facility, index) => (
                         <div className="facility-card" key={index}>
                             <div className="facility-icon">{facility.icon}</div>
@@ -195,6 +193,7 @@ const Dashboard = () => {
                     ))}
                 </div>
             </section>
+
             {/* Manager / Director Message Section */}
             <section className="manager-message-section">
                 <div className="manager-container">
@@ -219,7 +218,7 @@ const Dashboard = () => {
                 </div>
             </section>
 
-            {/* 4. Courses Access Section with Best Cards */}
+            {/* 4. Courses Access Section */}
             <section id="courses" className="courses-access-section">
                 <div className="courses-header">
                     <h2>Explore Our Courses</h2>
@@ -247,21 +246,25 @@ const Dashboard = () => {
                     </div>
                     <h2>Upcoming Events & Important Updates</h2>
                 </div>
-
-                {/* Top Scrolling Ticker Bar for Quick Alerts */}
-                <div className="notice-ticker-bar">
-                    <span className="ticker-badge">LATEST</span>
-                    <div className="ticker-content-box">
-                        <div className="ticker-animation-track">
-                            <span>🎓 Odd Semester Examination forms are now available. Last date is 15th July 2026.</span>
-                            <span>⚡ National Scholarship Portal (NSP) verification is live for all departments.</span>
-                            <span>🏆 Annual Tech Fest "TechnoPulse 2026" registration starts from next week!</span>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Detailed Event Cards Grid */}
                 <div className="events-notice-grid">
+                    {dynamicNotices.map((notice, idx) => (
+                        <div className="notice-card highlight-card" key={idx}>
+                            <div className="notice-date-box">
+                                <span className="date-num">NEW</span>
+                                <span className="date-mon">LIVE</span>
+                            </div>
+                            <div className="notice-content">
+                                <span className="event-category tech">Admin Broadcast</span>
+                                <h3 className="notice-card-title">{notice.title}</h3>
+                                <p className="notice-card-desc">{notice.content}</p>
+                                <div className="notice-footer">
+                                    <span className="notice-time">⏰ {notice.date}</span>
+                                    <span className="notice-location">📍 PTSRIET Portal</span>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+
                     <div className="notice-card highlight-card">
                         <div className="notice-date-box">
                             <span className="date-num">15</span>
@@ -269,33 +272,18 @@ const Dashboard = () => {
                         </div>
                         <div className="notice-content">
                             <span className="event-category tech">Tech Fest</span>
-                            <h3>Annual Tech Fest - "TechnoPulse 2026"</h3>
-                            <p>Coding competition, web design hackathon, and AI model showcase for all departments.</p>
+                            <h3 className="notice-card-title">Annual Tech Fest - "TechnoPulse 2026"</h3>
+                            <p className="notice-card-desc">Coding competition, web design hackathon, and AI model showcase for all departments.</p>
                             <div className="notice-footer">
                                 <span className="notice-time">⏰ 10:00 AM onwards</span>
                                 <span className="notice-location">📍 Main Auditorium</span>
                             </div>
                         </div>
                     </div>
-
-                    <div className="notice-card">
-                        <div className="notice-date-box">
-                            <span className="date-num">22</span>
-                            <span className="date-mon">JUL</span>
-                        </div>
-                        <div className="notice-content">
-                            <span className="event-category sports">Sports & Culture</span>
-                            <h3>Inter-Department Sports Meet</h3>
-                            <p>Cricket, volleyball tournaments, and cultural dance competitions across faculties.</p>
-                            <div className="notice-footer">
-                                <span className="notice-time">⏰ 09:00 AM</span>
-                                <span className="notice-location">📍 College Ground</span>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </section>
-            {/* 4. Quick Admission Enquiry / Callback Form Card */}
+
+            {/* Quick Admission Enquiry Card */}
             <section className="dashboard-section-box">
                 <div className="admission-enquiry-card">
                     <div className="enquiry-text">
@@ -319,7 +307,8 @@ const Dashboard = () => {
                     </form>
                 </div>
             </section>
-            {/* 5. Alumni Success Stories / Sliding Wall of Fame */}
+
+            {/* Alumni Success Stories */}
             <section className="dashboard-section-box">
                 <div className="section-header-wrap text-center">
                     <span className="badge-tag">🌟 WALL OF FAME</span>
@@ -350,7 +339,8 @@ const Dashboard = () => {
                     </div>
                 </div>
             </section>
-            {/* About Institute Section - Similar to University Design */}
+
+            {/* About Institute Section */}
             <section className="university-about-section" id="about">
                 <div className="about-header-title">
                     <span className="about-subtitle-tag">ABOUT THE INSTITUTE</span>
@@ -358,7 +348,6 @@ const Dashboard = () => {
                 </div>
 
                 <div className="university-about-grid">
-                    {/* Left Side: Description and Read More Button */}
                     <div className="about-text-content">
                         <p>
                             Pt. Sukhraj Raghunathi Institute of Education & Technology is a premier institution dedicated to academic excellence, professional innovation, technical proficiency, and holistic student development. Established to foster higher education in Uttar Pradesh, the institute serves as a dynamic hub offering undergraduate and professional programs across Computer Applications, Sciences, Commerce, Arts, Law, and Teacher Education.
@@ -371,9 +360,7 @@ const Dashboard = () => {
                         </a>
                     </div>
 
-                    {/* Right Side: Profile Cards with Images */}
                     <div className="about-cards-wrapper">
-                        {/* Card 1 */}
                         <div className="uni-profile-card">
                             <div className="uni-card-img-container">
                                 <img src="/college .png" alt="Chairman / Principal" className="uni-profile-img" />
@@ -384,7 +371,6 @@ const Dashboard = () => {
                             <a href="#profile-1" className="view-profile-btn">VIEW PROFILE</a>
                         </div>
 
-                        {/* Card 2 */}
                         <div className="uni-profile-card">
                             <div className="uni-card-img-container">
                                 <img src="/nilesh.jpg" alt="HOD / Academic Head" className="uni-profile-img" />
@@ -398,8 +384,7 @@ const Dashboard = () => {
                 </div>
             </section>
 
-
-            {/* 5. College Main Footer */}
+            {/* College Main Footer */}
             <footer className="college-main-footer">
                 <div className="footer-top-grid">
                     <div className="footer-col">
