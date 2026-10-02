@@ -1,10 +1,12 @@
 /* Admin Dashboard Red & Black Enterprise Theme */
 .admin-dashboard-wrapper {
     display: flex;
-    min-height: 100vh;
+    width: 100vw;
+    height: 100vh;
     background-color: #050505;
     font-family: "Montserrat", 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: #f3f4f6;
+    overflow: hidden;
 }
 
 /* Sidebar */
@@ -15,14 +17,25 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    flex-shrink: 0;
+    height: 100%;
     padding: 20px;
 }
 
-.sidebar-brand h3 {
-    color: #ffffff;
-    margin-bottom: 4px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
+/* Updated Brand Section for Logo */
+.sidebar-brand {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(255, 40, 40, 0.2);
+}
+
+.admin-brand-logo {
+    width: 140px;
+    max-height: 45px;
+    object-fit: contain;
 }
 
 .sidebar-brand span {
@@ -36,7 +49,7 @@
 .sidebar-menu {
     list-style: none;
     padding: 0;
-    margin-top: 30px;
+    margin-top: 20px;
 }
 
 .sidebar-menu li {
@@ -81,27 +94,35 @@
     box-shadow: 0 4px 15px rgba(230, 0, 0, 0.4);
 }
 
-/* Main Content */
+/* Main Content Area */
 .admin-main-content {
     flex: 1;
-    padding: 35px;
+    height: 100%;
+    padding: 30px;
     overflow-y: auto;
     background: radial-gradient(circle at top right, #140202 0%, #050505 60%);
+    box-sizing: border-box;
 }
 
+/* Topbar Header (Welcome + Badge) */
 .admin-topbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
     border-bottom: 1px solid rgba(255, 40, 40, 0.2);
     padding-bottom: 20px;
-    margin-bottom: 30px;
+    margin-bottom: 25px;
+    flex-wrap: nowrap;
 }
 
 .admin-topbar h2 {
     color: #ffffff;
+    font-size: 24px;
     font-weight: 700;
+    margin: 0;
     letter-spacing: 0.5px;
+    white-space: nowrap;
 }
 
 .admin-profile-badge span {
@@ -112,6 +133,7 @@
     font-size: 13px;
     font-weight: 600;
     border: 1px solid rgba(16, 185, 129, 0.3);
+    white-space: nowrap;
 }
 
 .admin-stats-grid {
@@ -151,6 +173,7 @@
     font-size: 32px;
     font-weight: 700;
     text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+    margin: 0;
 }
 
 .admin-action-section {

@@ -19,6 +19,7 @@ import TermsConditions from './src/pages/TermsConditions';
 import AdminLogin from './src/pages/AdminLogin';
 import AdminDashboard from './src/pages/AdminDashboard';
 import ProtectedAdminRoute from './src/components/ProtectedAdminRoute';
+import StudentResult from './src/components/StudentResult';
 
 function App() {
     return (
@@ -39,6 +40,7 @@ function App() {
                 <Route path="/ma" element={<MaPage />} />
                 <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                 <Route path="/terms-conditions" element={<TermsConditions />} />
+                <Route path="/student/result" element={<StudentResult />} />
 
                 {/* Separate Admin Panel Routes */}
                 <Route path="/admin/login" element={<AdminLogin />} />
