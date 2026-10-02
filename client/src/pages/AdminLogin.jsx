@@ -5,6 +5,7 @@ import './style/AdminLogin.css';
 export default function AdminLogin() {
     const [passcode, setPasscode] = useState('');
     const [error, setError] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
 
     const handleAdminLogin = (e) => {
@@ -21,18 +22,52 @@ export default function AdminLogin() {
         <div className="admin-login-body">
             <div className="container">
                 <div className="login-box">
-                    <form onSubmit={handleAdminLogin}>
+                    <form onSubmit={handleAdminLogin} autoComplete="off">
                         <h2>Admin Login</h2>
 
-                        <div className="input-box">
-                            <span className="icon"><i className="fa-solid fa-lock"></i></span>
+                        {/* Yahan humne flexbox laga diya hai taaki input aur eye icon side-by-side ekdam fit aayein */}
+                        <div className="input-box" style={{
+                            position: 'relative',
+                            display: 'flex',
+                            alignItems: 'center'
+                        }}>
+                            <span className="icon" style={{ position: 'absolute', left: '15px', zIndex: '2' }}>
+                                <i className="fa-solid fa-lock"></i>
+                            </span>
+
                             <input
-                                type="password"
+                                type={showPassword ? "text" : "password"}
                                 value={passcode}
                                 onChange={(e) => setPasscode(e.target.value)}
+                                autoComplete="new-password"
+                                name="random-admin-passcode-field"
                                 required
+                                style={{
+                                    width: '100%',
+                                    paddingLeft: '45px',
+                                    paddingRight: '45px', // Icon ke liye jagah chhori hai
+                                    boxSizing: 'border-box'
+                                }}
                             />
-                            <label className={passcode ? 'active' : ''}>Admin Passcode</label>
+
+                            <span
+                                onClick={() => setShowPassword(!showPassword)}
+                                style={{
+                                    cursor: 'pointer',
+                                    position: 'absolute',
+                                    right: '15px',
+                                    top: '50%',
+                                    transform: 'translateY(-50%)',
+                                    fontSize: '18px',
+                                    background: 'transparent',
+                                    border: 'none',
+                                    zIndex: '99'
+                                }}
+                            >
+                                {showPassword ? "👁️‍🗨️" : "👁️"}
+                            </span>
+
+                            <label className={passcode ? 'active' : ''} style={{ left: '45px' }}>Admin Passcode</label>
                         </div>
 
                         {error && <p style={{ color: '#ff4d4d', fontSize: '0.85em', marginBottom: '10px', textAlign: 'center' }}>{error}</p>}
