@@ -1,0 +1,212 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+
+.admin-login-body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Montserrat", sans-serif;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background-color: #050505;
+}
+
+.admin-login-body .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+    background: radial-gradient(circle at center, #140202 0%, #070101 60%, #000000 100%);
+}
+
+/* Vertical / Portrait Glass Card */
+.admin-login-body .login-box {
+    position: relative;
+    width: 380px;
+    /* Narrower width for a vertical look */
+    min-height: 440px;
+    /* Taller vertical structure */
+    padding: 35px 30px;
+    background: linear-gradient(135deg, rgba(20, 10, 10, 0.85) 0%, rgba(10, 5, 5, 0.95) 100%);
+    border-radius: 30px;
+    border: 1px solid rgba(255, 40, 40, 0.35);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.95),
+        0 0 40px rgba(255, 0, 0, 0.12),
+        inset 0 1px 2px rgba(255, 255, 255, 0.15),
+        inset 0 -2px 5px rgba(255, 0, 0, 0.2);
+}
+
+/* Admin Login Title */
+.admin-login-body h2 {
+    font-size: 1.9em;
+    color: #ffffff;
+    text-align: center;
+    margin-bottom: 40px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.9);
+}
+
+.admin-login-body .input-box {
+    position: relative;
+    width: 100%;
+    margin-bottom: 25px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 14px;
+    transition: all 0.3s ease;
+}
+
+.admin-login-body .input-box:focus-within {
+    border-color: rgba(255, 50, 50, 0.85);
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.25);
+    background: rgba(25, 5, 5, 0.5);
+}
+
+/* Admin Passcode label */
+.admin-login-body .input-box label {
+    position: absolute;
+    top: 50%;
+    left: 16px;
+    transform: translateY(-50%);
+    font-size: 0.95em;
+    color: #888888;
+    font-weight: 500;
+    pointer-events: none;
+    transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.admin-login-body .input-box input:focus~label,
+.admin-login-body .input-box label.active {
+    top: 10px;
+    font-size: 0.75em;
+    color: #ff3333;
+    font-weight: 600;
+    transform: translateY(0);
+    text-shadow: 0 0 6px rgba(255, 51, 51, 0.4);
+}
+
+.admin-login-body .input-box input {
+    width: 100%;
+    height: 52px;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 1.05em;
+    color: #ffffff;
+    font-weight: 600;
+    padding: 16px 40px 0 16px;
+    letter-spacing: 2px;
+}
+
+/* Browser autofill fix */
+.admin-login-body .input-box input:-webkit-autofill,
+.admin-login-body .input-box input:-webkit-autofill:hover,
+.admin-login-body .input-box input:-webkit-autofill:focus {
+    -webkit-text-fill-color: #ffffff;
+    -webkit-box-shadow: 0 0 0px 1000px #0a0505 inset;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+.admin-login-body .input-box .icon {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    color: #888888;
+    transform: translateY(-50%);
+    transition: color 0.3s ease;
+}
+
+.admin-login-body .input-box:focus-within .icon {
+    color: #ff3333;
+}
+
+/* Remember me & Forgot Password */
+.admin-login-body .remember-forgot {
+    margin: 15px 0 30px;
+    font-size: 0.85em;
+    color: #aaaaaa;
+    font-weight: 500;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.admin-login-body .remember-forgot label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.admin-login-body .remember-forgot label input {
+    margin-right: 8px;
+    accent-color: #cc0000;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.admin-login-body .remember-forgot a {
+    color: #ff4d4d;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+
+.admin-login-body .remember-forgot a:hover {
+    color: #ff1a1a;
+    text-decoration: underline;
+}
+
+/* Login Button - Premium Red & Black Glow */
+.admin-login-body button {
+    width: 100%;
+    height: 50px;
+    background: linear-gradient(135deg, #e60000 0%, #8a0000 100%);
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    font-size: 1.05em;
+    color: #ffffff;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 20px rgba(230, 0, 0, 0.4);
+}
+
+.admin-login-body button:hover {
+    background: linear-gradient(135deg, #ff1a1a 0%, #a30000 100%);
+    box-shadow: 0 8px 25px rgba(255, 0, 0, 0.6);
+    transform: translateY(-2px);
+}
+
+.admin-login-body button:active {
+    transform: translateY(1px);
+}
+
+/* Back to Home link */
+.admin-login-body .register-link {
+    font-size: 0.85em;
+    color: #888888;
+    text-align: center;
+    margin-top: 30px;
+    font-weight: 500;
+}
+
+.admin-login-body .register-link p a {
+    color: #ff4d4d;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+
+.admin-login-body .register-link p a:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}

@@ -18,6 +18,7 @@ const BcaPage = () => {
     { name: 'Aman Gupta', achievement: 'Secured 1st Rank in Major Project', image: '/student3.jpg' },
     { name: 'Neha Singh', achievement: 'AI Research Paper Published', image: '/student4.jpg' }
   ];
+
   const announcements = [
     "📢 BCA Admission Last Date: 15th July 2026",
     "💡 National Scholarship Portal (NSP) Form submission open - Apply Now!",
@@ -79,6 +80,7 @@ const BcaPage = () => {
           <img src="/logo.png" alt="BCA Logo" className="bca-hero-logo" />
         </div>
       </div>
+
       {/* Important Information Infinite Ticker */}
       <div className="important-ticker-wrapper">
         <div className="ticker-label">🚨 IMPORTANT UPDATES</div>
@@ -90,6 +92,7 @@ const BcaPage = () => {
           </div>
         </div>
       </div>
+
       {/* Semesters, Notes & Syllabus Section */}
       <div className="bca-section">
         <div className="bca-section-header">
@@ -109,7 +112,6 @@ const BcaPage = () => {
                 <a href="#notes" className="bca-btn notes-l">Notes</a>
                 <a href="#quick-notes" className="bca-btn quick-l">Quick Notes ✨</a>
                 <a href={item.syllabusPdf} target="_blank" rel="noopener noreferrer" className="bca-btn syllabus-l">Syllabus PDF</a>
-                <a href="/result-dummy" className="bca-btn result-l">Result</a>
               </div>
             </div>
           ))}
@@ -160,7 +162,6 @@ const BcaPage = () => {
 
         <div className="infinite-slider-container">
           <div className="infinite-track">
-            {/* Loop 2 times for seamless infinite effect */}
             {[...gloryStudents, ...gloryStudents].map((student, idx) => (
               <div key={idx} className="glory-card-light">
                 <img src={student.image} alt={student.name} className="glory-avatar" />
