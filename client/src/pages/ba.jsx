@@ -67,17 +67,17 @@ const BaPage = () => {
   ];
 
   const gloryStudents = [
-    { name: 'Vandana Shukla', achievement: 'Cleared UPPSC Pre Examination 2025', image: '/student1.jpg' },
-    { name: 'Anurag Yadav', achievement: 'Published Poetry Anthology in National Forum', image: '/student2.jpg' },
-    { name: 'Pooja Pandey', achievement: 'Rank 1 in University B.A Merit List', image: '/student3.jpg' },
-    { name: 'Kishan Mishra', achievement: 'Selected for National Debate Championship', image: '/student4.jpg' }
+    { name: 'Arvind Yadav', achievement: 'Cleared UPPSC PCS Prelims on 1st Attempt', image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&h=200&q=80' },
+    { name: 'Monika Tiwari', achievement: 'Gold Medalist - University Debate Championship', image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&h=200&q=80' },
+    { name: 'Alok Nath Pandey', achievement: 'Selected as Sub-Inspector (UP Police)', image: 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=200&h=200&q=80' },
+    { name: 'Ritu Srivastava', achievement: 'Published Poetry Anthology in Hindi Academy', image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&h=200&q=80' }
   ];
 
   const announcements = [
-    "📢 B.A Admission Open for Academic Session 2026-27",
-    "📚 Annual Seminar on Indian History & Literature scheduled for next month.",
-    "💡 National Scholarship Portal (NSP) Form submission open - Apply Now!",
-    "📝 Even Semester Mid-Term Assignment submission last date: 20th July."
+    "📢 B.A. (Bachelor of Arts) Admissions Active for 2026 Session",
+    "📖 Special Civil Services Foundation Guidance Cell meeting this Saturday",
+    "📝 Internal assignment submission notice for Semester 2, 4 & 6",
+    "🎭 Annual Cultural & Literary Inter-College Fest registrations open."
   ];
 
   return (
@@ -177,7 +177,6 @@ const BaPage = () => {
           <p style={{ color: '#64748b', fontSize: '0.8rem', margin: 0, fontStyle: 'italic' }}>"Empowering students through historical perspectives, social conscience, and linguistic excellence."</p>
         </div>
       </div>
-
     </div>
   );
 };
