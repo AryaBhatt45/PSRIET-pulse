@@ -4,45 +4,42 @@ import './style/bca.css';
 
 const BedPage = () => {
   const semesters = [
-    { sem: 'Sem 1', subjects: 'Childhood and Growing Up, Contemporary India and Education, Language Across Curriculum, EPC-1', syllabusPdf: '/syllabus/bed-sem1-syllabus.pdf' },
-    { sem: 'Sem 2', subjects: 'Learning and Teaching, Pedagogy of School Subjects (Part I & II), Knowledge and Curriculum, EPC-2', syllabusPdf: '/syllabus/bed-sem2-syllabus.pdf' },
-    { sem: 'Sem 3', subjects: 'School Internship (16 Weeks Field Work), Practical Teaching Competency, Lesson Planning Viva', syllabusPdf: '/syllabus/bed-sem3-syllabus.pdf' },
-    { sem: 'Sem 4', subjects: 'Gender School and Society, Creating an Inclusive School, Assessment for Learning, Environmental Education', syllabusPdf: '/syllabus/bed-sem4-syllabus.pdf' }
+    { sem: 'Sem 1', subjects: 'Childhood and Growing Up, Contemporary India & Education, Language Across Curriculum, ICT', syllabusPdf: '/syllabus/bed-sem1-syllabus.pdf' },
+    { sem: 'Sem 2', subjects: 'Learning & Teaching, Pedagogy of School Subject 1 & 2, Drama & Art in Education', syllabusPdf: '/syllabus/bed-sem2-syllabus.pdf' },
+    { sem: 'Sem 3', subjects: 'School Internship (16 Weeks), Micro Teaching Competency, Preparation of TLM', syllabusPdf: '/syllabus/bed-sem3-syllabus.pdf' },
+    { sem: 'Sem 4', subjects: 'Gender School & Society, Creating an Inclusive School, Assessment for Learning', syllabusPdf: '/syllabus/bed-sem4-syllabus.pdf' }
   ];
 
   const gloryStudents = [
-    { name: 'Ritu Tiwari', achievement: 'Cleared CTET with 128 Marks in 1st Attempt', image: '/student1.jpg' },
-    { name: 'Alok Nath', achievement: 'Selected as Primary Teacher (UP Govt)', image: '/student2.jpg' },
-    { name: 'Sunita Yadav', achievement: 'Gold Medalist in B.Ed University Exams', image: '/student3.jpg' },
-    { name: 'Mohit Mishra', achievement: 'Best Student Teacher Award 2025', image: '/student4.jpg' }
+    { name: 'Meenakshi Dubey', achievement: 'Selected as Primary Teacher in Super TET (Rank 14)', image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&h=200&q=80' },
+    { name: 'Sanjay Kumar', achievement: 'Qualified CTET Both Papers with 132/150 Score', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&h=200&q=80' },
+    { name: 'Vandana Shukla', achievement: 'Best Student Teacher - State Micro-teaching Camp', image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&h=200&q=80' },
+    { name: 'Gaurav Tripathi', achievement: 'Selected in KVS TGT Recruitment Exam', image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=200&h=200&q=80' }
   ];
 
   const announcements = [
-    "📢 B.Ed Admission Open for Session 2026-28",
-    "🏫 16-Week School Teaching Internship begins next month for Sem 3.",
-    "💡 National Scholarship Portal (NSP) Form submission open - Apply Now!",
-    "📝 Practical File and Lesson Plan submission date announced."
+    "📢 B.Ed Session 2026-28 Counseling & Direct Admissions Open",
+    "📋 School Teaching Internship (16 Weeks) list published for Sem 3",
+    "💡 CTET / UPTET special pedagogical workshop every Sunday",
+    "📝 Practical file & micro-teaching lesson plan submission dates."
   ];
 
   return (
     <div className="bca-dashboard-theme">
-
-      {/* Top Bar */}
       <div className="bca-top-bar">
         <Link to="/" className="back-dash-btn">← Back to Dashboard</Link>
-        <span className="badge-pill">Department of Teacher Education</span>
+        <span className="badge-pill">Faculty of Education</span>
       </div>
 
-      {/* Clean Dashboard-Style Hero Section */}
       <div className="bca-hero-dashboard">
         <div className="bca-hero-left">
           <span className="hero-tag">ACADEMIC EXCELLENCE</span>
           <h1>Bachelor of Education (B.Ed)</h1>
-          <p>Master modern pedagogical techniques, educational psychology, and classroom leadership with a professional 2-year NCTE curriculum.</p>
+          <p>Equip yourself with progressive pedagogical psychology, classroom administration, and interactive teaching skills.</p>
           <div className="bca-meta-tags">
             <span>⏳ 2 Years</span>
             <span>🪑 100 Seats</span>
-            <span>💰 ₹35,000 / Year</span>
+            <span>💰 ₹51,250 / Year</span>
           </div>
         </div>
         <div className="bca-hero-right">
@@ -50,7 +47,6 @@ const BedPage = () => {
         </div>
       </div>
 
-      {/* Important Information Infinite Ticker */}
       <div className="important-ticker-wrapper">
         <div className="ticker-label">🚨 IMPORTANT UPDATES</div>
         <div className="ticker-container">
@@ -62,7 +58,6 @@ const BedPage = () => {
         </div>
       </div>
 
-      {/* Semesters, Notes & Syllabus Section */}
       <div className="bca-section">
         <div className="bca-section-header">
           <span className="section-badge">🚀 ROADMAP</span>
@@ -76,30 +71,34 @@ const BedPage = () => {
                 <span className="active-dot"></span>
               </div>
               <p className="sem-subjects">{item.subjects}</p>
-
               <div className="bca-links">
                 <a href="#notes" className="bca-btn notes-l">Notes</a>
                 <a href="#quick-notes" className="bca-btn quick-l">Quick Notes ✨</a>
                 <a href={item.syllabusPdf} target="_blank" rel="noopener noreferrer" className="bca-btn syllabus-l">Syllabus PDF</a>
-                <a href="/result-dummy" className="bca-btn result-l">Result</a>
               </div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Glory Infinite Slider Section with Student Photos */}
       <div className="bca-section glory-wrapper">
         <div className="bca-section-header text-center">
           <span className="section-badge">🏆 GLORY & ACHIEVEMENTS</span>
           <h2>Student Hall of Fame</h2>
         </div>
-
         <div className="infinite-slider-container">
           <div className="infinite-track">
             {[...gloryStudents, ...gloryStudents].map((student, idx) => (
               <div key={idx} className="glory-card-light">
-                <img src={student.image} alt={student.name} className="glory-avatar" />
+                <img 
+                  src={student.image} 
+                  alt={student.name} 
+                  className="glory-avatar" 
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(student.name)}&background=0D8ABC&color=fff&size=128`;
+                  }}
+                />
                 <div className="glory-text">
                   <h3>{student.name}</h3>
                   <p>{student.achievement}</p>
@@ -110,16 +109,14 @@ const BedPage = () => {
         </div>
       </div>
 
-      {/* HOD Profile */}
       <div className="bca-hod-card-light">
         <img src="/nilesh.jpg" className="hod-img-light" alt="HOD" />
         <div>
-          <h3>Dr. Anupama Srivastava</h3>
-          <p className="hod-title-light">HOD - Department of Education</p>
-          <p className="hod-desc-light">"Shaping future nation builders with ethics, practical micro-teaching, and holistic child development."</p>
+          <h3>Dr. Anupama Mishra</h3>
+          <p className="hod-title-light">Dean & HOD - Department of Education</p>
+          <p className="hod-desc-light">"Transforming passionate scholars into inspiring, empathetic, and innovative educators."</p>
         </div>
       </div>
-
     </div>
   );
 };
