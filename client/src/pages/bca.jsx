@@ -112,7 +112,7 @@ const BcaPage = () => {
       </div>
 
       <div className="bca-hod-card-light">
-        <img src="/nilesh.jpg" className="hod-img-light" alt="HOD" />
+        <img src="/hod.jpg" className="hod-img-light" alt="HOD" />
         <div>
           <h3>Pradeep Pandey</h3>
           <p className="hod-title-light">HOD - Computer Science Department</p>

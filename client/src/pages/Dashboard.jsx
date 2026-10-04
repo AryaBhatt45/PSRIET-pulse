@@ -387,7 +387,7 @@ const Dashboard = () => {
                         {/* Card 2 */}
                         <div className="uni-profile-card">
                             <div className="uni-card-img-container">
-                                <img src="/nilesh.jpg" alt="HOD / Academic Head" className="uni-profile-img" />
+                                <img src="/hod.jpg" alt="HOD / Academic Head" className="uni-profile-img" />
                             </div>
                             <h3>Pradeep Pandey</h3>
                             <p className="uni-role">HOD - Computer Science</p>
