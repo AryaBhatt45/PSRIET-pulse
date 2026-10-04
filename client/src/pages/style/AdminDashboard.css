@@ -195,3 +195,208 @@
     color: #aaaaaa;
     font-size: 14px;
 }
+
+.student-form-card {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 40, 40, 0.25);
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+.student-input-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1.5fr 1fr;
+    gap: 15px;
+    margin-top: 15px;
+    margin-bottom: 20px;
+}
+
+.student-form-card input,
+.student-select,
+.student-search-input {
+    padding: 12px 16px;
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(255, 40, 40, 0.3);
+    border-radius: 8px;
+    color: #fff;
+    outline: none;
+    font-size: 14px;
+}
+
+.student-select {
+    background: #121212;
+    cursor: pointer;
+}
+
+.add-student-btn {
+    padding: 12px 24px;
+    background: #e60000;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.student-search-input {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.student-item-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 16px 20px;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    border: 1px solid rgba(255, 40, 40, 0.2);
+}
+
+.student-course-badge {
+    font-size: 12px;
+    background: rgba(59, 130, 246, 0.2);
+    color: #3b82f6;
+    border: 1px solid rgba(59, 130, 246, 0.4);
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-left: 10px;
+    font-weight: 600;
+}
+
+.student-info-text {
+    margin: 6px 0 0;
+    font-size: 13px;
+    color: #aaa;
+}
+
+.remove-student-btn {
+    background: #ef4444;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* Manage Students Section CSS Styles */
+.student-form-card {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 40, 40, 0.25);
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.student-form-card h4 {
+    color: #fff;
+    font-size: 18px;
+    margin-bottom: 16px;
+    font-weight: 600;
+}
+
+.student-input-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1.5fr 1fr;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.student-form-card input,
+.student-select,
+.student-search-input {
+    padding: 12px 16px;
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(255, 40, 40, 0.3);
+    border-radius: 8px;
+    color: #fff;
+    outline: none;
+    font-size: 14px;
+    width: 100%;
+}
+
+.student-select {
+    background: #121212;
+    cursor: pointer;
+}
+
+.add-student-btn {
+    padding: 12px 24px;
+    background: #e60000;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s;
+}
+
+.add-student-btn:hover {
+    background: #ff1a1a;
+}
+
+.student-search-input {
+    margin-bottom: 20px;
+}
+
+.student-item-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 16px 20px;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    border: 1px solid rgba(255, 40, 40, 0.2);
+}
+
+.student-name {
+    color: #fff;
+    font-size: 16px;
+}
+
+.student-course-badge {
+    font-size: 12px;
+    background: rgba(59, 130, 246, 0.2);
+    color: #3b82f6;
+    border: 1px solid rgba(59, 130, 246, 0.4);
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-left: 10px;
+    font-weight: 600;
+}
+
+.student-info-text {
+    margin: 6px 0 0;
+    font-size: 13px;
+    color: #aaa;
+}
+
+.remove-student-btn {
+    background: #ef4444;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    transition: background 0.2s;
+}
+
+.remove-student-btn:hover {
+    background: #dc2626;
+}
+
+.no-students-text {
+    color: #888;
+    font-size: 14px;
+}
