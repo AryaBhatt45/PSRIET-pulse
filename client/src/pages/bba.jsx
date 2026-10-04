@@ -4,47 +4,44 @@ import './style/bca.css';
 
 const BbaPage = () => {
   const semesters = [
-    { sem: 'Sem 1', subjects: 'Principles of Management, Business Economics, Financial Accounting, Business Math', syllabusPdf: '/syllabus/bba-sem1-syllabus.pdf' },
-    { sem: 'Sem 2', subjects: 'Organizational Behaviour, Business Communication, Marketing Management, Statistics', syllabusPdf: '/syllabus/bba-sem2-syllabus.pdf' },
-    { sem: 'Sem 3', subjects: 'Human Resource Management, Business Law, Cost Accounting, Production Mgmt', syllabusPdf: '/syllabus/bba-sem3-syllabus.pdf' },
-    { sem: 'Sem 4', subjects: 'Financial Management, Research Methodology, Operations Management, MIS', syllabusPdf: '/syllabus/bba-sem4-syllabus.pdf' },
-    { sem: 'Sem 5', subjects: 'Strategic Management, Consumer Behaviour, Digital Marketing, Entrepreneurship', syllabusPdf: '/syllabus/bba-sem5-syllabus.pdf' },
-    { sem: 'Sem 6', subjects: 'International Business, Business Policy, Environmental Studies, Major Project', syllabusPdf: '/syllabus/bba-sem6-syllabus.pdf' }
+    { sem: 'Sem 1', subjects: 'Principles of Management, Business Economics, Business Communication, Accounting', syllabusPdf: '/syllabus/bba-sem1-syllabus.pdf' },
+    { sem: 'Sem 2', subjects: 'Organizational Behavior, Business Statistics, Marketing Management, Business Law', syllabusPdf: '/syllabus/bba-sem2-syllabus.pdf' },
+    { sem: 'Sem 3', subjects: 'Human Resource Management, Cost & Management Accounting, Business Environment', syllabusPdf: '/syllabus/bba-sem3-syllabus.pdf' },
+    { sem: 'Sem 4', subjects: 'Financial Management, Research Methodology, Indian Banking System, Company Law', syllabusPdf: '/syllabus/bba-sem4-syllabus.pdf' },
+    { sem: 'Sem 5', subjects: 'Entrepreneurship Development, Strategic Management, Income Tax Law', syllabusPdf: '/syllabus/bba-sem5-syllabus.pdf' },
+    { sem: 'Sem 6', subjects: 'International Business, Project Management & Viva, Business Ethics', syllabusPdf: '/syllabus/bba-sem6-syllabus.pdf' }
   ];
 
   const gloryStudents = [
-    { name: 'Rohit Sharma', achievement: 'Selected as Business Analyst at HDFC', image: '/student1.jpg' },
-    { name: 'Ananya Roy', achievement: 'Winner - National B-Plan Challenge 2025', image: '/student2.jpg' },
-    { name: 'Sameer Khan', achievement: 'Secured Top Placement in FMCG Brand', image: '/student3.jpg' },
-    { name: 'Pooja Tiwari', achievement: '1st Rank in University BBA Examinations', image: '/student4.jpg' }
+    { name: 'Rishabh Soni', achievement: 'Placed at Deloitte with ₹8.5 LPA Package', image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=200&h=200&q=80' },
+    { name: 'Shreya Saxena', achievement: 'Winner - National B-Plan Startup Pitch', image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&h=200&q=80' },
+    { name: 'Nikhil Chauhan', achievement: 'Selected for IIM Indore MDP Summer Session', image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=200&h=200&q=80' },
+    { name: 'Pooja Agarwal', achievement: 'Founded Campus Social Entrepreneurship Cell', image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=200&h=200&q=80' }
   ];
 
   const announcements = [
-    "📢 BBA Admission Open for Academic Session 2026-27",
-    "💼 Summer Internship Project guidelines uploaded for Sem 4 & 6.",
-    "💡 National Scholarship Portal (NSP) Form submission open - Apply Now!",
-    "📝 Back Exam Form filling started - Submit before 30th June."
+    "📢 BBA Summer Internship Placement Drive Starting Soon",
+    "💼 Corporate Guest Lecture by Industry Experts on Friday",
+    "📈 B-School Case Study Competition registrations open",
+    "📝 4th & 6th Sem Viva-Voce Presentation timetable released."
   ];
 
   return (
     <div className="bca-dashboard-theme">
-
-      {/* Top Bar */}
       <div className="bca-top-bar">
         <Link to="/" className="back-dash-btn">← Back to Dashboard</Link>
-        <span className="badge-pill">Department of Business Administration</span>
+        <span className="badge-pill">Department of Management Studies</span>
       </div>
 
-      {/* Clean Dashboard-Style Hero Section */}
       <div className="bca-hero-dashboard">
         <div className="bca-hero-left">
           <span className="hero-tag">ACADEMIC EXCELLENCE</span>
           <h1>Bachelor of Business Administration (BBA)</h1>
-          <p>Develop managerial leadership, modern marketing strategies, and financial expertise with a professional 3-year curriculum.</p>
+          <p>Develop leadership acumen, strategic financial planning, corporate communication, and startup agility.</p>
           <div className="bca-meta-tags">
             <span>⏳ 3 Years</span>
             <span>🪑 60 Seats</span>
-            <span>💰 ₹22,000 / Year</span>
+            <span>💰 ₹32,000 / Year</span>
           </div>
         </div>
         <div className="bca-hero-right">
@@ -52,7 +49,6 @@ const BbaPage = () => {
         </div>
       </div>
 
-      {/* Important Information Infinite Ticker */}
       <div className="important-ticker-wrapper">
         <div className="ticker-label">🚨 IMPORTANT UPDATES</div>
         <div className="ticker-container">
@@ -64,7 +60,6 @@ const BbaPage = () => {
         </div>
       </div>
 
-      {/* Semesters, Notes & Syllabus Section */}
       <div className="bca-section">
         <div className="bca-section-header">
           <span className="section-badge">🚀 ROADMAP</span>
@@ -78,30 +73,34 @@ const BbaPage = () => {
                 <span className="active-dot"></span>
               </div>
               <p className="sem-subjects">{item.subjects}</p>
-
               <div className="bca-links">
                 <a href="#notes" className="bca-btn notes-l">Notes</a>
                 <a href="#quick-notes" className="bca-btn quick-l">Quick Notes ✨</a>
                 <a href={item.syllabusPdf} target="_blank" rel="noopener noreferrer" className="bca-btn syllabus-l">Syllabus PDF</a>
-                <a href="/result-dummy" className="bca-btn result-l">Result</a>
               </div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Glory Infinite Slider Section with Student Photos */}
       <div className="bca-section glory-wrapper">
         <div className="bca-section-header text-center">
           <span className="section-badge">🏆 GLORY & ACHIEVEMENTS</span>
           <h2>Student Hall of Fame</h2>
         </div>
-
         <div className="infinite-slider-container">
           <div className="infinite-track">
             {[...gloryStudents, ...gloryStudents].map((student, idx) => (
               <div key={idx} className="glory-card-light">
-                <img src={student.image} alt={student.name} className="glory-avatar" />
+                <img 
+                  src={student.image} 
+                  alt={student.name} 
+                  className="glory-avatar" 
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(student.name)}&background=0D8ABC&color=fff&size=128`;
+                  }}
+                />
                 <div className="glory-text">
                   <h3>{student.name}</h3>
                   <p>{student.achievement}</p>
@@ -112,16 +111,14 @@ const BbaPage = () => {
         </div>
       </div>
 
-      {/* HOD Profile */}
       <div className="bca-hod-card-light">
         <img src="/nilesh.jpg" className="hod-img-light" alt="HOD" />
         <div>
-          <h3>Prof. Arvind Saxena</h3>
-          <p className="hod-title-light">HOD - Department of Management</p>
-          <p className="hod-desc-light">"Nurturing analytical mindset, corporate exposure, and strategic leadership skills."</p>
+          <h3>Prof. Alok Ranjan Verma</h3>
+          <p className="hod-title-light">HOD - Business Administration</p>
+          <p className="hod-desc-light">"Preparing resilient young leaders capable of handling modern competitive business ecosystems."</p>
         </div>
       </div>
-
     </div>
   );
 };
