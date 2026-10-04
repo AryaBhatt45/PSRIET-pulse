@@ -6,31 +6,43 @@ export default function AdminDashboard() {
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('overview');
 
-    // States for Notices, Results & Students
+    // States for Notices
     const [noticeTitle, setNoticeTitle] = useState('');
     const [noticeContent, setNoticeContent] = useState('');
     const [noticeDate, setNoticeDate] = useState('');
     const [savedNotices, setSavedNotices] = useState([]);
 
+    // States for Events & Updates
+    const [eventTitle, setEventTitle] = useState('');
+    const [eventContent, setEventContent] = useState('');
+    const [eventDate, setEventDate] = useState('');
+    const [eventTag, setEventTag] = useState('NEW LIVE');
+    const [savedEvents, setSavedEvents] = useState([]);
+
+    // States for Results & Students
     const [rollNo, setRollNo] = useState('');
     const [studentName, setStudentName] = useState('');
     const [semester, setSemester] = useState('');
     const [marks, setMarks] = useState('');
     const [savedResults, setSavedResults] = useState([]);
 
-    // States for Manage Students
     const [savedStudents, setSavedStudents] = useState([]);
     const [newName, setNewName] = useState('');
     const [newRollNo, setNewRollNo] = useState('');
     const [newCourse, setNewCourse] = useState('BCA');
     const [studentSearch, setStudentSearch] = useState('');
+    const [savedEnquiries, setSavedEnquiries] = useState([]);
 
     useEffect(() => {
         const notices = JSON.parse(localStorage.getItem('pt_notices')) || [];
+        const events = JSON.parse(localStorage.getItem('pt_events')) || [];
         const results = JSON.parse(localStorage.getItem('pt_results')) || [];
         const students = JSON.parse(localStorage.getItem('pt_students')) || [];
+        const enquiries = JSON.parse(localStorage.getItem('pt_enquiries')) || [];
 
+        setSavedEnquiries(enquiries);
         setSavedNotices(notices);
+        setSavedEvents(events);
         setSavedResults(results);
         setSavedStudents(students);
     }, []);
@@ -54,6 +66,40 @@ export default function AdminDashboard() {
         setNoticeTitle('');
         setNoticeContent('');
         setNoticeDate('');
+    };
+
+    const handleDeleteNotice = (index) => {
+        const updated = savedNotices.filter((_, i) => i !== index);
+        localStorage.setItem('pt_notices', JSON.stringify(updated));
+        setSavedNotices(updated);
+    };
+
+    const handlePublishEvent = (e) => {
+        e.preventDefault();
+        if (!eventTitle || !eventContent) return;
+
+        const formattedDate = eventDate ? new Date(eventDate).toLocaleDateString() : new Date().toLocaleDateString();
+        const newEvent = {
+            title: eventTitle,
+            content: eventContent,
+            date: formattedDate,
+            tag: eventTag || 'NEW LIVE',
+            location: 'PTSRIET Portal'
+        };
+        const updatedEvents = [newEvent, ...savedEvents];
+
+        localStorage.setItem('pt_events', JSON.stringify(updatedEvents));
+        setSavedEvents(updatedEvents);
+        alert('Event / Update added successfully!');
+        setEventTitle('');
+        setEventContent('');
+        setEventDate('');
+    };
+
+    const handleDeleteEvent = (index) => {
+        const updated = savedEvents.filter((_, i) => i !== index);
+        localStorage.setItem('pt_events', JSON.stringify(updated));
+        setSavedEvents(updated);
     };
 
     const handleUploadResult = (e) => {
@@ -97,16 +143,16 @@ export default function AdminDashboard() {
         setNewRollNo('');
     };
 
-    const handleDeleteNotice = (index) => {
-        const updated = savedNotices.filter((_, i) => i !== index);
-        localStorage.setItem('pt_notices', JSON.stringify(updated));
-        setSavedNotices(updated);
-    };
-
     const handleDeleteStudent = (index) => {
         const updated = savedStudents.filter((_, i) => i !== index);
         localStorage.setItem('pt_students', JSON.stringify(updated));
         setSavedStudents(updated);
+    };
+
+    const handleDeleteEnquiry = (index) => {
+        const updated = savedEnquiries.filter((_, i) => i !== index);
+        localStorage.setItem('pt_enquiries', JSON.stringify(updated));
+        setSavedEnquiries(updated);
     };
 
     const filteredStudents = savedStudents.filter(s =>
@@ -116,13 +162,44 @@ export default function AdminDashboard() {
 
     const renderContent = () => {
         switch (activeTab) {
+            case 'enquiries':
+                return (
+                    <div className="admin-action-section">
+                        <h3>📥 Admission Enquiries & Callbacks ({savedEnquiries.length})</h3>
+                        <p>Students who filled out the "Want to Join PTSRIET?" form on the homepage requesting a callback.</p>
+
+                        <div style={{ marginTop: '20px' }}>
+                            {savedEnquiries.length > 0 ? (
+                                savedEnquiries.map((enq, idx) => (
+                                    <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(0,0,0,0.4)', padding: '15px', borderRadius: '8px', marginBottom: '12px', border: '1px solid rgba(59,130,246,0.3)' }}>
+                                        <div>
+                                            <strong style={{ color: '#fff', fontSize: '16px' }}>{enq.name || 'N/A'}</strong>
+                                            <span style={{ fontSize: '12px', background: '#3b82f6', color: '#fff', padding: '2px 8px', borderRadius: '4px', marginLeft: '10px' }}>
+                                                {enq.course || 'Selected Course'}
+                                            </span>
+                                            <p style={{ margin: '6px 0 0', fontSize: '14px', color: '#38bdf8' }}>
+                                                📞 Phone: <a href={`tel:${enq.phone}`} style={{ color: '#38bdf8', textDecoration: 'underline' }}>{enq.phone || 'N/A'}</a>
+                                            </p>
+                                            <span style={{ fontSize: '11px', color: '#888' }}>Requested on: {enq.date || 'Recent'}</span>
+                                        </div>
+                                        <div style={{ display: 'flex', gap: '10px' }}>
+                                            <a href={`tel:${enq.phone}`} style={{ background: '#10b981', color: '#fff', padding: '6px 12px', borderRadius: '6px', textDecoration: 'none', fontSize: '13px', fontWeight: '600' }}>Call Now</a>
+                                            <button onClick={() => handleDeleteEnquiry(idx)} style={{ background: '#ef4444', color: '#fff', border: 'none', padding: '6px 12px', borderRadius: '6px', cursor: 'pointer', fontSize: '13px' }}>Delete</button>
+                                        </div>
+                                    </div>
+                                ))
+                            ) : (
+                                <p style={{ color: '#888', fontSize: '14px', marginTop: '20px' }}>No admission callback requests yet.</p>
+                            )}
+                        </div>
+                    </div>
+                );
             case 'students':
                 return (
                     <div className="admin-action-section">
                         <h3>🎓 Manage Students & Admissions</h3>
                         <p>Register new students into the portal or search existing records.</p>
 
-                        {/* Add Student Form */}
                         <form onSubmit={handleAddStudent} style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '15px', background: 'rgba(0,0,0,0.3)', padding: '20px', borderRadius: '10px', border: '1px solid rgba(255,40,40,0.2)' }}>
                             <h4 style={{ color: '#fff', margin: '0 0 5px 0' }}>Register New Student</h4>
                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px' }}>
@@ -161,7 +238,6 @@ export default function AdminDashboard() {
                             <button type="submit" style={{ padding: '10px 20px', background: '#e60000', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer', width: 'fit-content' }}>Add Student 🚀</button>
                         </form>
 
-                        {/* Search & Student List */}
                         <div style={{ marginTop: '30px' }}>
                             <input
                                 type="text"
@@ -170,7 +246,6 @@ export default function AdminDashboard() {
                                 onChange={(e) => setStudentSearch(e.target.value)}
                                 style={{ width: '100%', padding: '12px', background: 'rgba(0,0,0,0.5)', border: '1px solid rgba(255,40,40,0.3)', borderRadius: '8px', color: '#fff', outline: 'none', marginBottom: '15px' }}
                             />
-
                             <h4 style={{ color: '#fff', marginBottom: '15px' }}>Registered Students ({filteredStudents.length})</h4>
                             {filteredStudents.length > 0 ? (
                                 filteredStudents.map((st, idx) => (
@@ -191,8 +266,8 @@ export default function AdminDashboard() {
             case 'notices':
                 return (
                     <div className="admin-action-section">
-                        <h3>📢 Post Notices & Announcements</h3>
-                        <p>Broadcast urgent announcements or exam schedules directly to students with custom dates.</p>
+                        <h3>📢 Post General Notices</h3>
+                        <p>Broadcast standard examination notifications or college updates.</p>
                         <form onSubmit={handlePublishNotice} style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '15px' }}>
                             <div>
                                 <label style={{ display: 'block', fontSize: '13px', color: '#aaa', marginBottom: '5px' }}>Notice Title</label>
@@ -206,7 +281,7 @@ export default function AdminDashboard() {
                                 />
                             </div>
                             <div>
-                                <label style={{ display: 'block', fontSize: '13px', color: '#aaa', marginBottom: '5px' }}>Select Notice Date</label>
+                                <label style={{ display: 'block', fontSize: '13px', color: '#aaa', marginBottom: '5px' }}>Notice Date</label>
                                 <input
                                     type="date"
                                     value={noticeDate}
@@ -215,7 +290,7 @@ export default function AdminDashboard() {
                                 />
                             </div>
                             <div>
-                                <label style={{ display: 'block', fontSize: '13px', color: '#aaa', marginBottom: '5px' }}>Notice Body Content</label>
+                                <label style={{ display: 'block', fontSize: '13px', color: '#aaa', marginBottom: '5px' }}>Notice Content</label>
                                 <textarea
                                     placeholder="Notice Body Content..."
                                     rows="4"
@@ -237,6 +312,73 @@ export default function AdminDashboard() {
                                         <p style={{ margin: '4px 0 0', fontSize: '13px', color: '#aaa' }}>{n.content}</p>
                                     </div>
                                     <button onClick={() => handleDeleteNotice(idx)} style={{ background: '#ef4444', color: '#fff', border: 'none', padding: '6px 12px', borderRadius: '6px', cursor: 'pointer' }}>Delete</button>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                );
+            case 'events':
+                return (
+                    <div className="admin-action-section">
+                        <h3>🗓️ Manage Upcoming Events & Updates</h3>
+                        <p>Create cards for the homepage live updates banner.</p>
+                        <form onSubmit={handlePublishEvent} style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                            <div>
+                                <label style={{ display: 'block', fontSize: '13px', color: '#aaa', marginBottom: '5px' }}>Event / Update Title</label>
+                                <input
+                                    type="text"
+                                    placeholder="e.g. TCS & Infosys Mega Drive"
+                                    value={eventTitle}
+                                    onChange={(e) => setEventTitle(e.target.value)}
+                                    style={{ width: '100%', padding: '12px', background: 'rgba(0,0,0,0.5)', border: '1px solid rgba(255,40,40,0.3)', borderRadius: '8px', color: '#fff', outline: 'none' }}
+                                    required
+                                />
+                            </div>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '13px', color: '#aaa', marginBottom: '5px' }}>Date</label>
+                                    <input
+                                        type="date"
+                                        value={eventDate}
+                                        onChange={(e) => setEventDate(e.target.value)}
+                                        style={{ width: '100%', padding: '12px', background: 'rgba(0,0,0,0.5)', border: '1px solid rgba(255,40,40,0.3)', borderRadius: '8px', color: '#fff', outline: 'none', colorScheme: 'dark' }}
+                                    />
+                                </div>
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '13px', color: '#aaa', marginBottom: '5px' }}>Badge Tag</label>
+                                    <input
+                                        type="text"
+                                        placeholder="e.g. NEW LIVE"
+                                        value={eventTag}
+                                        onChange={(e) => setEventTag(e.target.value)}
+                                        style={{ width: '100%', padding: '12px', background: 'rgba(0,0,0,0.5)', border: '1px solid rgba(255,40,40,0.3)', borderRadius: '8px', color: '#fff', outline: 'none' }}
+                                    />
+                                </div>
+                            </div>
+                            <div>
+                                <label style={{ display: 'block', fontSize: '13px', color: '#aaa', marginBottom: '5px' }}>Event Details Description</label>
+                                <textarea
+                                    placeholder="Write details shown on the event card..."
+                                    rows="4"
+                                    value={eventContent}
+                                    onChange={(e) => setEventContent(e.target.value)}
+                                    style={{ width: '100%', padding: '12px', background: 'rgba(0,0,0,0.5)', border: '1px solid rgba(255,40,40,0.3)', borderRadius: '8px', color: '#fff', outline: 'none', resize: 'none' }}
+                                    required
+                                ></textarea>
+                            </div>
+                            <button type="submit" style={{ padding: '12px 20px', background: '#3b82f6', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer', width: 'fit-content' }}>Post Event Card 🚀</button>
+                        </form>
+
+                        <div style={{ marginTop: '30px' }}>
+                            <h4 style={{ color: '#fff', marginBottom: '15px' }}>Active Event Cards ({savedEvents.length})</h4>
+                            {savedEvents.map((ev, idx) => (
+                                <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(0,0,0,0.4)', padding: '12px', borderRadius: '8px', marginBottom: '10px', border: '1px solid rgba(59,130,246,0.3)' }}>
+                                    <div>
+                                        <strong style={{ color: '#fff' }}>{ev.title}</strong> <span style={{ fontSize: '11px', background: '#3b82f6', color: '#fff', padding: '2px 6px', borderRadius: '4px', marginLeft: '10px' }}>{ev.tag}</span>
+                                        <p style={{ margin: '4px 0 0', fontSize: '13px', color: '#aaa' }}>{ev.content}</p>
+                                        <span style={{ fontSize: '11px', color: '#888' }}>Date: {ev.date}</span>
+                                    </div>
+                                    <button onClick={() => handleDeleteEvent(idx)} style={{ background: '#ef4444', color: '#fff', border: 'none', padding: '6px 12px', borderRadius: '6px', cursor: 'pointer' }}>Delete</button>
                                 </div>
                             ))}
                         </div>
@@ -280,16 +422,37 @@ export default function AdminDashboard() {
                             />
                             <button type="submit" style={{ padding: '12px 20px', background: '#10b981', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer', width: 'fit-content' }}>Upload Result Record</button>
                         </form>
+
+                        <div style={{ marginTop: '30px' }}>
+                            <h4 style={{ color: '#fff', marginBottom: '15px' }}>Uploaded Results ({savedResults.length})</h4>
+                            {savedResults.length > 0 ? (
+                                savedResults.map((res, idx) => (
+                                    <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(0,0,0,0.4)', padding: '12px', borderRadius: '8px', marginBottom: '10px', border: '1px solid rgba(16,185,129,0.3)' }}>
+                                        <div>
+                                            <strong style={{ color: '#fff' }}>{res.studentName}</strong> <span style={{ fontSize: '12px', color: '#10b981', marginLeft: '10px' }}>[{res.semester}]</span>
+                                            <p style={{ margin: '4px 0 0', fontSize: '13px', color: '#aaa' }}>Roll No: {res.rollNo} | Marks/Grade: {res.marks}</p>
+                                        </div>
+                                        <button onClick={() => {
+                                            const updated = savedResults.filter((_, i) => i !== idx);
+                                            localStorage.setItem('pt_results', JSON.stringify(updated));
+                                            setSavedResults(updated);
+                                        }} style={{ background: '#ef4444', color: '#fff', border: 'none', padding: '6px 12px', borderRadius: '6px', cursor: 'pointer' }}>Delete</button>
+                                    </div>
+                                ))
+                            ) : (
+                                <p style={{ color: '#888', fontSize: '14px' }}>No result records uploaded yet.</p>
+                            )}
+                        </div>
                     </div>
                 );
             case 'settings':
                 return (
                     <div className="admin-action-section">
                         <h3>⚙️ System Settings</h3>
-                        <p>Configure portal security parameters, change admin access passcodes, and monitor logs.</p>
+                        <p>Configure portal security parameters and monitor admin activity.</p>
                         <div style={{ marginTop: '20px', color: '#ccc' }}>
                             <p style={{ marginBottom: '10px' }}>🔐 <strong>Security Status:</strong> Fully Encrypted & Secured</p>
-                            <p>🛡️️ <strong>Session Storage:</strong> Active (Local Storage Handled)</p>
+                            <p>🛡 <strong>Session Storage:</strong> Active (Local Storage Handled)</p>
                         </div>
                     </div>
                 );
@@ -297,23 +460,23 @@ export default function AdminDashboard() {
                 return (
                     <>
                         <div className="admin-stats-grid">
+                            <div className="stat-card" onClick={() => setActiveTab('enquiries')} style={{ cursor: 'pointer' }}>
+                                <h4>Admission Enquiries</h4>
+                                <h2>{savedEnquiries.length}</h2>
+                            </div>
                             <div className="stat-card">
                                 <h4>Total Students</h4>
-                                <h2>{savedStudents.length > 0 ? savedStudents.length : '1,240'}</h2>
+                                <h2>{savedStudents.length}</h2>
                             </div>
                             <div className="stat-card">
-                                <h4>Active Courses</h4>
-                                <h2>9+</h2>
-                            </div>
-                            <div className="stat-card">
-                                <h4>Uploaded Results</h4>
-                                <h2>{savedResults.length}</h2>
+                                <h4>Active Events</h4>
+                                <h2>{savedEvents.length}</h2>
                             </div>
                         </div>
 
                         <div className="admin-action-section">
                             <h3>Quick Management Panel</h3>
-                            <p>Select a module from the sidebar or manage portal updates directly from here.</p>
+                            <p>Select **📥 Admission Enquiries** from the left sidebar to check who requested a callback from the homepage form!</p>
                         </div>
                     </>
                 );
@@ -332,11 +495,17 @@ export default function AdminDashboard() {
                     <li className={activeTab === 'overview' ? 'active' : ''} onClick={() => setActiveTab('overview')}>
                         📊 Overview
                     </li>
+                    <li className={activeTab === 'enquiries' ? 'active' : ''} onClick={() => setActiveTab('enquiries')}>
+                        📥 Admission Enquiries ({savedEnquiries.length})
+                    </li>
                     <li className={activeTab === 'students' ? 'active' : ''} onClick={() => setActiveTab('students')}>
                         🎓 Manage Students
                     </li>
                     <li className={activeTab === 'notices' ? 'active' : ''} onClick={() => setActiveTab('notices')}>
                         📢 Post Notices
+                    </li>
+                    <li className={activeTab === 'events' ? 'active' : ''} onClick={() => setActiveTab('events')}>
+                        🗓️ Manage Events
                     </li>
                     <li className={activeTab === 'results' ? 'active' : ''} onClick={() => setActiveTab('results')}>
                         📝 Update Results

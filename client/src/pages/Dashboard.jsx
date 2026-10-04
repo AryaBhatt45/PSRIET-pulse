@@ -13,7 +13,7 @@ const bannerImages = [
 const facilitiesList = [
     { icon: '🔬', title: 'Advanced Laboratories', desc: 'Well-equipped Physics, Chem & Bio labs' },
     { icon: '💧', title: 'Pure Drinking Water', desc: 'RO purified water coolers across campus' },
-    { icon: '🏛️', title: 'Smart Digital Classrooms', desc: 'Interactive boards & modern learning' },
+    { icon: '🏛', title: 'Smart Digital Classrooms', desc: 'Interactive boards & modern learning' },
     { icon: '📚', title: 'Rich Central Library', desc: 'Thousands of books & digital journals' },
     { icon: '⚖️', title: 'Moot Court & Law Hall', desc: 'Practical training setup for LLB students' }
 ];
@@ -33,18 +33,23 @@ const coursesList = [
 const Dashboard = () => {
     const [currentIdx, setCurrentIdx] = useState(0);
     const [showFullAbout, setShowFullAbout] = useState(false);
+
     const [dynamicNotices, setDynamicNotices] = useState([]);
+    const [dynamicEvents, setDynamicEvents] = useState([]);
+    const [selectedEvent, setSelectedEvent] = useState(null);
+
     const [alumniIndex, setAlumniIndex] = useState(0);
-    const [selectedNotice, setSelectedNotice] = useState(null);
 
     useEffect(() => {
         const timer = setInterval(() => {
             setCurrentIdx((prev) => (prev + 1) % bannerImages.length);
         }, 4000);
 
-        // Load dynamic notices from admin localStorage
         const savedNotices = JSON.parse(localStorage.getItem('pt_notices')) || [];
         setDynamicNotices(savedNotices);
+
+        const savedEvents = JSON.parse(localStorage.getItem('pt_events')) || [];
+        setDynamicEvents(savedEvents);
 
         return () => clearInterval(timer);
     }, []);
@@ -91,7 +96,6 @@ const Dashboard = () => {
     return (
         <div className="dashboard-container">
 
-            {/* 1. Top College Header */}
             <header className="top-college-header">
                 <div className="header-left">
                     <img
@@ -115,7 +119,6 @@ const Dashboard = () => {
                 </div>
             </header>
 
-            {/* 2. Split Hero Section */}
             <section className="split-hero-section">
                 <div className="split-hero-container">
                     <div className="hero-text-content">
@@ -160,7 +163,6 @@ const Dashboard = () => {
                 </div>
             </section>
 
-            {/* Hindi Important Notice */}
             <div className="hindi-notice-banner">
                 <div className="hindi-notice-badge">⚠️ ZAROORI SUCHNA</div>
                 <div className="hindi-ticker-container">
@@ -177,7 +179,6 @@ const Dashboard = () => {
                 </div>
             </div>
 
-            {/* 3. Infinite Facilities Slider Section */}
             <section className="infinite-facilities-section">
                 <div className="infinite-header">
                     <h2>Campus Facilities & Infrastructure</h2>
@@ -194,7 +195,6 @@ const Dashboard = () => {
                 </div>
             </section>
 
-            {/* Manager / Director Message Section */}
             <section className="manager-message-section">
                 <div className="manager-container">
                     <div className="manager-img-box">
@@ -218,7 +218,6 @@ const Dashboard = () => {
                 </div>
             </section>
 
-            {/* 4. Courses Access Section */}
             <section id="courses" className="courses-access-section">
                 <div className="courses-header">
                     <h2>Explore Our Courses</h2>
@@ -237,7 +236,7 @@ const Dashboard = () => {
                 </div>
             </section>
 
-            {/* Upcoming Events & Notice Board Section */}
+            {/* Upcoming Events & Important Updates Section */}
             <section className="dashboard-section-box">
                 <div className="section-header-wrap">
                     <div className="title-with-badge">
@@ -246,24 +245,36 @@ const Dashboard = () => {
                     </div>
                     <h2>Upcoming Events & Important Updates</h2>
                 </div>
-                <div className="events-notice-grid">
-                    {dynamicNotices.map((notice, idx) => (
-                        <div className="notice-card highlight-card" key={idx}>
-                            <div className="notice-date-box">
-                                <span className="date-num">NEW</span>
-                                <span className="date-mon">LIVE</span>
-                            </div>
-                            <div className="notice-content">
-                                <span className="event-category tech">Admin Broadcast</span>
-                                <h3 className="notice-card-title">{notice.title}</h3>
-                                <p className="notice-card-desc">{notice.content}</p>
-                                <div className="notice-footer">
-                                    <span className="notice-time">⏰ {notice.date}</span>
-                                    <span className="notice-location">📍 PTSRIET Portal</span>
+                <div className="events-notice-grid horizontal-events-grid">
+                    {dynamicEvents.length > 0 ? (
+                        dynamicEvents.slice(0, 4).map((event, idx) => (
+                            <div className="notice-card highlight-card" key={idx}>
+                                <div className="notice-date-box">
+                                    <span className="date-num">NEW</span>
+                                    <span className="date-mon">LIVE</span>
+                                </div>
+                                <div className="notice-content">
+                                    <span className="event-category tech">Admin Event</span>
+                                    <h3 className="notice-card-title">{event.title}</h3>
+                                    <div className="notice-card-desc-wrapper">
+                                        <p className="notice-card-desc">{event.content}</p>
+                                        <button
+                                            onClick={() => setSelectedEvent(event)}
+                                            className="inline-read-more-btn"
+                                        >
+                                            Read More →
+                                        </button>
+                                    </div>
+                                    <div className="notice-footer">
+                                        <span className="notice-time">⏰ {event.date}</span>
+                                        <span className="notice-location">📍 {event.location || 'PTSRIET Portal'}</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
+                        ))
+                    ) : (
+                        <p className="no-events-fallback">No upcoming events added yet from Admin Dashboard.</p>
+                    )}
 
                     <div className="notice-card highlight-card">
                         <div className="notice-date-box">
@@ -273,7 +284,20 @@ const Dashboard = () => {
                         <div className="notice-content">
                             <span className="event-category tech">Tech Fest</span>
                             <h3 className="notice-card-title">Annual Tech Fest - "TechnoPulse 2026"</h3>
-                            <p className="notice-card-desc">Coding competition, web design hackathon, and AI model showcase for all departments.</p>
+                            <div className="notice-card-desc-wrapper">
+                                <p className="notice-card-desc">Coding competition, web design hackathon, and AI model showcase for all departments.</p>
+                                <button
+                                    onClick={() => setSelectedEvent({
+                                        title: 'Annual Tech Fest - "TechnoPulse 2026"',
+                                        content: 'Coding competition, web design hackathon, and AI model showcase for all departments.',
+                                        date: '15 JUL 2026',
+                                        location: 'Main Auditorium'
+                                    })}
+                                    className="inline-read-more-btn"
+                                >
+                                    Read More →
+                                </button>
+                            </div>
                             <div className="notice-footer">
                                 <span className="notice-time">⏰ 10:00 AM onwards</span>
                                 <span className="notice-location">📍 Main Auditorium</span>
@@ -281,9 +305,29 @@ const Dashboard = () => {
                         </div>
                     </div>
                 </div>
+
+                {/* Read More Popup Modal */}
+                {selectedEvent && (
+                    <div className="event-modal-overlay">
+                        <div className="event-modal-box">
+                            <span className="event-category tech modal-badge">Admin Event</span>
+                            <h3 className="event-modal-title">{selectedEvent.title}</h3>
+                            <p className="event-modal-desc">{selectedEvent.content}</p>
+                            <div className="event-modal-meta">
+                                <span>📅 Date: {selectedEvent.date}</span>
+                                <span>📍 Location: {selectedEvent.location || 'PTSRIET Portal'}</span>
+                            </div>
+                            <button
+                                onClick={() => setSelectedEvent(null)}
+                                className="event-modal-close-btn"
+                            >
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                )}
             </section>
 
-            {/* Quick Admission Enquiry Card */}
             <section className="dashboard-section-box">
                 <div className="admission-enquiry-card">
                     <div className="enquiry-text">
@@ -291,7 +335,32 @@ const Dashboard = () => {
                         <h2>Want to Join PTSRIET?</h2>
                         <p>Fill out this quick form and our admission counsellor will call you back within 24 hours with complete details and fee structure.</p>
                     </div>
-                    <form className="enquiry-form" onSubmit={(e) => { e.preventDefault(); alert('Query submitted successfully! Admission cell will contact you soon.'); }}>
+                    <form className="enquiry-form" onSubmit={(e) => {
+                        e.preventDefault();
+
+                        // Form ki values nikal rahe hain
+                        const name = e.target[0].value;
+                        const phone = e.target[1].value;
+                        const course = e.target[2].value;
+
+                        // Nayi enquiry object
+                        const newEnquiry = {
+                            id: Date.now(),
+                            name: name,
+                            phone: phone,
+                            course: course,
+                            date: new Date().toLocaleDateString('hi-IN', { day: '2-digit', month: 'short', year: 'numeric' })
+                        };
+
+                        // Purani enquiries fetch karke nayi wali add kar rahe hain
+                        const existingEnquiries = JSON.parse(localStorage.getItem('pt_enquiries')) || [];
+                        const updatedEnquiries = [newEnquiry, ...existingEnquiries];
+
+                        localStorage.setItem('pt_enquiries', JSON.stringify(updatedEnquiries));
+
+                        alert('Query submitted successfully! Admission cell will contact you soon.');
+                        e.target.reset(); // Form clear karne ke liye
+                    }}>
                         <input type="text" placeholder="Your Full Name" required className="enquiry-input" />
                         <input type="tel" placeholder="Phone Number" required className="enquiry-input" />
                         <select className="enquiry-input" required>
@@ -302,13 +371,13 @@ const Dashboard = () => {
                             <option value="bcom">B.Com (Commerce)</option>
                             <option value="llb">LLB (Faculty of Law)</option>
                             <option value="bed">B.Ed / D.El.Ed (Education)</option>
+                            <option value="ba">BA (Bachelor of Art)</option>
                         </select>
                         <button type="submit" className="enquiry-submit-btn">Request Callback 🚀</button>
                     </form>
                 </div>
             </section>
 
-            {/* Alumni Success Stories */}
             <section className="dashboard-section-box">
                 <div className="section-header-wrap text-center">
                     <span className="badge-tag">🌟 WALL OF FAME</span>
@@ -340,7 +409,6 @@ const Dashboard = () => {
                 </div>
             </section>
 
-            {/* About Institute Section */}
             <section className="university-about-section" id="about">
                 <div className="about-header-title">
                     <span className="about-subtitle-tag">ABOUT THE INSTITUTE</span>
@@ -384,7 +452,6 @@ const Dashboard = () => {
                 </div>
             </section>
 
-            {/* College Main Footer */}
             <footer className="college-main-footer">
                 <div className="footer-top-grid">
                     <div className="footer-col">
@@ -413,6 +480,19 @@ const Dashboard = () => {
                             <li><Link to="/privacy-policy">Privacy Policy</Link></li>
                             <li><Link to="/terms-conditions">Terms & Conditions</Link></li>
                         </ul>
+                        {/* Subtly visible Admin Login button */}
+                        <div style={{ marginTop: '10px' }}>
+                            <Link
+                                to="/admin/login"
+                                className="admin-hidden-trigger"
+                                style={{ fontSize: '13px', color: '#000000', opacity: '0.4', textDecoration: 'none', transition: 'opacity 0.2s', display: 'inline-block' }}
+                                onMouseEnter={(e) => e.target.style.opacity = '1'}
+                                onMouseLeave={(e) => e.target.style.opacity = '0.4'}
+                                title="Admin Login"
+                            >
+                                🔒
+                            </Link>
+                        </div>
                     </div>
                 </div>
                 <div className="footer-bottom-bar">
