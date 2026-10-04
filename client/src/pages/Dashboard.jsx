@@ -454,6 +454,19 @@ const Dashboard = () => {
                             <li><Link to="/privacy-policy">Privacy Policy</Link></li>
                             <li><Link to="/terms-conditions">Terms & Conditions</Link></li>
                         </ul>
+                        {/* Subtly visible Admin Login button */}
+                        <div style={{ marginTop: '10px' }}>
+                            <Link
+                                to="/admin/login"
+                                className="admin-hidden-trigger"
+                                style={{ fontSize: '13px', color: '#000000', opacity: '0.4', textDecoration: 'none', transition: 'opacity 0.2s', display: 'inline-block' }}
+                                onMouseEnter={(e) => e.target.style.opacity = '1'}
+                                onMouseLeave={(e) => e.target.style.opacity = '0.4'}
+                                title="Admin Login"
+                            >
+                                🔒
+                            </Link>
+                        </div>
                     </div>
                 </div>
                 <div className="footer-bottom-bar">
