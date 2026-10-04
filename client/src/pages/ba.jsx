@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import './style/bca.css';
+import './style/ba.css';
 
 const BaPage = () => {
   const [activeSem, setActiveSem] = useState(null);
@@ -9,154 +9,107 @@ const BaPage = () => {
     setActiveSem(activeSem === index ? null : index);
   };
 
-  const semesters = [
-    { 
-      sem: 'Sem 1', 
-      subjects: [
-        { name: 'History of Ancient India', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/ba-sem1-history.pdf' },
-        { name: 'Hindi Literature (Kavya)', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/ba-sem1-hindi.pdf' },
-        { name: 'Political Theory', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/ba-sem1-pol.pdf' },
-        { name: 'Sociology Basics', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/ba-sem1-soc.pdf' }
-      ] 
-    },
-    { 
-      sem: 'Sem 2', 
-      subjects: [
-        { name: 'Medieval Indian History', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/ba-sem2-history.pdf' },
-        { name: 'Hindi Prose & Fiction', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/ba-sem2-hindi.pdf' },
-        { name: 'Western Political Thought', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/ba-sem2-pol.pdf' },
-        { name: 'Society in India', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/ba-sem2-soc.pdf' }
-      ] 
-    },
-    { 
-      sem: 'Sem 3', 
-      subjects: [
-        { name: 'Modern Indian History (1757-1947)', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/ba-sem3-history.pdf' },
-        { name: 'Modern Hindi Poetry', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/ba-sem3-hindi.pdf' },
-        { name: 'Indian Government & Politics', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/ba-sem3-pol.pdf' },
-        { name: 'Social Change', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/ba-sem3-soc.pdf' }
-      ] 
-    },
-    { 
-      sem: 'Sem 4', 
-      subjects: [
-        { name: 'World History (1453-1950)', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/ba-sem4-history.pdf' },
-        { name: 'Functional & Media Hindi', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/ba-sem4-hindi.pdf' },
-        { name: 'Public Administration', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/ba-sem4-pub.pdf' },
-        { name: 'Social Research Methods', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/ba-sem4-soc.pdf' }
-      ] 
-    },
-    { 
-      sem: 'Sem 5', 
-      subjects: [
-        { name: 'Indian National Movement', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/ba-sem5-history.pdf' },
-        { name: 'Hindi Drama & Linguistics', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/ba-sem5-hindi.pdf' },
-        { name: 'International Relations', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/ba-sem5-ir.pdf' },
-        { name: 'Classical Sociological Thinkers', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/ba-sem5-soc.pdf' }
-      ] 
-    },
-    { 
-      sem: 'Sem 6', 
-      subjects: [
-        { name: 'Contemporary World History', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/ba-sem6-history.pdf' },
-        { name: 'Literary Criticism & Essays', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/ba-sem6-hindi.pdf' },
-        { name: 'Comparative Politics', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/ba-sem6-pol.pdf' },
-        { name: 'Indian Sociological Thought', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/ba-sem6-soc.pdf' }
-      ] 
-    }
+  // Har semester mein same 8 major subjects with dummy links
+  const subjectsList = [
+    { name: 'Ancient History', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/ba-dummy.pdf' },
+    { name: 'Modern History', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/ba-dummy.pdf' },
+    { name: 'Geography', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/ba-dummy.pdf' },
+    { name: 'Education', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/ba-dummy.pdf' },
+    { name: 'Sociology', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/ba-dummy.pdf' },
+    { name: 'English Literature', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/ba-dummy.pdf' },
+    { name: 'Hindi Literature', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/ba-dummy.pdf' },
+    { name: 'CTS (Co-Curricular)', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/ba-dummy.pdf' }
   ];
 
-  const gloryStudents = [
-    { name: 'Arvind Yadav', achievement: 'Cleared UPPSC PCS Prelims on 1st Attempt', image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&h=200&q=80' },
-    { name: 'Monika Tiwari', achievement: 'Gold Medalist - University Debate Championship', image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&h=200&q=80' },
-    { name: 'Alok Nath Pandey', achievement: 'Selected as Sub-Inspector (UP Police)', image: 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=200&h=200&q=80' },
-    { name: 'Ritu Srivastava', achievement: 'Published Poetry Anthology in Hindi Academy', image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&h=200&q=80' }
+  const semesters = [
+    { sem: 'Sem 1', subjects: subjectsList },
+    { sem: 'Sem 2', subjects: subjectsList },
+    { sem: 'Sem 3', subjects: subjectsList },
+    { sem: 'Sem 4', subjects: subjectsList },
+    { sem: 'Sem 5', subjects: subjectsList },
+    { sem: 'Sem 6', subjects: subjectsList }
   ];
 
   const announcements = [
-    "📢 B.A. (Bachelor of Arts) Admissions Active for 2026 Session",
-    "📖 Special Civil Services Foundation Guidance Cell meeting this Saturday",
-    "📝 Internal assignment submission notice for Semester 2, 4 & 6",
-    "🎭 Annual Cultural & Literary Inter-College Fest registrations open."
+    "📢 B.A. (Bachelor of Arts) Admissions Active for 2026 Session[cite: 16]",
+    "📖 Special Civil Services Foundation Guidance Cell meeting this Saturday[cite: 16]",
+    "📝 Internal assignment submission notice for Semester 2, 4 & 6[cite: 16]",
+    "🎭 Annual Cultural & Literary Inter-College Fest registrations open[cite: 16]."
   ];
 
   return (
-    <div style={{ backgroundColor: '#f8fafc', color: '#1e293b', minHeight: '100vh', padding: '30px 40px', fontFamily: 'Segoe UI, Tahoma, Geneva, Verdana, sans-serif' }}>
+    <div className="ba-page-container">
 
       {/* Top Bar */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '25px' }}>
-        <Link to="/" style={{ background: '#ffffff', color: '#2563eb', padding: '8px 16px', borderRadius: '8px', textDecoration: 'none', border: '1px solid #e2e8f0', fontWeight: '600', boxShadow: '0 2px 5px rgba(0,0,0,0.02)' }}>← Back to Dashboard</Link>
-        <span style={{ background: '#eff6ff', color: '#2563eb', padding: '6px 14px', borderRadius: '20px', fontSize: '0.85rem', border: '1px solid #bfdbfe', fontWeight: '600' }}>Faculty of Arts & Humanities</span>
+      <div className="ba-top-bar">
+        <Link to="/" className="ba-back-btn">← Back to Dashboard</Link>
+        <span className="ba-badge-top">Faculty of Arts & Humanities</span>
       </div>
 
       {/* Hero Section */}
-      <div style={{ background: 'linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%)', padding: '40px', borderRadius: '16px', color: '#ffffff', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px', boxShadow: '0 10px 25px rgba(30, 64, 175, 0.15)' }}>
+      <div className="ba-hero-card">
         <div>
-          <span style={{ background: 'rgba(255, 255, 255, 0.15)', padding: '4px 10px', borderRadius: '6px', fontSize: '0.75rem', fontWeight: '700', letterSpacing: '1px' }}>ACADEMIC EXCELLENCE</span>
-          <h1 style={{ fontSize: '2.2rem', margin: '10px 0' }}>Bachelor of Arts (B.A)</h1>
-          <p style={{ color: '#cbd5e1', fontSize: '0.95rem', maxWidth: '600px', marginBottom: '20px' }}>Gain comprehensive critical thinking, social insights, and literary appreciation through a structured 3-year multidisciplinary curriculum.</p>
-          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-            <span style={{ background: 'rgba(255, 255, 255, 0.1)', padding: '6px 12px', borderRadius: '6px', fontSize: '0.85rem', border: '1px solid rgba(255, 255, 255, 0.2)' }}>⏳ 3 Years</span>
-            <span style={{ background: 'rgba(255, 255, 255, 0.1)', padding: '6px 12px', borderRadius: '6px', fontSize: '0.85rem', border: '1px solid rgba(255, 255, 255, 0.2)' }}>🪑 150 Seats</span>
-            <span style={{ background: 'rgba(255, 255, 255, 0.1)', padding: '6px 12px', borderRadius: '6px', fontSize: '0.85rem', border: '1px solid rgba(255, 255, 255, 0.2)' }}>💰 ₹10,000 / Year</span>
+          <span className="ba-hero-tag">ACADEMIC EXCELLENCE</span>
+          <h1 className="ba-hero-title">Bachelor of Arts (B.A)</h1>
+          <p className="ba-hero-desc">Gain comprehensive critical thinking, social insights, and literary appreciation through a structured multidisciplinary curriculum.</p>
+          <div className="ba-hero-info-tags">
+            <span>⏳ 3 Years</span>
+            <span>🪑 150 Seats</span>
+            <span>💰 ₹10,000 / Year</span>
           </div>
         </div>
-        <div>
-          <img src="/logo.png" alt="BA Logo" style={{ width: '90px', height: '90px', objectFit: 'contain' }} />
+        <div className="ba-hero-logo-box">
+          <img src="/logo.png" alt="BA Logo" />
         </div>
       </div>
 
-      {/* Ticker */}
-      <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '10px', display: 'flex', alignItems: 'center', overflow: 'hidden', marginBottom: '35px', boxShadow: '0 2px 10px rgba(0,0,0,0.02)' }}>
-        <div style={{ background: '#ef4444', color: '#ffffff', padding: '12px 18px', fontSize: '0.8rem', fontWeight: '700', whiteSpace: 'nowrap', zIndex: '2' }}>🚨 IMPORTANT UPDATES</div>
-        <div style={{ overflow: 'hidden', width: '100%' }}>
-          <div style={{ display: 'flex', gap: '40px', whiteSpace: 'nowrap' }}>
-            {announcements.map((item, idx) => (
-              <span key={idx} style={{ fontSize: '0.85rem', color: '#475569', fontWeight: '500' }}>{item}</span>
+      {/* Infinite Moving Ticker */}
+      <div className="ba-ticker-container">
+        <div className="ba-ticker-head">🚨 UPDATES</div>
+        <div className="ba-ticker-body">
+          <div className="ticker-track">
+            {[...announcements, ...announcements].map((item, idx) => (
+              <span key={idx} className="ba-ticker-item">{item}</span>
             ))}
           </div>
         </div>
       </div>
 
       {/* Curriculum Section */}
-      <div style={{ marginBottom: '40px' }}>
-        <div style={{ marginBottom: '20px' }}>
-          <span style={{ background: '#f1f5f9', color: '#475569', padding: '4px 10px', borderRadius: '6px', fontSize: '0.75rem', fontWeight: '700' }}>🚀 ROADMAP</span>
-          <h2 style={{ fontSize: '1.6rem', color: '#0f172a', marginTop: '5px' }}>Semester-wise Curriculum & Notes</h2>
+      <div className="ba-curriculum-section">
+        <div className="ba-section-header">
+          <span className="ba-sub-tag">🚀 ROADMAP</span>
+          <h2>Semester-wise Curriculum & Notes</h2>
         </div>
-        
-        {/* Flex container with cards properly boxed */}
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', alignItems: 'flex-start' }}>
+
+        <div className="ba-sem-grid">
           {semesters.map((item, index) => {
             const isOpen = activeSem === index;
             return (
-              <div key={index} style={{ background: '#ffffff', border: '1px solid #cbd5e1', padding: '20px', borderRadius: '14px', boxShadow: '0 4px 15px rgba(0,0,0,0.04)', display: 'flex', flexDirection: 'column', width: 'calc(33.333% - 14px)', minWidth: '280px', boxSizing: 'border-box' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                  <h3 style={{ margin: 0, color: '#0f172a', fontSize: '1.15rem', fontWeight: '700' }}>{item.sem}</h3>
-                  <span style={{ width: '8px', height: '8px', background: '#10b981', borderRadius: '50%', boxShadow: '0 0 6px rgba(16, 185, 129, 0.5)' }}></span>
+              <div key={index} className={`ba-sem-card ${isOpen ? 'open' : ''}`}>
+                <div className="ba-sem-card-top">
+                  <h3>{item.sem}</h3>
+                  <span className="ba-active-dot"></span>
                 </div>
-                
-                <p style={{ fontSize: '0.8rem', color: '#64748b', lineHeight: '1.4', marginBottom: '12px' }}>
+
+                <p className="ba-sem-preview-text">
                   {item.subjects.map(s => s.name).join(', ')}
                 </p>
 
-                <button 
-                  onClick={() => toggleAccordion(index)}
-                  style={{ width: '100%', border: '1px solid #cbd5e1', padding: '8px 12px', borderRadius: '8px', fontWeight: '600', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.8rem', background: isOpen ? '#eff6ff' : '#f8fafc', color: isOpen ? '#2563eb' : '#334155' }}
-                >
+                <button onClick={() => toggleAccordion(index)} className="ba-accordion-btn">
                   <span>{isOpen ? 'Hide Subjects' : 'View Subjects & Resources'}</span>
                   <span>{isOpen ? '▲' : '▼'}</span>
                 </button>
 
                 {isOpen && (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', borderTop: '1px dashed #cbd5e1', paddingTop: '10px', marginTop: '10px', maxHeight: '260px', overflowY: 'auto' }}>
+                  <div className="bca-sub-subjects-container">
                     {item.subjects.map((sub, subIdx) => (
-                      <div key={subIdx} style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '8px 10px' }}>
-                        <h4 style={{ margin: '0 0 6px 0', fontSize: '0.82rem', color: '#1e293b', fontWeight: '700' }}>{sub.name}</h4>
-                        <div style={{ display: 'flex', gap: '6px', marginTop: '6px' }}>
-                          <a href={sub.notesUrl} style={{ flex: 1, textAlign: 'center', padding: '5px 4px', borderRadius: '5px', textDecoration: 'none', fontSize: '0.72rem', fontWeight: '600', background: '#eff6ff', color: '#1d4ed8', border: '1px solid #bfdbfe' }}>Notes</a>
-                          <a href={sub.quickUrl} style={{ flex: 1, textAlign: 'center', padding: '5px 4px', borderRadius: '5px', textDecoration: 'none', fontSize: '0.72rem', fontWeight: '600', background: '#fffbeb', color: '#b45309', border: '1px solid #fde68a' }}>Quick Notes ✨</a>
-                          <a href={sub.pdfUrl} target="_blank" rel="noopener noreferrer" style={{ flex: 1, textAlign: 'center', padding: '5px 4px', borderRadius: '5px', textDecoration: 'none', fontSize: '0.72rem', fontWeight: '600', background: '#ecfdf5', color: '#047857', border: '1px solid #a7f3d0' }}>Syllabus PDF</a>
+                      <div key={subIdx} className="bca-sub-card">
+                        <h4 className="ba-subject-title">{sub.name}</h4>
+                        <div className="bca-links">
+                          <a href={sub.notesUrl} className="bca-btn notes-l">Notes</a>
+                          <a href={sub.quickUrl} className="bca-btn quick-l">Quick ✨</a>
+                          <a href={sub.pdfUrl} target="_blank" rel="noopener noreferrer" className="bca-btn syllabus-l">Syllabus</a>
                         </div>
                       </div>
                     ))}
@@ -168,15 +121,57 @@ const BaPage = () => {
         </div>
       </div>
 
-      {/* HOD Profile */}
-      <div style={{ display: 'flex', alignItems: 'center', background: '#ffffff', border: '1px solid #e2e8f0', padding: '20px', borderRadius: '14px', gap: '20px', marginTop: '30px', boxShadow: '0 4px 15px rgba(0,0,0,0.02)' }}>
-        <img src="/nilesh.jpg" style={{ width: '70px', height: '70px', borderRadius: '50%', objectFit: 'cover' }} alt="HOD" />
-        <div>
-          <h3 style={{ margin: '0 0 4px 0', color: '#0f172a', fontSize: '1.1rem' }}>Prof. Ramakant Dwivedi</h3>
-          <p style={{ color: '#2563eb', fontSize: '0.85rem', margin: '0 0 6px 0', fontWeight: '600' }}>HOD - Faculty of Arts & Humanities</p>
-          <p style={{ color: '#64748b', fontSize: '0.8rem', margin: 0, fontStyle: 'italic' }}>"Empowering students through historical perspectives, social conscience, and linguistic excellence."</p>
+      {/* Cheatsheet Hub Card (Replaces HOD section) */}
+      <div className="ba-cheatsheet-card">
+        <div className="ba-cheatsheet-header">
+          <div>
+            <span className="ba-cheat-tag">⚡ QUICK ACCESS</span>
+            <h3>B.A. All-Subjects Master Cheatsheet Hub</h3>
+            <p>Access one-shot revision notes and summary PDFs for all major subjects instantly.</p>
+          </div>
+          <a href="/syllabus/ba-dummy.pdf" target="_blank" rel="noopener noreferrer" className="ba-cheat-main-btn">
+            View All Cheatsheets 📄
+          </a>
+        </div>
+        <div className="ba-cheat-grid">
+          {subjectsList.map((subj, sIdx) => (
+            <a key={sIdx} href={subj.pdfUrl} target="_blank" rel="noopener noreferrer" className="ba-cheat-chip">
+              <span>{subj.name}</span>
+              <span className="ba-pdf-badge">PDF view ↗</span>
+            </a>
+          ))}
         </div>
       </div>
+      {/* Scholarship & Eligibility Hub */}
+      <div className="ba-scholarship-card">
+        <div className="ba-scholarship-header">
+          <div>
+            <span className="ba-sch-tag">🎓 FINANCIAL AID</span>
+            <h3>State Scholarship & Fee Reimbursement</h3>
+            <p>Check your eligibility criteria and apply for government scholarship schemes directly.</p>
+          </div>
+          <div className="ba-sch-buttons">
+            <a href="#" className="ba-sch-btn apply-btn">Apply Now 🚀</a>
+            <a href="#" className="ba-sch-btn status-btn">Check Status 🔍</a>
+          </div>
+        </div>
+
+        <div className="ba-sch-criteria-box">
+          <div className="ba-criteria-item">
+            <span className="ba-criteria-label">Academic Cutoff:</span>
+            <span className="ba-criteria-val">Minimum 75% Marks</span>
+          </div>
+          <div className="ba-criteria-item">
+            <span className="ba-criteria-label">Backlog Rule:</span>
+            <span className="ba-criteria-val">No Active Backlogs (0 Failures)</span>
+          </div>
+          <div className="ba-criteria-item">
+            <span className="ba-criteria-label">Attendance:</span>
+            <span className="ba-criteria-val">Minimum 75% Required</span>
+          </div>
+        </div>
+      </div>
+
     </div>
   );
 };
