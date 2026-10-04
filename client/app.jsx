@@ -21,6 +21,9 @@ import AdminDashboard from './src/pages/AdminDashboard';
 import ProtectedAdminRoute from './src/components/ProtectedAdminRoute';
 import StudentResult from './src/components/StudentResult';
 
+// Support Widget Import (Path check kar lena agar component kisi aur folder me ho)
+import SupportWidget from './src/components/SupportWidget';
+
 function App() {
     return (
         <Router>
@@ -53,6 +56,9 @@ function App() {
                     }
                 />
             </Routes>
+
+            {/* Floating WhatsApp/Telegram Support Widget - Yeh har page par bottom-right me dikhega */}
+            <SupportWidget />
         </Router>
     );
 }

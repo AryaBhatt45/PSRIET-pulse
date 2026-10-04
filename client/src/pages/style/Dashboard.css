@@ -1822,3 +1822,71 @@
 .event-modal-close-btn:hover {
   background: #dc2626;
 }
+
+/* Header Support Contacts Container */
+.header-support-contacts {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-left: 20px;
+  margin-right: auto;
+  /* Yeh baki elements ko right push kar dega aur isko logo ke paas le aayega */
+}
+
+/* Phone Support Button Style */
+.support-phone-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  color: #1e293b;
+  font-size: 14px;
+  font-weight: 600;
+  background: #f8fafc;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s ease;
+}
+
+.support-phone-btn svg {
+  color: #0284c7;
+}
+
+.support-phone-btn:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+/* WhatsApp Support Button Style */
+.support-whatsapp-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  color: #166534;
+  font-size: 14px;
+  font-weight: 600;
+  background: #f0fdf4;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid #dcfce7;
+  transition: all 0.2s ease;
+}
+
+.support-whatsapp-btn svg {
+  color: #22c55e;
+}
+
+.support-whatsapp-btn:hover {
+  background: #dcfce7;
+  border-color: #bbf7d0;
+}
+
+/* Mobile responsive ke liye choti screen par hide ya adjust karne ke liye */
+@media (max-width: 768px) {
+  .header-support-contacts {
+    display: none;
+    /* Mobile par header clutter avoid karne ke liye hide kar sakte hain, floating widget already hai */
+  }
+}
