@@ -335,7 +335,32 @@ const Dashboard = () => {
                         <h2>Want to Join PTSRIET?</h2>
                         <p>Fill out this quick form and our admission counsellor will call you back within 24 hours with complete details and fee structure.</p>
                     </div>
-                    <form className="enquiry-form" onSubmit={(e) => { e.preventDefault(); alert('Query submitted successfully! Admission cell will contact you soon.'); }}>
+                    <form className="enquiry-form" onSubmit={(e) => {
+                        e.preventDefault();
+
+                        // Form ki values nikal rahe hain
+                        const name = e.target[0].value;
+                        const phone = e.target[1].value;
+                        const course = e.target[2].value;
+
+                        // Nayi enquiry object
+                        const newEnquiry = {
+                            id: Date.now(),
+                            name: name,
+                            phone: phone,
+                            course: course,
+                            date: new Date().toLocaleDateString('hi-IN', { day: '2-digit', month: 'short', year: 'numeric' })
+                        };
+
+                        // Purani enquiries fetch karke nayi wali add kar rahe hain
+                        const existingEnquiries = JSON.parse(localStorage.getItem('pt_enquiries')) || [];
+                        const updatedEnquiries = [newEnquiry, ...existingEnquiries];
+
+                        localStorage.setItem('pt_enquiries', JSON.stringify(updatedEnquiries));
+
+                        alert('Query submitted successfully! Admission cell will contact you soon.');
+                        e.target.reset(); // Form clear karne ke liye
+                    }}>
                         <input type="text" placeholder="Your Full Name" required className="enquiry-input" />
                         <input type="tel" placeholder="Phone Number" required className="enquiry-input" />
                         <select className="enquiry-input" required>
@@ -346,6 +371,7 @@ const Dashboard = () => {
                             <option value="bcom">B.Com (Commerce)</option>
                             <option value="llb">LLB (Faculty of Law)</option>
                             <option value="bed">B.Ed / D.El.Ed (Education)</option>
+                            <option value="ba">BA (Bachelor of Art)</option>
                         </select>
                         <button type="submit" className="enquiry-submit-btn">Request Callback 🚀</button>
                     </form>
