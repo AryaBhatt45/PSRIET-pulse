@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './style/bca.css';
 
 const BcaPage = () => {
+  const [expandedId, setExpandedId] = useState(null);
+
   const semesters = [
     { sem: 'Sem 1', subjects: 'C Programming, Computer Fundamentals, Basic Math', syllabusPdf: '/syllabus/sem1-syllabus.pdf' },
     { sem: 'Sem 2', subjects: 'C++, Web Designing (HTML/CSS/JS), Digital Electronics', syllabusPdf: '/syllabus/sem2-syllabus.pdf' },
@@ -19,6 +21,45 @@ const BcaPage = () => {
     { name: 'Neha Singh', achievement: 'AI Research Paper Published', image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&h=200&q=80' }
   ];
 
+ const openSourcePrograms = [
+    {
+      id: 1,
+      title: 'Google Summer of Code (GSoC)',
+      type: 'Open Source Program',
+      stipend: '₹1.5 Lakh - ₹3.3 Lakh ($1,500 - $3,300)',
+      timeline: 'Registration starts in February | Program: March - August',
+      link: 'https://summerofcode.withgoogle.com/',
+      details: 'A global online program by Google that introduces students to open-source software development. Students work with open-source organizations on real projects under the guidance of mentors and earn a substantial stipend.\n\nRegistration Steps:\n1. Check eligibility (Must be 18+ and a college student).\n2. Explore open-source mentor organizations and choose a project in February.\n3. Connect with organization mentors via IRC/Discord and discuss proposal ideas.\n4. Draft and submit your project proposal on the official GSoC portal before the deadline.'
+    },
+    {
+      id: 2,
+      title: 'MLH Fellowship (Major League Hacking)',
+      type: 'Open Source & Internship',
+      stipend: '₹1 Lakh+ Stipend / Fellowship',
+      timeline: 'Batch-wise (Spring, Summer, Fall applications open early)',
+      link: 'https://fellowship.mlh.io/',
+      details: 'A 12-week professional internship alternative where students get paid to learn how to collaborate on real-world open-source projects used by top tech companies.\n\nRegistration Steps:\n1. Visit the MLH Fellowship website and select your preferred track (Open Source or Prep).\n2. Fill out the application form with your GitHub profile and coding background.\n3. Clear the technical assessment and interview rounds.\n4. Accept the offer and join the cohort.'
+    },
+    {
+      id: 3,
+      title: 'Postman Student Leader & Open Source',
+      type: 'API & Community Open Source',
+      stipend: 'Swags, Grants & Paid Bounties',
+      timeline: 'Open Throughout Year (Applications open bi-annually)',
+      link: 'https://www.postman.com/student-program/',
+      details: 'An ideal program for students passionate about APIs, backend workflows, and building developer tools. Contribute to open-source API projects and student leader initiatives to earn bounties.\n\nRegistration Steps:\n1. Sign up on the Postman Student Portal.\n2. Complete the beginner API fundamentals training.\n3. Apply for the Student Leader or Open Source contributor badge.\n4. Build and submit projects using Postman technologies.'
+    },
+    {
+      id: 4,
+      title: 'Hacktoberfest',
+      type: 'Open Source Contribution',
+      stipend: 'Digital Badges, Swags & Tree Planting / Bounties',
+      timeline: 'Registration in September | Event in October',
+      link: 'https://hacktoberfest.com/',
+      details: 'The ultimate beginner-friendly event to jumpstart your open-source journey. Contribute valid pull requests to participating public GitHub/GitLab repositories during October.\n\nRegistration Steps:\n1. Create a GitHub or GitLab account if you do not have one.\n2. Register on the official Hacktoberfest website when registration opens in September.\n3. Find beginner-friendly repositories labeled with "hacktoberfest".\n4. Submit 4 pull requests that get merged or approved during the month of October.'
+    }
+  ];
+
   const announcements = [
     "📢 BCA Admission Last Date: 15th July 2026",
     "💡 National Scholarship Portal (NSP) Form submission open - Apply Now!",
@@ -26,6 +67,9 @@ const BcaPage = () => {
     "🚀 New Practical Lab Sessions scheduled for odd semesters."
   ];
 
+  const toggleExpand = (id) => {
+    setExpandedId(expandedId === id ? null : id);
+  };
   return (
     <div className="bca-dashboard-theme">
       <div className="bca-top-bar">
@@ -82,6 +126,54 @@ const BcaPage = () => {
           ))}
         </div>
       </div>
+      {/* Open Source & Earning Hub (Naya Feature add kiya hai) */}
+      <div className="opensource-hub-card" style={{ background: '#ffffff', border: '1px solid #cbd5e1', padding: '22px', borderRadius: '16px', marginTop: '25px', marginBottom: '25px', boxShadow: '0 4px 15px rgba(0,0,0,0.03)' }}>
+        <div style={{ marginBottom: '18px' }}>
+          <span style={{ background: '#ecfdf5', color: '#047857', padding: '4px 10px', borderRadius: '6px', fontSize: '0.7rem', fontWeight: '700', border: '1px solid #a7f3d0' }}>💰 SKILLS & EARNINGS HUB</span>
+          <h3 style={{ margin: '8px 0 4px 0', fontSize: '1.15rem', color: '#0f172a' }}>Open Source & Paid Student Programs</h3>
+          <p style={{ margin: '0', fontSize: '0.82rem', color: '#64748b' }}>Coding skills ke sath-sath open-source me contribute karke stipend aur pocket money kaise kamayein, yahan dekhein!</p>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '12px' }}>
+          {openSourcePrograms.map((item) => {
+            const isExpanded = expandedId === item.id;
+            return (
+              <div key={item.id} style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '14px 16px', transition: 'all 0.2s ease' }}>
+                <div
+                  onClick={() => toggleExpand(item.id)}
+                  style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}
+                >
+                  <div>
+                    <span style={{ fontSize: '0.7rem', fontWeight: '700', color: '#2563eb', background: '#eff6ff', padding: '2px 8px', borderRadius: '4px', border: '1px solid #bfdbfe' }}>{item.type}</span>
+                    <h4 style={{ margin: '6px 0 2px 0', fontSize: '0.95rem', color: '#0f172a', fontWeight: '700' }}>{item.title}</h4>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{ fontSize: '0.75rem', fontWeight: '600', color: '#047857', background: '#ecfdf5', padding: '4px 8px', borderRadius: '6px' }}>{item.stipend}</span>
+                    <span style={{ fontSize: '1rem', color: '#64748b', fontWeight: 'bold' }}>{isExpanded ? '▲' : '▼'}</span>
+                  </div>
+                </div>
+
+                {isExpanded && (
+                  <div style={{ marginTop: '14px', paddingTop: '12px', borderTop: '1px solid #cbd5e1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <p style={{ margin: '0', fontSize: '0.82rem', color: '#475569', lineHeight: '1.5' }}>{item.details}</p>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '6px', flexWrap: 'wrap', gap: '10px' }}>
+                      <span style={{ fontSize: '0.78rem', color: '#d97706', fontWeight: '600', background: '#fef3c7', padding: '3px 8px', borderRadius: '6px' }}>📅 Timeline: {item.timeline}</span>
+                      <a
+                        href={item.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ background: '#2563eb', color: '#ffffff', padding: '6px 14px', borderRadius: '8px', textDecoration: 'none', fontSize: '0.78rem', fontWeight: '600', boxShadow: '0 2px 8px rgba(37,99,235,0.2)' }}
+                      >
+                        Apply / Official Website ↗
+                      </a>
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
 
       <div className="bca-section glory-wrapper">
         <div className="bca-section-header text-center">
@@ -92,10 +184,10 @@ const BcaPage = () => {
           <div className="infinite-track">
             {[...gloryStudents, ...gloryStudents].map((student, idx) => (
               <div key={idx} className="glory-card-light">
-                <img 
-                  src={student.image} 
-                  alt={student.name} 
-                  className="glory-avatar" 
+                <img
+                  src={student.image}
+                  alt={student.name}
+                  className="glory-avatar"
                   onError={(e) => {
                     e.target.onerror = null;
                     e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(student.name)}&background=0D8ABC&color=fff&size=128`;
@@ -112,7 +204,7 @@ const BcaPage = () => {
       </div>
 
       <div className="bca-hod-card-light">
-        <img src="/nilesh.jpg" className="hod-img-light" alt="HOD" />
+        <img src="/pradeeppandey.jpg" className="hod-img-light" alt="HOD" />
         <div>
           <h3>Pradeep Pandey</h3>
           <p className="hod-title-light">HOD - Computer Science Department</p>
