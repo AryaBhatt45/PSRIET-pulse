@@ -499,7 +499,7 @@ const Dashboard = () => {
                     <div className="enquiry-text">
                         <span className="badge-tag">🎓 ADMISSIONS OPEN 2026</span>
                         <h2>Want to Join PTSRIET?</h2>
-                        <p>Fill out this quick form and our admission counsellor will call you back within 24 hours with complete details and fee structure.</p>
+                        <p>This form saves your enquiry in this browser only. For a response or fee details, please contact the institute directly.</p>
                     </div>
                     <form className="enquiry-form" onSubmit={(e) => {
                         e.preventDefault();
@@ -520,7 +520,7 @@ const Dashboard = () => {
 
                         localStorage.setItem('pt_enquiries', JSON.stringify(updatedEnquiries));
 
-                        alert('Query submitted successfully! Admission cell will contact you soon.');
+                        alert('Your enquiry was saved in this browser only. Please contact the institute directly to request a callback.');
                         e.target.reset();
                     }}>
                         <input type="text" placeholder="Your Full Name" required className="enquiry-input" />

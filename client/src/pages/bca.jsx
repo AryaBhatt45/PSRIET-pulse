@@ -3,30 +3,6 @@ import { Link } from 'react-router-dom';
 import './style/bca.css';
 
 const opportunityStorageKeys = ['pt_jobs', 'pt_internships'];
-const sampleOpportunities = [
-  {
-    id: 'sample-job-junior-web-developer',
-    title: 'Sample: Junior Web Developer',
-    company: 'Example Technology Co. (Demo)',
-    description: 'Demo listing for a full-time role building responsive web applications. Replace with a real posting in the Admin Dashboard.',
-    eligibility: 'BCA / B.Tech, final year or graduate',
-    experience: 'Fresher',
-    lastDate: '30 Nov 2026',
-    applyLink: 'https://example.com/jobs/junior-web-developer',
-    type: 'Job'
-  },
-  {
-    id: 'sample-internship-frontend-developer',
-    title: 'Sample: Frontend Developer Intern',
-    company: 'Example Digital Studio (Demo)',
-    description: 'Demo listing for a frontend internship working with React and modern CSS. Replace with a real posting in the Admin Dashboard.',
-    eligibility: 'BCA / B.Tech, pre-final or final year',
-    experience: 'Fresher',
-    lastDate: '15 Dec 2026',
-    applyLink: 'https://example.com/internships/frontend-developer',
-    type: 'Internship'
-  }
-];
 
 const readOpportunities = () => opportunityStorageKeys.flatMap((key) => {
   const rawEntries = localStorage.getItem(key);
@@ -87,8 +63,7 @@ const BcaPage = () => {
 
   useEffect(() => {
     const updateOpportunities = () => {
-      const storedOpportunities = readOpportunities();
-      setOpportunities(storedOpportunities.length > 0 ? storedOpportunities : sampleOpportunities);
+      setOpportunities(readOpportunities());
     };
     updateOpportunities();
 
@@ -101,12 +76,12 @@ const BcaPage = () => {
   }, []);
 
   const semesters = [
-    { sem: 'Sem 1', subjects: 'C Programming, Computer Fundamentals, Basic Math', syllabusPdf: '/syllabus/sem1-syllabus.pdf' },
-    { sem: 'Sem 2', subjects: 'C++, Web Designing (HTML/CSS/JS), Digital Electronics', syllabusPdf: '/syllabus/sem2-syllabus.pdf' },
-    { sem: 'Sem 3', subjects: 'Data Structures (DSA), Python OOPs, DBMS & SQL', syllabusPdf: '/syllabus/sem3-syllabus.pdf' },
-    { sem: 'Sem 4', subjects: 'Advanced Java, Software Engineering, Computer Networks', syllabusPdf: '/syllabus/sem4-syllabus.pdf' },
-    { sem: 'Sem 5', subjects: 'Full-Stack Development (MERN), Cyber Security', syllabusPdf: '/syllabus/sem5-syllabus.pdf' },
-    { sem: 'Sem 6', subjects: 'Cloud Computing, Major Live Project, AI Basics', syllabusPdf: '/syllabus/sem6-syllabus.pdf' }
+    { sem: 'Sem 1', subjects: 'C Programming, Computer Fundamentals, Basic Math' },
+    { sem: 'Sem 2', subjects: 'C++, Web Designing (HTML/CSS/JS), Digital Electronics' },
+    { sem: 'Sem 3', subjects: 'Data Structures (DSA), Python OOPs, DBMS & SQL' },
+    { sem: 'Sem 4', subjects: 'Advanced Java, Software Engineering, Computer Networks' },
+    { sem: 'Sem 5', subjects: 'Full-Stack Development (MERN), Cyber Security' },
+    { sem: 'Sem 6', subjects: 'Cloud Computing, Major Live Project, AI Basics' }
   ];
 
   const gloryStudents = [
@@ -156,10 +131,10 @@ const BcaPage = () => {
   ];
 
   const announcements = [
-    "📢 BCA Admission Last Date: 15th July 2026",
-    "💡 National Scholarship Portal (NSP) Form submission open - Apply Now!",
-    "📝 Semester Back Exam Form filling started - Submit before 30th June",
-    "🚀 New Practical Lab Sessions scheduled for odd semesters."
+    "📢 Check the latest official institute notice for BCA admissions and application dates.",
+    "💡 Confirm scholarship eligibility and deadlines on the official scholarship portal.",
+    "📝 Verify examination form deadlines in official notices.",
+    "🚀 Consult department updates for practical lab schedules."
   ];
 
   const toggleExpand = (id) => {
@@ -213,9 +188,9 @@ const BcaPage = () => {
               </div>
               <p className="sem-subjects">{item.subjects}</p>
               <div className="bca-links">
-                <a href="#notes" className="bca-btn notes-l">Notes</a>
-                <a href="#quick-notes" className="bca-btn quick-l">Quick Notes ✨</a>
-                <a href={item.syllabusPdf} target="_blank" rel="noopener noreferrer" className="bca-btn syllabus-l">Syllabus PDF</a>
+                <span style={{ color: '#64748b', fontSize: '0.82rem' }}>
+                  Verified course resources will be added when available.
+                </span>
               </div>
             </div>
           ))}

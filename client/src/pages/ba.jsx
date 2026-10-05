@@ -9,16 +9,15 @@ const BaPage = () => {
     setActiveSem(activeSem === index ? null : index);
   };
 
-  // Har semester mein same 8 major subjects with dummy links
   const subjectsList = [
-    { name: 'Ancient History', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/ba-dummy.pdf' },
-    { name: 'Modern History', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/ba-dummy.pdf' },
-    { name: 'Geography', notesUrl: '#', quickUrl: '#', pdfUrl: '/Geography.pdf' },
-    { name: 'Education', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/ba-dummy.pdf' },
-    { name: 'Sociology', notesUrl: '#', quickUrl: '#', pdfUrl: '/Sociology.pdf' },
-    { name: 'English Literature', notesUrl: '#', quickUrl: '#', pdfUrl: '/English.pdf' },
-    { name: 'Hindi Literature', notesUrl: '#', quickUrl: '#', pdfUrl: '/U_hindi.pdf' },
-    { name: 'CTS (Co-Curricular)', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/ba-dummy.pdf' }
+    { name: 'Ancient History' },
+    { name: 'Modern History' },
+    { name: 'Geography', pdfUrl: '/Geography.pdf' },
+    { name: 'Education' },
+    { name: 'Sociology', pdfUrl: '/Sociology.pdf' },
+    { name: 'English Literature', pdfUrl: '/English.pdf' },
+    { name: 'Hindi Literature', pdfUrl: '/U_hindi.pdf' },
+    { name: 'CTS (Co-Curricular)' }
   ];
 
   const semesters = [
@@ -31,10 +30,10 @@ const BaPage = () => {
   ];
 
   const announcements = [
-    "📢 B.A. (Bachelor of Arts) Admissions Active for 2026 Session[cite: 16]",
-    "📖 Special Civil Services Foundation Guidance Cell meeting this Saturday[cite: 16]",
-    "📝 Internal assignment submission notice for Semester 2, 4 & 6[cite: 16]",
-    "🎭 Annual Cultural & Literary Inter-College Fest registrations open[cite: 16]."
+    "📢 Check the latest institute notice for B.A. admissions and application dates.",
+    "📖 Contact the department for current academic guidance and programme details.",
+    "📝 Verify assignment deadlines with your semester coordinator.",
+    "🎭 Follow institute announcements for upcoming cultural and literary events."
   ];
 
   return (
@@ -107,9 +106,11 @@ const BaPage = () => {
                       <div key={subIdx} className="bca-sub-card">
                         <h4 className="ba-subject-title">{sub.name}</h4>
                         <div className="bca-links">
-                          <a href={sub.notesUrl} className="bca-btn notes-l">Notes</a>
-                          <a href={sub.quickUrl} className="bca-btn quick-l">Quick ✨</a>
-                          <a href={sub.pdfUrl} target="_blank" rel="noopener noreferrer" className="bca-btn syllabus-l">Syllabus</a>
+                          {sub.pdfUrl ? (
+                            <a href={sub.pdfUrl} target="_blank" rel="noopener noreferrer" className="bca-btn syllabus-l">View PDF</a>
+                          ) : (
+                            <span style={{ color: '#64748b', fontSize: '0.82rem' }}>Verified resources are not available yet.</span>
+                          )}
                         </div>
                       </div>
                     ))}
@@ -127,17 +128,14 @@ const BaPage = () => {
           <div>
             <span className="ba-cheat-tag">⚡ QUICK ACCESS</span>
             <h3>B.A. All-Subjects Master Cheatsheet Hub</h3>
-            <p>Access one-shot revision notes and summary PDFs for all major subjects instantly.</p>
+            <p>Open the currently available subject PDFs. More verified resources will be added when published.</p>
           </div>
-          <a href="/syllabus/ba-dummy.pdf" target="_blank" rel="noopener noreferrer" className="ba-cheat-main-btn">
-            View All Cheatsheets 📄
-          </a>
         </div>
         <div className="ba-cheat-grid">
-          {subjectsList.map((subj, sIdx) => (
-            <a key={sIdx} href={subj.pdfUrl} target="_blank" rel="noopener noreferrer" className="ba-cheat-chip">
+          {subjectsList.filter((subj) => subj.pdfUrl).map((subj) => (
+            <a key={subj.name} href={subj.pdfUrl} target="_blank" rel="noopener noreferrer" className="ba-cheat-chip">
               <span>{subj.name}</span>
-              <span className="ba-pdf-badge">PDF view ↗</span>
+              <span className="ba-pdf-badge">View PDF ↗</span>
             </a>
           ))}
         </div>
@@ -151,8 +149,8 @@ const BaPage = () => {
             <p>Check your eligibility criteria and apply for government scholarship schemes directly.</p>
           </div>
           <div className="ba-sch-buttons">
-            <a href="https://scholarship.up.gov.in/" className="ba-sch-btn apply-btn">Apply Now 🚀</a>
-            <a href="https://scholarship.up.gov.in/" className="ba-sch-btn status-btn">Check Status 🔍</a>
+            <a href="https://scholarship.up.gov.in/" target="_blank" rel="noopener noreferrer" className="ba-sch-btn apply-btn">Apply Now 🚀</a>
+            <a href="https://scholarship.up.gov.in/" target="_blank" rel="noopener noreferrer" className="ba-sch-btn status-btn">Check Status 🔍</a>
           </div>
         </div>
 
