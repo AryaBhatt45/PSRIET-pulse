@@ -39,6 +39,15 @@ const Dashboard = () => {
     const [selectedEvent, setSelectedEvent] = useState(null);
 
     const [alumniIndex, setAlumniIndex] = useState(0);
+    const [attendanceAttended, setAttendanceAttended] = useState('');
+    const [attendanceHeld, setAttendanceHeld] = useState('');
+    const [attendanceTarget, setAttendanceTarget] = useState('75');
+    const [attendanceResult, setAttendanceResult] = useState('');
+    const [marksObtained, setMarksObtained] = useState('');
+    const [marksTotal, setMarksTotal] = useState('');
+    const [marksResult, setMarksResult] = useState('');
+    const [examDate, setExamDate] = useState('');
+    const [examCountdown, setExamCountdown] = useState('');
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -92,6 +101,69 @@ const Dashboard = () => {
     const nextSlide = () => setCurrentIdx((prev) => (prev + 1) % bannerImages.length);
     const prevSlide = () => setCurrentIdx((prev) => (prev - 1 + bannerImages.length) % bannerImages.length);
     const currentAlumni = alumniList[alumniIndex];
+
+    const calculateAttendance = (event) => {
+        event.preventDefault();
+        const attended = Number(attendanceAttended);
+        const held = Number(attendanceHeld);
+        const target = Number(attendanceTarget);
+
+        if (!attendanceAttended || !attendanceHeld || !attendanceTarget ||
+            !Number.isFinite(attended) || !Number.isFinite(held) || !Number.isFinite(target) ||
+            attended < 0 || held <= 0 || attended > held || target <= 0 || target > 100) {
+            setAttendanceResult('Enter valid class counts and a target between 1% and 100%.');
+            return;
+        }
+
+        const currentPercentage = (attended / held) * 100;
+        if (currentPercentage >= target) {
+            const classesCanMiss = Math.floor(attended / (target / 100) - held);
+            setAttendanceResult(`Current attendance: ${currentPercentage.toFixed(1)}%. You can miss up to ${Math.max(0, classesCanMiss)} more class${classesCanMiss === 1 ? '' : 'es'} and stay at ${target}%.`);
+            return;
+        }
+
+        if (target === 100) {
+            setAttendanceResult(`Current attendance: ${currentPercentage.toFixed(1)}%. A 100% target is no longer reachable after missing a class.`);
+            return;
+        }
+
+        const classesNeeded = Math.ceil((target * held - 100 * attended) / (100 - target));
+        setAttendanceResult(`Current attendance: ${currentPercentage.toFixed(1)}%. Attend the next ${classesNeeded} consecutive class${classesNeeded === 1 ? '' : 'es'} to reach ${target}%.`);
+    };
+
+    const calculateMarksPercentage = (event) => {
+        event.preventDefault();
+        const obtained = Number(marksObtained);
+        const total = Number(marksTotal);
+
+        if (!marksObtained || !marksTotal || !Number.isFinite(obtained) ||
+            !Number.isFinite(total) || obtained < 0 || total <= 0 || obtained > total) {
+            setMarksResult('Enter valid marks; obtained marks cannot exceed the total.');
+            return;
+        }
+
+        setMarksResult(`Percentage: ${((obtained / total) * 100).toFixed(2)}%`);
+    };
+
+    const calculateExamCountdown = (event) => {
+        event.preventDefault();
+        if (!examDate) {
+            setExamCountdown('Choose your exam date to see the countdown.');
+            return;
+        }
+
+        const [year, month, day] = examDate.split('-').map(Number);
+        const selectedDay = Date.UTC(year, month - 1, day);
+        const today = new Date();
+        const todayStart = Date.UTC(today.getFullYear(), today.getMonth(), today.getDate());
+        const daysRemaining = Math.round((selectedDay - todayStart) / 86400000);
+
+        setExamCountdown(daysRemaining < 0
+            ? 'That exam date has already passed.'
+            : daysRemaining === 0
+                ? 'Your exam is today. Good luck!'
+                : `${daysRemaining} day${daysRemaining === 1 ? '' : 's'} until your exam.`);
+    };
 
     return (
         <div className="dashboard-container">
@@ -247,7 +319,68 @@ const Dashboard = () => {
                     ))}
                 </div>
             </section>
+            <section className="student-toolkit-section" aria-labelledby="student-toolkit-title">
+                <div className="student-toolkit-heading">
+                    <span className="student-toolkit-badge">🎒 STUDENT TOOLKIT</span>
+                    <h2 id="student-toolkit-title">Quick tools for your semester</h2>
+                    <p>Check attendance, calculate marks, and keep your next exam in sight.</p>
+                </div>
+                <div className="student-toolkit-grid">
+                    <article className="student-tool-card">
+                        <div className="student-tool-icon" aria-hidden="true">📊</div>
+                        <h3>Attendance Planner</h3>
+                        <p>See your current attendance and how many classes you need to attend or can miss.</p>
+                        <form onSubmit={calculateAttendance} className="student-tool-form">
+                            <label>
+                                Classes attended
+                                <input type="number" min="0" step="1" value={attendanceAttended} onChange={(event) => setAttendanceAttended(event.target.value)} required />
+                            </label>
+                            <label>
+                                Classes held
+                                <input type="number" min="1" step="1" value={attendanceHeld} onChange={(event) => setAttendanceHeld(event.target.value)} required />
+                            </label>
+                            <label>
+                                Target attendance (%)
+                                <input type="number" min="1" max="100" step="0.1" value={attendanceTarget} onChange={(event) => setAttendanceTarget(event.target.value)} required />
+                            </label>
+                            <button type="submit" className="student-tool-button">Check attendance</button>
+                            {attendanceResult && <p className="student-tool-result" aria-live="polite">{attendanceResult}</p>}
+                        </form>
+                    </article>
 
+                    <article className="student-tool-card">
+                        <div className="student-tool-icon" aria-hidden="true">🧮</div>
+                        <h3>Marks Calculator</h3>
+                        <p>Calculate your score percentage without guessing a CGPA conversion formula.</p>
+                        <form onSubmit={calculateMarksPercentage} className="student-tool-form">
+                            <label>
+                                Marks obtained
+                                <input type="number" min="0" step="any" value={marksObtained} onChange={(event) => setMarksObtained(event.target.value)} required />
+                            </label>
+                            <label>
+                                Total marks
+                                <input type="number" min="0.01" step="any" value={marksTotal} onChange={(event) => setMarksTotal(event.target.value)} required />
+                            </label>
+                            <button type="submit" className="student-tool-button">Calculate percentage</button>
+                            {marksResult && <p className="student-tool-result" aria-live="polite">{marksResult}</p>}
+                        </form>
+                    </article>
+
+                    <article className="student-tool-card">
+                        <div className="student-tool-icon" aria-hidden="true">📅</div>
+                        <h3>Exam Countdown</h3>
+                        <p>Set an exam date to see how many days you have left to prepare.</p>
+                        <form onSubmit={calculateExamCountdown} className="student-tool-form">
+                            <label>
+                                Exam date
+                                <input type="date" value={examDate} onChange={(event) => setExamDate(event.target.value)} required />
+                            </label>
+                            <button type="submit" className="student-tool-button">Start countdown</button>
+                            {examCountdown && <p className="student-tool-result" aria-live="polite">{examCountdown}</p>}
+                        </form>
+                    </article>
+                </div>
+            </section>
             {/* Upcoming Events & Important Updates Section */}
             <section className="dashboard-section-box">
                 <div className="section-header-wrap">
@@ -316,6 +449,51 @@ const Dashboard = () => {
                 </div>
             </section>
 
+            {/* Scholarship & Financial Aid Section (Jaise BA me hai) */}
+            <section className="dashboard-section-box">
+                <div className="section-header-wrap">
+                    <div className="title-with-badge">
+                        <span className="badge-tag">🎓 FINANCIAL AID</span>
+                    </div>
+                    <h2>State Scholarship & Fee Reimbursement</h2>
+                    <p className="section-subtitle">Check your eligibility criteria and apply for government scholarship schemes directly.</p>
+                </div>
+
+                <div className="scholarship-main-card">
+                    <div className="scholarship-card-header">
+                        <div className="scholarship-title-area">
+                            <span className="scholarship-badge">🏛️ Government Scheme</span>
+                            <h3>Post-Matric Scholarship Scheme</h3>
+                            <p>Eligible students can claim tuition fee reimbursement and maintenance allowances provided by the state government.</p>
+                        </div>
+                        <div className="scholarship-action-btns">
+                            <a href="https://scholarships.gov.in/" target="_blank" rel="noreferrer" className="primary-apply-btn">
+                                Apply Now 🚀
+                            </a>
+                            <button onClick={() => alert("Checking application status...")} className="secondary-status-btn">
+                                Check Status 🔍
+                            </button>
+                        </div>
+                    </div>
+
+                    <div className="scholarship-rules-grid">
+                        <div className="rule-box">
+                            <span className="rule-label">ACADEMIC CUTOFF:</span>
+                            <span className="rule-value">Minimum 75% Marks</span>
+                        </div>
+                        <div className="rule-box">
+                            <span className="rule-label">BACKLOG RULE:</span>
+                            <span className="rule-value">No Active Backlogs (0 Failures)</span>
+                        </div>
+                        <div className="rule-box">
+                            <span className="rule-label">ATTENDANCE:</span>
+                            <span className="rule-value">Minimum 75% Required</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Admissions Enquiry Section (Fixed Layout) */}
             <section className="dashboard-section-box">
                 <div className="admission-enquiry-card">
                     <div className="enquiry-text">
@@ -325,13 +503,10 @@ const Dashboard = () => {
                     </div>
                     <form className="enquiry-form" onSubmit={(e) => {
                         e.preventDefault();
-
-                        // Form ki values nikal rahe hain
                         const name = e.target[0].value;
                         const phone = e.target[1].value;
                         const course = e.target[2].value;
 
-                        // Nayi enquiry object
                         const newEnquiry = {
                             id: Date.now(),
                             name: name,
@@ -340,14 +515,13 @@ const Dashboard = () => {
                             date: new Date().toLocaleDateString('hi-IN', { day: '2-digit', month: 'short', year: 'numeric' })
                         };
 
-                        // Purani enquiries fetch karke nayi wali add kar rahe hain
                         const existingEnquiries = JSON.parse(localStorage.getItem('pt_enquiries')) || [];
                         const updatedEnquiries = [newEnquiry, ...existingEnquiries];
 
                         localStorage.setItem('pt_enquiries', JSON.stringify(updatedEnquiries));
 
                         alert('Query submitted successfully! Admission cell will contact you soon.');
-                        e.target.reset(); // Form clear karne ke liye
+                        e.target.reset();
                     }}>
                         <input type="text" placeholder="Your Full Name" required className="enquiry-input" />
                         <input type="tel" placeholder="Phone Number" required className="enquiry-input" />
@@ -363,37 +537,6 @@ const Dashboard = () => {
                         </select>
                         <button type="submit" className="enquiry-submit-btn">Request Callback 🚀</button>
                     </form>
-                </div>
-            </section>
-
-            <section className="dashboard-section-box">
-                <div className="section-header-wrap text-center">
-                    <span className="badge-tag">🌟 WALL OF FAME</span>
-                    <h2>Our Proud Achievers & Alumni</h2>
-                    <p className="section-sub">Hear from our brilliant graduates who started their journey at PTSRIET.</p>
-                </div>
-
-                <div className="alumni-single-slider-card">
-                    <div className="slider-image-side">
-                        <img src={currentAlumni.image} alt={currentAlumni.name} />
-                        <p className="slider-role-text">{currentAlumni.role}</p>
-                        <div className="slider-company-badge">{currentAlumni.role}</div>
-                    </div>
-                    <div className="slider-content-side">
-                        <span className="slider-batch-tag">{currentAlumni.batch}</span>
-                        <h3>{currentAlumni.name}</h3>
-                        <p className="slider-quote">"{currentAlumni.quote}"</p>
-
-                        <div className="slider-dots">
-                            {alumniList.map((_, idx) => (
-                                <span
-                                    key={idx}
-                                    className={`dot ${alumniIndex === idx ? 'active' : ''}`}
-                                    onClick={() => setAlumniIndex(idx)}
-                                ></span>
-                            ))}
-                        </div>
-                    </div>
                 </div>
             </section>
 
@@ -419,9 +562,9 @@ const Dashboard = () => {
                     <div className="about-cards-wrapper">
                         <div className="uni-profile-card">
                             <div className="uni-card-img-container">
-                                <img src="/college .png" alt="Chairman / Principal" className="uni-profile-img" />
+                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYCea70h3XgTlVdYgvSMvtEf6QRfB0UlupRGpCE5edYQ&s=10" alt="Chairman / Principal" className="uni-profile-img" />
                             </div>
-                            <h3>Dr. R. K. Vishwakarma</h3>
+                            <h3>Dr.Lal ji Tripathi</h3>
                             <p className="uni-role">Managing Director & Patron</p>
                             <p className="uni-subtext">PTSRIET Institution, U.P.</p>
                             <a href="#profile-1" className="view-profile-btn">VIEW PROFILE</a>
@@ -429,7 +572,7 @@ const Dashboard = () => {
 
                         <div className="uni-profile-card">
                             <div className="uni-card-img-container">
-                                <img src="/nilesh.jpg" alt="HOD / Academic Head" className="uni-profile-img" />
+                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYCea70h3XgTlVdYgvSMvtEf6QRfB0UlupRGpCE5edYQ&s=10" alt="HOD / Academic Head" className="uni-profile-img" />
                             </div>
                             <h3>Pradeep Pandey</h3>
                             <p className="uni-role">HOD - Computer Science</p>

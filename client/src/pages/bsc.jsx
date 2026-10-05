@@ -38,7 +38,7 @@ const BscPage = () => {
   ];
 
   return (
-    <div className="ba-page-container">
+    <div className="bsc-page-container">
 
       {/* Top Bar */}
       <div className="ba-top-bar">

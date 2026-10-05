@@ -13,11 +13,11 @@ const BaPage = () => {
   const subjectsList = [
     { name: 'Ancient History', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/ba-dummy.pdf' },
     { name: 'Modern History', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/ba-dummy.pdf' },
-    { name: 'Geography', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/ba-dummy.pdf' },
+    { name: 'Geography', notesUrl: '#', quickUrl: '#', pdfUrl: '/Geography.pdf' },
     { name: 'Education', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/ba-dummy.pdf' },
-    { name: 'Sociology', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/ba-dummy.pdf' },
-    { name: 'English Literature', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/ba-dummy.pdf' },
-    { name: 'Hindi Literature', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/ba-dummy.pdf' },
+    { name: 'Sociology', notesUrl: '#', quickUrl: '#', pdfUrl: '/Sociology.pdf' },
+    { name: 'English Literature', notesUrl: '#', quickUrl: '#', pdfUrl: '/English.pdf' },
+    { name: 'Hindi Literature', notesUrl: '#', quickUrl: '#', pdfUrl: '/U_hindi.pdf' },
     { name: 'CTS (Co-Curricular)', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/ba-dummy.pdf' }
   ];
 
@@ -54,8 +54,8 @@ const BaPage = () => {
           <p className="ba-hero-desc">Gain comprehensive critical thinking, social insights, and literary appreciation through a structured multidisciplinary curriculum.</p>
           <div className="ba-hero-info-tags">
             <span>⏳ 3 Years</span>
-            <span>🪑 150 Seats</span>
-            <span>💰 ₹10,000 / Year</span>
+            <span>🪑 90 Seats</span>
+            <span>💰 ₹7000/ Year</span>
           </div>
         </div>
         <div className="ba-hero-logo-box">
@@ -151,8 +151,8 @@ const BaPage = () => {
             <p>Check your eligibility criteria and apply for government scholarship schemes directly.</p>
           </div>
           <div className="ba-sch-buttons">
-            <a href="#" className="ba-sch-btn apply-btn">Apply Now 🚀</a>
-            <a href="#" className="ba-sch-btn status-btn">Check Status 🔍</a>
+            <a href="https://scholarship.up.gov.in/" className="ba-sch-btn apply-btn">Apply Now 🚀</a>
+            <a href="https://scholarship.up.gov.in/" className="ba-sch-btn status-btn">Check Status 🔍</a>
           </div>
         </div>
 
