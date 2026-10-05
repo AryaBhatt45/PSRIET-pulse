@@ -696,133 +696,193 @@
   }
 }
 
-/* Events Cards Grid */
-.events-notice-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 20px;
+/* Container & Header Styling */
+.dashboard-section-box {
+  margin: 30px 0;
+  font-family: inherit;
 }
 
-.notice-card {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 14px;
-  padding: 22px;
+.section-header-wrap {
+  margin-bottom: 18px;
+}
+
+.title-with-badge {
   display: flex;
-  gap: 18px;
-  align-items: flex-start;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
-  transition: all 0.3s ease;
-}
-
-.notice-card:hover {
-  transform: translateY(-4px);
-  border-color: #2563eb;
-  box-shadow: 0 8px 25px rgba(37, 99, 235, 0.08);
-}
-
-.highlight-card {
-  border-left: 5px solid #2563eb;
-}
-
-.notice-date-box {
-  background: #eff6ff;
-  color: #2563eb;
-  border: 1px solid #bfdbfe;
-  border-radius: 12px;
-  padding: 10px 14px;
-  text-align: center;
-  flex-shrink: 0;
-}
-
-.date-num {
-  display: block;
-  font-size: 1.4rem;
-  font-weight: 800;
-  line-height: 1;
-}
-
-.date-mon {
-  display: block;
-  font-size: 0.75rem;
-  font-weight: 700;
-  margin-top: 3px;
-}
-
-.notice-content {
-  width: 100%;
-}
-
-.event-category {
-  display: inline-block;
-  font-size: 0.7rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  padding: 2px 8px;
-  border-radius: 6px;
+  align-items: center;
+  gap: 8px;
   margin-bottom: 6px;
 }
 
-.event-category.tech {
-  background: #f0fdf4;
-  color: #16a34a;
-  border: 1px solid #bbf7d0;
-}
-
-.event-category.sports {
-  background: #fff7ed;
-  color: #c2410c;
-  border: 1px solid #ffedd5;
-}
-
-.notice-content h3 {
-  margin: 0 0 6px 0;
-  font-size: 1.05rem;
-  color: #0f172a;
+.badge-tag {
+  background: #eff6ff;
+  color: #2563eb;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.7rem;
   font-weight: 700;
+  border: 1px solid #bfdbfe;
+  text-transform: uppercase;
 }
 
-.notice-content p {
-  margin: 0 0 14px 0;
-  font-size: 0.88rem;
+.live-pulse-dot {
+  width: 8px;
+  height: 8px;
+  background-color: #ef4444;
+  border-radius: 50%;
+  animation: pulse-dot 1.5s infinite;
+}
+
+.section-header-wrap h2 {
+  font-size: 1.35rem;
+  color: #0f172a;
+  font-weight: 800;
+  margin: 0;
+}
+
+/* Horizontal Grid Setup */
+.horizontal-events-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+/* Notice Card Box */
+.notice-card.highlight-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  gap: 12px;
+  align-items: stretch;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  box-sizing: border-box;
+  width: 100%;
+}
+
+/* Fixed Chhota Date Box (Width Fix) */
+.notice-date-box {
+  flex: 0 0 50px;
+  width: 50px;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 8px 2px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: fit-content;
+}
+
+.notice-date-box .date-num {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #2563eb;
+  line-height: 1.1;
+}
+
+.notice-date-box .date-mon {
+  font-size: 0.55rem;
+  font-weight: 700;
   color: #64748b;
-  line-height: 1.4;
+  margin-top: 2px;
+  text-transform: uppercase;
 }
 
+/* Content Area - Takes all remaining space */
+.notice-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.event-category {
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: #047857;
+  background: #ecfdf5;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid #a7f3d0;
+  display: inline-block;
+  width: fit-content;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+
+.notice-card-title {
+  font-size: 0.92rem;
+  color: #0f172a;
+  margin: 2px 0 4px 0;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.notice-card-desc {
+  font-size: 0.75rem;
+  color: #64748b;
+  margin: 0 0 8px 0;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.inline-read-more-btn {
+  background: none;
+  border: none;
+  color: #2563eb;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+  margin-bottom: 10px;
+}
+
+.inline-read-more-btn:hover {
+  text-decoration: underline;
+}
+
+/* Footer (Time & Location inside card) */
 .notice-footer {
+  border-top: 1px solid #f1f5f9;
+  padding-top: 8px;
+  margin-top: auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-top: 1px solid #f1f5f9;
-  padding-top: 10px;
-  font-size: 0.78rem;
+  font-size: 0.68rem;
   color: #475569;
   font-weight: 600;
+  gap: 6px;
 }
 
-/* Mobile Responsive */
-@media (max-width: 768px) {
-  .notice-card {
-    flex-direction: column;
-    gap: 12px;
+.notice-time,
+.notice-location {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@keyframes pulse-dot {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
   }
 
-  .notice-date-box {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    width: 100%;
-    padding: 8px 12px;
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 6px rgba(239, 68, 68, 0);
   }
 
-  .date-num {
-    font-size: 1.1rem;
-  }
-
-  .notice-footer {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 4px;
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
   }
 }
 
@@ -1889,4 +1949,40 @@
     display: none;
     /* Mobile par header clutter avoid karne ke liye hide kar sakte hain, floating widget already hai */
   }
+}
+
+.view-subjects-btn {
+  /* baaki purani properties jo hain wo rehne de, bas ye add kar: */
+  position: relative;
+  z-index: 2;
+  cursor: pointer;
+}
+
+.view-subjects-btn * {
+  pointer-events: none;
+  /* Ye ensure karega ki click seedha button par lage, span par nahi */
+}
+
+.notice-card {
+  display: flex;
+  flex-direction: column;
+  /* baaki jo purani properties hain jaise background, border, padding, wo sab rehne dena */
+}
+
+.notice-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  /* Ye sabhi cards ki height ko barabar kar dega */
+}
+
+/* Agar notice-card-desc (description) par koi margin-bottom hai toh usko auto kar sakte hain */
+.notice-card-desc {
+  flex-grow: 1;
+  /* Description jitna bhi chhota ho, bacha hua space le lega aur button ko neeche bhej dega */
+  margin-bottom: 15px;
+}
+
+.horizontal-events-grid * {
+  pointer-events: auto !important;
 }
