@@ -469,7 +469,7 @@ const Dashboard = () => {
                             <li><Link to="/terms-conditions">Terms & Conditions</Link></li>
                         </ul>
                         {/* Subtly visible Admin Login button */}
-                        <div style={{ marginTop: '10px' }}>
+                        <div style={{ marginTop: '30px' }}>
                             <Link
                                 to="/admin/login"
                                 className="admin-hidden-trigger"
