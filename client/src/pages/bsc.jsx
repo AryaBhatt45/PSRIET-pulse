@@ -1,14 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
+import CurriculumQuickAccess from '../components/CurriculumQuickAccess';
+import CurriculumSemesterCards from '../components/CurriculumSemesterCards';
 import './style/bsc.css';
 
 const BscPage = () => {
-  const [activeSem, setActiveSem] = useState(null);
-
-  const toggleAccordion = (index) => {
-    setActiveSem(activeSem === index ? null : index);
-  };
-
   const subjectsList = [
     { name: 'Mechanics & Wave Motion' },
     { name: 'Calculus & Algebra' },
@@ -81,55 +77,9 @@ const BscPage = () => {
           <h2>Semester-wise Curriculum & Notes</h2>
         </div>
 
-        <div className="ba-sem-grid">
-          {semesters.map((item, index) => {
-            const isOpen = activeSem === index;
-            return (
-              <div key={index} className={`ba-sem-card ${isOpen ? 'open' : ''}`}>
-                <div className="ba-sem-card-top">
-                  <h3>{item.sem}</h3>
-                  <span className="ba-active-dot"></span>
-                </div>
-
-                <p className="ba-sem-preview-text">
-                  {item.subjects.map(s => s.name).join(', ')}
-                </p>
-
-                <button onClick={() => toggleAccordion(index)} className="ba-accordion-btn">
-                  <span>{isOpen ? 'Hide Subjects' : 'View Subjects & Resources'}</span>
-                  <span>{isOpen ? '▲' : '▼'}</span>
-                </button>
-
-                {isOpen && (
-                  <div className="bca-sub-subjects-container">
-                    {item.subjects.map((sub, subIdx) => (
-                      <div key={subIdx} className="bca-sub-card">
-                        <h4 className="ba-subject-title">{sub.name}</h4>
-                        <div className="bca-links">
-                          <span style={{ color: '#64748b', fontSize: '0.82rem' }}>
-                            Verified resources are not available yet.
-                          </span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
+        <CurriculumSemesterCards semesters={semesters} />
       </div>
-
-      {/* Cheatsheet Hub Card */}
-      <div className="ba-cheatsheet-card">
-        <div className="ba-cheatsheet-header">
-          <div>
-            <span className="ba-cheat-tag">⚡ QUICK ACCESS</span>
-            <h3>B.Sc. Study Resources</h3>
-            <p>Verified subject PDFs will be listed here when they are published.</p>
-          </div>
-        </div>
-      </div>
+      <CurriculumQuickAccess semesters={semesters} />
 
       {/* Scholarship & Eligibility Hub */}
       <div className="ba-scholarship-card">

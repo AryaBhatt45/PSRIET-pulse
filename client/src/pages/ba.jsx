@@ -1,23 +1,19 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
+import CurriculumQuickAccess from '../components/CurriculumQuickAccess';
+import CurriculumSemesterCards from '../components/CurriculumSemesterCards';
 import './style/ba.css';
 
 const BaPage = () => {
-  const [activeSem, setActiveSem] = useState(null);
-
-  const toggleAccordion = (index) => {
-    setActiveSem(activeSem === index ? null : index);
-  };
-
   const subjectsList = [
-    { name: 'Ancient History' },
-    { name: 'Modern History' },
-    { name: 'Geography', pdfUrl: '/Geography.pdf' },
-    { name: 'Education' },
-    { name: 'Sociology', pdfUrl: '/Sociology.pdf' },
-    { name: 'English Literature', pdfUrl: '/English.pdf' },
-    { name: 'Hindi Literature', pdfUrl: '/U_hindi.pdf' },
-    { name: 'CTS (Co-Curricular)' }
+    'Ancient History',
+    'Modern History',
+    'Geography',
+    'Education',
+    'Sociology',
+    'English Literature',
+    'Hindi Literature',
+    'CTS (Co-Curricular)'
   ];
 
   const semesters = [
@@ -81,65 +77,10 @@ const BaPage = () => {
           <h2>Semester-wise Curriculum & Notes</h2>
         </div>
 
-        <div className="ba-sem-grid">
-          {semesters.map((item, index) => {
-            const isOpen = activeSem === index;
-            return (
-              <div key={index} className={`ba-sem-card ${isOpen ? 'open' : ''}`}>
-                <div className="ba-sem-card-top">
-                  <h3>{item.sem}</h3>
-                  <span className="ba-active-dot"></span>
-                </div>
-
-                <p className="ba-sem-preview-text">
-                  {item.subjects.map(s => s.name).join(', ')}
-                </p>
-
-                <button onClick={() => toggleAccordion(index)} className="ba-accordion-btn">
-                  <span>{isOpen ? 'Hide Subjects' : 'View Subjects & Resources'}</span>
-                  <span>{isOpen ? '▲' : '▼'}</span>
-                </button>
-
-                {isOpen && (
-                  <div className="bca-sub-subjects-container">
-                    {item.subjects.map((sub, subIdx) => (
-                      <div key={subIdx} className="bca-sub-card">
-                        <h4 className="ba-subject-title">{sub.name}</h4>
-                        <div className="bca-links">
-                          {sub.pdfUrl ? (
-                            <a href={sub.pdfUrl} target="_blank" rel="noopener noreferrer" className="bca-btn syllabus-l">View PDF</a>
-                          ) : (
-                            <span style={{ color: '#64748b', fontSize: '0.82rem' }}>Verified resources are not available yet.</span>
-                          )}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
+        <CurriculumSemesterCards semesters={semesters} />
       </div>
+      <CurriculumQuickAccess semesters={semesters} />
 
-      {/* Cheatsheet Hub Card (Replaces HOD section) */}
-      <div className="ba-cheatsheet-card">
-        <div className="ba-cheatsheet-header">
-          <div>
-            <span className="ba-cheat-tag">⚡ QUICK ACCESS</span>
-            <h3>B.A. All-Subjects Master Cheatsheet Hub</h3>
-            <p>Open the currently available subject PDFs. More verified resources will be added when published.</p>
-          </div>
-        </div>
-        <div className="ba-cheat-grid">
-          {subjectsList.filter((subj) => subj.pdfUrl).map((subj) => (
-            <a key={subj.name} href={subj.pdfUrl} target="_blank" rel="noopener noreferrer" className="ba-cheat-chip">
-              <span>{subj.name}</span>
-              <span className="ba-pdf-badge">View PDF ↗</span>
-            </a>
-          ))}
-        </div>
-      </div>
       {/* Scholarship & Eligibility Hub */}
       <div className="ba-scholarship-card">
         <div className="ba-scholarship-header">

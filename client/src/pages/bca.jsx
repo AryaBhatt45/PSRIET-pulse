@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import CurriculumQuickAccess from '../components/CurriculumQuickAccess';
+import CurriculumSemesterCards from '../components/CurriculumSemesterCards';
 import './style/bca.css';
 
 const opportunityStorageKeys = ['pt_jobs', 'pt_internships'];
@@ -76,12 +78,12 @@ const BcaPage = () => {
   }, []);
 
   const semesters = [
-    { sem: 'Sem 1', subjects: 'C Programming, Computer Fundamentals, Basic Math' },
-    { sem: 'Sem 2', subjects: 'C++, Web Designing (HTML/CSS/JS), Digital Electronics' },
-    { sem: 'Sem 3', subjects: 'Data Structures (DSA), Python OOPs, DBMS & SQL' },
-    { sem: 'Sem 4', subjects: 'Advanced Java, Software Engineering, Computer Networks' },
-    { sem: 'Sem 5', subjects: 'Full-Stack Development (MERN), Cyber Security' },
-    { sem: 'Sem 6', subjects: 'Cloud Computing, Major Live Project, AI Basics' }
+    { sem: 'Sem 1', subjects: ['C Programming', 'Computer Fundamentals', 'Basic Mathematics', 'Digital Logic', 'Communication Skills'] },
+    { sem: 'Sem 2', subjects: ['C++ Programming', 'Web Designing (HTML/CSS/JS)', 'Digital Electronics', 'Discrete Mathematics', 'Operating Systems'] },
+    { sem: 'Sem 3', subjects: ['Data Structures (DSA)', 'Python OOP', 'DBMS & SQL', 'Computer Organization', 'Statistics'] },
+    { sem: 'Sem 4', subjects: ['Advanced Java', 'Software Engineering', 'Computer Networks', 'Linux & Shell Programming', 'Theory of Computation'] },
+    { sem: 'Sem 5', subjects: ['Full-Stack Development (MERN)', 'Cyber Security', 'Cloud Computing', 'Data Analytics'] },
+    { sem: 'Sem 6', subjects: ['Cloud Computing', 'Major Live Project', 'AI Basics'] }
   ];
 
   const gloryStudents = [
@@ -179,23 +181,9 @@ const BcaPage = () => {
           <span className="section-badge">🚀 ROADMAP</span>
           <h2>Semester-wise Curriculum & Notes</h2>
         </div>
-        <div className="bca-sem-grid">
-          {semesters.map((item, index) => (
-            <div key={index} className="bca-sem-card-light">
-              <div className="card-top">
-                <h3>{item.sem}</h3>
-                <span className="active-dot"></span>
-              </div>
-              <p className="sem-subjects">{item.subjects}</p>
-              <div className="bca-links">
-                <span style={{ color: '#64748b', fontSize: '0.82rem' }}>
-                  Verified course resources will be added when available.
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
+        <CurriculumSemesterCards semesters={semesters} />
       </div>
+      <CurriculumQuickAccess semesters={semesters} />
       {/* Open Source & Earning Hub (Naya Feature add kiya hai) */}
       <div className="opensource-hub-card" style={{ background: '#ffffff', border: '1px solid #cbd5e1', padding: '22px', borderRadius: '16px', marginTop: '25px', marginBottom: '25px', boxShadow: '0 4px 15px rgba(0,0,0,0.03)' }}>
         <div style={{ marginBottom: '18px' }}>
