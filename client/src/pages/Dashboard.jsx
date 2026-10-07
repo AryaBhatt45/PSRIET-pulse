@@ -627,7 +627,7 @@ const Dashboard = () => {
 
                         <div className="uni-profile-card">
                             <div className="uni-card-img-container">
-                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYCea70h3XgTlVdYgvSMvtEf6QRfB0UlupRGpCE5edYQ&s=10" alt="HOD / Academic Head" className="uni-profile-img" />
+                                <img src="/nilesh.jpg" alt="HOD / Academic Head" className="uni-profile-img" />
                             </div>
                             <h3>Pradeep Pandey</h3>
                             <p className="uni-role">HOD - Computer Science</p>

@@ -6,8 +6,8 @@ import './style/bba.css';
 
 const BbaPage = () => {
   const semesters = [
-    { sem: 'Sem 1', subjects: 'Principles of Management, Business Economics, Business Communication, Accounting', syllabusPdf: '/syllabus/bba-sem1-syllabus.pdf' },
-    { sem: 'Sem 2', subjects: 'Organizational Behavior, Business Statistics, Marketing Management, Business Law', syllabusPdf: '/syllabus/bba-sem2-syllabus.pdf' },
+    { sem: 'Sem 1', subjects: 'Principles of Management, Business Economics, Business Communication, Accounting', syllabusPdf: '/syllabus/BBA sem 1 .pdf' },
+    { sem: 'Sem 2', subjects: 'Organizational Behavior, Business Statistics, Marketing Management, Business Law', syllabusPdf: '/syllabus/BBA 2 sem .pdf' },
     { sem: 'Sem 3', subjects: 'Human Resource Management, Cost & Management Accounting, Business Environment', syllabusPdf: '/syllabus/bba-sem3-syllabus.pdf' },
     { sem: 'Sem 4', subjects: 'Financial Management, Research Methodology, Indian Banking System, Company Law', syllabusPdf: '/syllabus/bba-sem4-syllabus.pdf' },
     { sem: 'Sem 5', subjects: 'Entrepreneurship Development, Strategic Management, Income Tax Law', syllabusPdf: '/syllabus/bba-sem5-syllabus.pdf' },
