@@ -20,7 +20,7 @@ const BaPage = () => {
       subjectList: [
         { name: 'History of Ancient India', notes: '#notes', quickNotes: '#quick', syllabus: '/syllabus/ba-sem1-syllabus.pdf' },
         { name: 'Hindi Literature (Kavya)', notes: '#notes', quickNotes: '#quick', syllabus: '/syllabus/ba-sem1-syllabus.pdf' },
-        { name: 'Political Theory', notes: '#notes', quickNotes: '#quick', syllabus: '/syllabus/ba-sem1-syllabus.pdf' },
+        { name: 'Political Theory', notes: '#notes', quickNotes: '#quick', syllabus: '/syllabus/ba-sem1-political-theory.pdf' },
         { name: 'Sociology Basics', notes: '#notes', quickNotes: '#quick', syllabus: '/syllabus/ba-sem1-syllabus.pdf' }
       ]
     },
@@ -163,7 +163,15 @@ const BaPage = () => {
                         <div className="bca-links">
                           <a href={subject.notes} className="bca-btn notes-l">Notes</a>
                           <a href={subject.quickNotes} className="bca-btn quick-l">Quick Notes ✨</a>
-                          <a href={subject.syllabus} target="_blank" rel="noopener noreferrer" className="bca-btn syllabus-l">Syllabus PDF</a>
+                      <a 
+  href={subject.syllabus} 
+  target="_blank" 
+  rel="noopener noreferrer" 
+  download
+  className="bca-btn syllabus-l"
+>
+  Syllabus PDF 
+</a>
                         </div>
                       </div>
                     ))}
