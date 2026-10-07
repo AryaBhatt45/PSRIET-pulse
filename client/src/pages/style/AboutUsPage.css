@@ -5,31 +5,31 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.about-page-hero {
+.about-us-page-container .about-page-hero {
     background: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.85)), url('/college .png') no-repeat center center/cover;
     padding: 80px 20px;
     text-align: center;
     color: #ffffff;
 }
 
-.about-page-hero h1 {
+.about-us-page-container .about-page-hero h1 {
     font-size: 2.8rem;
     font-weight: 800;
     margin-bottom: 10px;
 }
 
-.about-page-hero p {
+.about-us-page-container .about-page-hero p {
     font-size: 1.1rem;
     color: #cbd5e1;
 }
 
-.about-page-content-wrapper {
+.about-us-page-container .about-page-content-wrapper {
     max-width: 1200px;
     margin: 0 auto;
     padding: 40px 20px;
 }
 
-.back-to-home-btn {
+.about-us-page-container .back-to-home-btn {
     background: #0f172a;
     color: #fff;
     border: none;
@@ -41,45 +41,45 @@
     transition: background 0.2s;
 }
 
-.back-to-home-btn:hover {
+.about-us-page-container .back-to-home-btn:hover {
     background: #2563eb;
 }
 
-.about-main-grid {
+.about-us-page-container .about-main-grid {
     display: grid;
     grid-template-columns: 2fr 1fr;
     gap: 40px;
     align-items: flex-start;
 }
 
-.about-text-col h2 {
+.about-us-page-container .about-text-col h2 {
     font-size: 2rem;
     color: #0f172a;
     margin-bottom: 20px;
 }
 
-.about-text-col h3 {
+.about-us-page-container .about-text-col h3 {
     font-size: 1.4rem;
     color: #1e3a8a;
     margin-top: 30px;
     margin-bottom: 10px;
 }
 
-.lead-text {
+.about-us-page-container .lead-text {
     font-size: 1.15rem;
     font-weight: 600;
     color: #334155;
     line-height: 1.6;
 }
 
-.about-text-col p {
+.about-us-page-container .about-text-col p {
     font-size: 1rem;
     line-height: 1.8;
     color: #475569;
     margin-bottom: 15px;
 }
 
-.sticky-img-card {
+.about-us-page-container .sticky-img-card {
     background: #ffffff;
     border: 1px solid #e2e8f0;
     border-radius: 12px;
@@ -88,7 +88,7 @@
     text-align: center;
 }
 
-.sticky-img-card img {
+.about-us-page-container .sticky-img-card img {
     width: 100%;
     height: 220px;
     object-fit: cover;
@@ -96,19 +96,19 @@
     margin-bottom: 15px;
 }
 
-.sticky-img-card h4 {
+.about-us-page-container .sticky-img-card h4 {
     font-size: 1.1rem;
     color: #0f172a;
     margin-bottom: 5px;
 }
 
-.sticky-img-card p {
+.about-us-page-container .sticky-img-card p {
     font-size: 0.85rem;
     color: #64748b;
 }
 
 @media(max-width: 900px) {
-    .about-main-grid {
+    .about-us-page-container .about-main-grid {
         grid-template-columns: 1fr;
     }
 }

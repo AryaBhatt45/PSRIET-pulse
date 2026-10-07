@@ -11,7 +11,7 @@
 }
 
 /* Background Slider */
-.background-slider {
+.hero-banner-container .background-slider {
   position: absolute;
   top: 0;
   left: 0;
@@ -20,7 +20,7 @@
   z-index: 1;
 }
 
-.banner-slide {
+.hero-banner-container .banner-slide {
   position: absolute;
   top: 0;
   left: 0;
@@ -34,13 +34,13 @@
   transition: opacity 1.2s ease-in-out, transform 4.5s ease-out;
 }
 
-.banner-slide.active {
+.hero-banner-container .banner-slide.active {
   opacity: 1;
   transform: scale(1);
 }
 
 /* Foreground Text Card */
-.hero-overlay-content {
+.hero-banner-container .hero-overlay-content {
   position: relative;
   z-index: 2;
   max-width: 950px;
@@ -56,7 +56,7 @@
   color: #ffffff;
 }
 
-.portal-badge {
+.hero-banner-container .portal-badge {
   display: inline-block;
   background: #f59e0b;
   color: #111827;
@@ -68,7 +68,7 @@
   margin-bottom: 14px;
 }
 
-.hero-main-title {
+.hero-banner-container .hero-main-title {
   font-size: 2.5rem;
   font-weight: 800;
   color: #ffffff;
@@ -76,14 +76,14 @@
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
 }
 
-.college-full-name {
+.hero-banner-container .college-full-name {
   font-size: 1.25rem;
   color: #93c5fd;
   font-weight: 600;
   margin-bottom: 15px;
 }
 
-.college-about-text {
+.hero-banner-container .college-about-text {
   font-size: 1rem;
   line-height: 1.65;
   color: #cbd5e1;
@@ -91,14 +91,14 @@
   margin: 0 auto 25px auto;
 }
 
-.hero-btn-group {
+.hero-banner-container .hero-btn-group {
   display: flex;
   gap: 14px;
   justify-content: center;
   flex-wrap: wrap;
 }
 
-.hero-btn {
+.hero-banner-container .hero-btn {
   padding: 10px 24px;
   border-radius: 8px;
   font-size: 0.95rem;
@@ -107,42 +107,42 @@
   transition: all 0.3s ease;
 }
 
-.primary-btn {
+.hero-banner-container .primary-btn {
   background: #2563eb;
   color: #ffffff;
   border: 2px solid #2563eb;
 }
 
-.primary-btn:hover {
+.hero-banner-container .primary-btn:hover {
   background: #1d4ed8;
   transform: translateY(-2px);
 }
 
-.secondary-btn {
+.hero-banner-container .secondary-btn {
   background: #0d9488;
   color: #ffffff;
   border: 2px solid #0d9488;
 }
 
-.secondary-btn:hover {
+.hero-banner-container .secondary-btn:hover {
   background: #0f766e;
   transform: translateY(-2px);
 }
 
-.outline-btn {
+.hero-banner-container .outline-btn {
   background: transparent;
   color: #ffffff;
   border: 2px solid rgba(255, 255, 255, 0.7);
 }
 
-.outline-btn:hover {
+.hero-banner-container .outline-btn:hover {
   background: #ffffff;
   color: #0f172a;
   transform: translateY(-2px);
 }
 
 /* Arrows */
-.slider-arrow {
+.hero-banner-container .slider-arrow {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -157,15 +157,15 @@
   transition: 0.3s;
 }
 
-.slider-arrow:hover {
+.hero-banner-container .slider-arrow:hover {
   background: #2563eb;
 }
 
-.left-arrow { left: 20px; }
-.right-arrow { right: 20px; }
+.hero-banner-container .left-arrow { left: 20px; }
+.hero-banner-container .right-arrow { right: 20px; }
 
 /* Dots */
-.dots-bar {
+.hero-banner-container .dots-bar {
   position: absolute;
   bottom: 18px;
   left: 50%;
@@ -175,7 +175,7 @@
   z-index: 3;
 }
 
-.dot-pill {
+.hero-banner-container .dot-pill {
   width: 12px;
   height: 12px;
   border-radius: 50%;
@@ -184,15 +184,15 @@
   transition: all 0.3s;
 }
 
-.dot-pill.active {
+.hero-banner-container .dot-pill.active {
   background: #f59e0b;
   transform: scale(1.25);
   box-shadow: 0 0 10px rgba(245, 158, 11, 0.7);
 }
 
 @media (max-width: 768px) {
-  .hero-main-title { font-size: 1.8rem; }
-  .college-full-name { font-size: 1.05rem; }
-  .college-about-text { font-size: 0.9rem; }
-  .slider-arrow { display: none; }
+  .hero-banner-container .hero-main-title { font-size: 1.8rem; }
+  .hero-banner-container .college-full-name { font-size: 1.05rem; }
+  .hero-banner-container .college-about-text { font-size: 0.9rem; }
+  .hero-banner-container .slider-arrow { display: none; }
 }
