@@ -34,7 +34,11 @@ const CurriculumSemesterCards = ({ semesters, syllabusPdf }) => {
             </button>
             {isOpen && (
               <div className="curriculum-semester-content" id={contentId} role="region" aria-label={`${semester.sem} subjects`}>
-                <CurriculumSubjectResources subjects={semester.subjects} syllabusPdf={syllabusPdf} />
+                <CurriculumSubjectResources
+                  subjects={semester.subjects}
+                  syllabusPdf={syllabusPdf}
+                  notesPdfs={semester.notesPdfs}
+                />
               </div>
             )}
           </article>

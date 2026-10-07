@@ -10,7 +10,7 @@ const subjectSyllabusPdfs = {
   'Hindi Literature': '/U_hindi.pdf'
 };
 
-const CurriculumSubjectResources = ({ subjects, syllabusPdf: courseSyllabusPdf }) => {
+const CurriculumSubjectResources = ({ subjects, syllabusPdf: courseSyllabusPdf, notesPdfs }) => {
   const subjectNames = (Array.isArray(subjects) ? subjects : subjects.split(','))
     .map((subject) => (typeof subject === 'string' ? subject : subject.name))
     .filter(Boolean);
@@ -28,7 +28,7 @@ const CurriculumSubjectResources = ({ subjects, syllabusPdf: courseSyllabusPdf }
               <a href={subjectSyllabusPdf} target="_blank" rel="noopener noreferrer" className="curriculum-resource-link syllabus-link">
                 Syllabus
               </a>
-              <a href={notesPdf} target="_blank" rel="noopener noreferrer" className="curriculum-resource-link notes-link">
+              <a href={notesPdfs?.[subjectName] || notesPdf} target="_blank" rel="noopener noreferrer" className="curriculum-resource-link notes-link">
                 Notes
               </a>
             </div>

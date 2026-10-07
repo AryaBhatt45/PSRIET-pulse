@@ -17,7 +17,7 @@ const BaPage = () => {
   ];
 
   const semesters = [
-    { sem: 'Sem 1', subjects: subjectsList },
+    { sem: 'Sem 1', subjects: subjectsList, notesPdfs: { 'English Literature': '/English1st.pdf' } },
     { sem: 'Sem 2', subjects: subjectsList },
     { sem: 'Sem 3', subjects: subjectsList },
     { sem: 'Sem 4', subjects: subjectsList },
