@@ -620,25 +620,48 @@
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 18px;
-  align-items: stretch;
+  align-items: start;
 }
 
 .dashboard-container .student-tool-card {
-  display: flex;
-  flex-direction: column;
   min-width: 0;
-  padding: 20px;
+  overflow: hidden;
   border: 1px solid #e2e8f0;
   border-radius: 14px;
   background: #ffffff;
   box-shadow: 0 4px 15px rgba(15, 23, 42, 0.04);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dashboard-container .student-tool-card:hover,
+.dashboard-container .student-tool-card.is-expanded {
+  border-color: #bfdbfe;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+}
+
+.dashboard-container .student-tool-header {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 42px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 13px;
+  padding: 17px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.dashboard-container .student-tool-header:focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.35);
+  outline-offset: -3px;
 }
 
 .dashboard-container .student-tool-icon {
   display: grid;
   width: 42px;
   height: 42px;
-  margin-bottom: 12px;
   place-items: center;
   border: 1px solid #bfdbfe;
   border-radius: 11px;
@@ -646,22 +669,72 @@
   font-size: 1.3rem;
 }
 
-.dashboard-container .student-tool-card h3 {
-  margin: 0 0 6px;
-  color: #0f172a;
-  font-size: 1.05rem;
+.dashboard-container .student-tool-header-copy {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 4px;
 }
 
-.dashboard-container .student-tool-card > p {
-  margin: 0 0 16px;
+.dashboard-container .student-tool-title {
+  color: #0f172a;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.dashboard-container .student-tool-description {
   color: #64748b;
   font-size: 0.82rem;
   line-height: 1.5;
 }
 
+.dashboard-container .student-tool-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #2563eb;
+  font-size: 0.75rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.dashboard-container .student-tool-chevron {
+  display: inline-block;
+  font-size: 1.15rem;
+  line-height: 1;
+  transition: transform 0.25s ease;
+}
+
+.dashboard-container .student-tool-card.is-expanded .student-tool-chevron {
+  transform: rotate(180deg);
+}
+
+.dashboard-container .student-tool-content {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.28s ease;
+}
+
+.dashboard-container .student-tool-card.is-expanded .student-tool-content {
+  grid-template-rows: 1fr;
+}
+
+.dashboard-container .student-tool-content-inner {
+  min-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.dashboard-container .student-tool-card.is-expanded .student-tool-content-inner {
+  padding: 0 17px 17px;
+  opacity: 1;
+  transform: translateY(0);
+}
+
 .dashboard-container .student-tool-form {
   display: flex;
-  flex: 1;
   flex-direction: column;
   align-items: stretch;
   gap: 11px;
@@ -694,7 +767,6 @@
 
 .dashboard-container .student-tool-button {
   width: 100%;
-  margin-top: auto;
   padding: 10px 12px;
   border: 0;
   border-radius: 8px;
@@ -741,7 +813,57 @@
   }
 
   .dashboard-container .student-tool-card {
-    padding: 17px;
+    border-radius: 12px;
+  }
+
+  .dashboard-container .student-tool-header {
+    grid-template-columns: 38px minmax(0, 1fr) auto;
+    gap: 10px;
+    padding: 14px;
+  }
+
+  .dashboard-container .student-tool-icon {
+    width: 38px;
+    height: 38px;
+  }
+
+  .dashboard-container .student-tool-title {
+    font-size: 0.98rem;
+  }
+
+  .dashboard-container .student-tool-description {
+    font-size: 0.76rem;
+  }
+
+  .dashboard-container .student-tool-toggle-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+
+  .dashboard-container .student-tool-toggle {
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: 1px solid #dbeafe;
+    border-radius: 50%;
+    background: #eff6ff;
+  }
+
+  .dashboard-container .student-tool-card.is-expanded .student-tool-content-inner {
+    padding: 0 14px 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-container .student-tool-card,
+  .dashboard-container .student-tool-content,
+  .dashboard-container .student-tool-content-inner,
+  .dashboard-container .student-tool-chevron {
+    transition: none;
   }
 }
 

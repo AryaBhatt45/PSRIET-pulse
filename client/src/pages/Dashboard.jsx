@@ -48,6 +48,7 @@ const Dashboard = () => {
     const [marksResult, setMarksResult] = useState('');
     const [examDate, setExamDate] = useState('');
     const [examCountdown, setExamCountdown] = useState('');
+    const [expandedTool, setExpandedTool] = useState(null);
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -326,58 +327,112 @@ const Dashboard = () => {
                     <p>Check attendance, calculate marks, and keep your next exam in sight.</p>
                 </div>
                 <div className="student-toolkit-grid">
-                    <article className="student-tool-card">
-                        <div className="student-tool-icon" aria-hidden="true">📊</div>
-                        <h3>Attendance Planner</h3>
-                        <p>See your current attendance and how many classes you need to attend or can miss.</p>
-                        <form onSubmit={calculateAttendance} className="student-tool-form">
-                            <label>
-                                Classes attended
-                                <input type="number" min="0" step="1" value={attendanceAttended} onChange={(event) => setAttendanceAttended(event.target.value)} required />
-                            </label>
-                            <label>
-                                Classes held
-                                <input type="number" min="1" step="1" value={attendanceHeld} onChange={(event) => setAttendanceHeld(event.target.value)} required />
-                            </label>
-                            <label>
-                                Target attendance (%)
-                                <input type="number" min="1" max="100" step="0.1" value={attendanceTarget} onChange={(event) => setAttendanceTarget(event.target.value)} required />
-                            </label>
-                            <button type="submit" className="student-tool-button">Check attendance</button>
-                            {attendanceResult && <p className="student-tool-result" aria-live="polite">{attendanceResult}</p>}
-                        </form>
+                    <article className={`student-tool-card${expandedTool === 'attendance' ? ' is-expanded' : ''}`}>
+                        <button
+                            type="button"
+                            className="student-tool-header"
+                            aria-expanded={expandedTool === 'attendance'}
+                            aria-controls="student-tool-attendance"
+                            onClick={() => setExpandedTool((current) => current === 'attendance' ? null : 'attendance')}
+                        >
+                            <span className="student-tool-icon" aria-hidden="true">📊</span>
+                            <span className="student-tool-header-copy">
+                                <span className="student-tool-title">Attendance Planner</span>
+                                <span className="student-tool-description">See how many classes you need to attend or can miss.</span>
+                            </span>
+                            <span className="student-tool-toggle">
+                                <span className="student-tool-toggle-label">{expandedTool === 'attendance' ? 'Close tool' : 'Open tool'}</span>
+                                <span className="student-tool-chevron" aria-hidden="true">⌄</span>
+                            </span>
+                        </button>
+                        <div id="student-tool-attendance" className="student-tool-content" aria-hidden={expandedTool !== 'attendance'} inert={expandedTool !== 'attendance'}>
+                            <div className="student-tool-content-inner">
+                                <form onSubmit={calculateAttendance} className="student-tool-form">
+                                    <label>
+                                        Classes attended
+                                        <input type="number" min="0" step="1" value={attendanceAttended} onChange={(event) => setAttendanceAttended(event.target.value)} required />
+                                    </label>
+                                    <label>
+                                        Classes held
+                                        <input type="number" min="1" step="1" value={attendanceHeld} onChange={(event) => setAttendanceHeld(event.target.value)} required />
+                                    </label>
+                                    <label>
+                                        Target attendance (%)
+                                        <input type="number" min="1" max="100" step="0.1" value={attendanceTarget} onChange={(event) => setAttendanceTarget(event.target.value)} required />
+                                    </label>
+                                    <button type="submit" className="student-tool-button">Check attendance</button>
+                                    {attendanceResult && <p className="student-tool-result" aria-live="polite">{attendanceResult}</p>}
+                                </form>
+                            </div>
+                        </div>
                     </article>
 
-                    <article className="student-tool-card">
-                        <div className="student-tool-icon" aria-hidden="true">🧮</div>
-                        <h3>Marks Calculator</h3>
-                        <p>Calculate your score percentage without guessing a CGPA conversion formula.</p>
-                        <form onSubmit={calculateMarksPercentage} className="student-tool-form">
-                            <label>
-                                Marks obtained
-                                <input type="number" min="0" step="any" value={marksObtained} onChange={(event) => setMarksObtained(event.target.value)} required />
-                            </label>
-                            <label>
-                                Total marks
-                                <input type="number" min="0.01" step="any" value={marksTotal} onChange={(event) => setMarksTotal(event.target.value)} required />
-                            </label>
-                            <button type="submit" className="student-tool-button">Calculate percentage</button>
-                            {marksResult && <p className="student-tool-result" aria-live="polite">{marksResult}</p>}
-                        </form>
+                    <article className={`student-tool-card${expandedTool === 'marks' ? ' is-expanded' : ''}`}>
+                        <button
+                            type="button"
+                            className="student-tool-header"
+                            aria-expanded={expandedTool === 'marks'}
+                            aria-controls="student-tool-marks"
+                            onClick={() => setExpandedTool((current) => current === 'marks' ? null : 'marks')}
+                        >
+                            <span className="student-tool-icon" aria-hidden="true">🧮</span>
+                            <span className="student-tool-header-copy">
+                                <span className="student-tool-title">Marks Calculator</span>
+                                <span className="student-tool-description">Calculate your score percentage from marks.</span>
+                            </span>
+                            <span className="student-tool-toggle">
+                                <span className="student-tool-toggle-label">{expandedTool === 'marks' ? 'Close tool' : 'Open tool'}</span>
+                                <span className="student-tool-chevron" aria-hidden="true">⌄</span>
+                            </span>
+                        </button>
+                        <div id="student-tool-marks" className="student-tool-content" aria-hidden={expandedTool !== 'marks'} inert={expandedTool !== 'marks'}>
+                            <div className="student-tool-content-inner">
+                                <form onSubmit={calculateMarksPercentage} className="student-tool-form">
+                                    <label>
+                                        Marks obtained
+                                        <input type="number" min="0" step="any" value={marksObtained} onChange={(event) => setMarksObtained(event.target.value)} required />
+                                    </label>
+                                    <label>
+                                        Total marks
+                                        <input type="number" min="0.01" step="any" value={marksTotal} onChange={(event) => setMarksTotal(event.target.value)} required />
+                                    </label>
+                                    <button type="submit" className="student-tool-button">Calculate percentage</button>
+                                    {marksResult && <p className="student-tool-result" aria-live="polite">{marksResult}</p>}
+                                </form>
+                            </div>
+                        </div>
                     </article>
 
-                    <article className="student-tool-card">
-                        <div className="student-tool-icon" aria-hidden="true">📅</div>
-                        <h3>Exam Countdown</h3>
-                        <p>Set an exam date to see how many days you have left to prepare.</p>
-                        <form onSubmit={calculateExamCountdown} className="student-tool-form">
-                            <label>
-                                Exam date
-                                <input type="date" value={examDate} onChange={(event) => setExamDate(event.target.value)} required />
-                            </label>
-                            <button type="submit" className="student-tool-button">Start countdown</button>
-                            {examCountdown && <p className="student-tool-result" aria-live="polite">{examCountdown}</p>}
-                        </form>
+                    <article className={`student-tool-card${expandedTool === 'countdown' ? ' is-expanded' : ''}`}>
+                        <button
+                            type="button"
+                            className="student-tool-header"
+                            aria-expanded={expandedTool === 'countdown'}
+                            aria-controls="student-tool-countdown"
+                            onClick={() => setExpandedTool((current) => current === 'countdown' ? null : 'countdown')}
+                        >
+                            <span className="student-tool-icon" aria-hidden="true">📅</span>
+                            <span className="student-tool-header-copy">
+                                <span className="student-tool-title">Exam Countdown</span>
+                                <span className="student-tool-description">Set an exam date and track the days remaining.</span>
+                            </span>
+                            <span className="student-tool-toggle">
+                                <span className="student-tool-toggle-label">{expandedTool === 'countdown' ? 'Close tool' : 'Open tool'}</span>
+                                <span className="student-tool-chevron" aria-hidden="true">⌄</span>
+                            </span>
+                        </button>
+                        <div id="student-tool-countdown" className="student-tool-content" aria-hidden={expandedTool !== 'countdown'} inert={expandedTool !== 'countdown'}>
+                            <div className="student-tool-content-inner">
+                                <form onSubmit={calculateExamCountdown} className="student-tool-form">
+                                    <label>
+                                        Exam date
+                                        <input type="date" value={examDate} onChange={(event) => setExamDate(event.target.value)} required />
+                                    </label>
+                                    <button type="submit" className="student-tool-button">Start countdown</button>
+                                    {examCountdown && <p className="student-tool-result" aria-live="polite">{examCountdown}</p>}
+                                </form>
+                            </div>
+                        </div>
                     </article>
                 </div>
             </section>
