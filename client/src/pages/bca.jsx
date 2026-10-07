@@ -181,7 +181,7 @@ const BcaPage = () => {
           <span className="section-badge">🚀 ROADMAP</span>
           <h2>Semester-wise Curriculum & Notes</h2>
         </div>
-        <CurriculumSemesterCards semesters={semesters} />
+        <CurriculumSemesterCards semesters={semesters} syllabusPdf="/bca.pdf" />
       </div>
       <CurriculumQuickAccess semesters={semesters} />
       {/* Open Source & Earning Hub (Naya Feature add kiya hai) */}

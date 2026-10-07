@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import CurriculumSubjectResources from './CurriculumSubjectResources';
 import './CurriculumSemesterCards.css';
 
-const CurriculumSemesterCards = ({ semesters }) => {
+const CurriculumSemesterCards = ({ semesters, syllabusPdf }) => {
   const [openSemester, setOpenSemester] = useState(null);
 
   const toggleSemester = (semesterId) => {
@@ -34,7 +34,7 @@ const CurriculumSemesterCards = ({ semesters }) => {
             </button>
             {isOpen && (
               <div className="curriculum-semester-content" id={contentId} role="region" aria-label={`${semester.sem} subjects`}>
-                <CurriculumSubjectResources subjects={semester.subjects} />
+                <CurriculumSubjectResources subjects={semester.subjects} syllabusPdf={syllabusPdf} />
               </div>
             )}
           </article>
