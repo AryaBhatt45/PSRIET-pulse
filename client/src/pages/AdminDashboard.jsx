@@ -1,6 +1,7 @@
 import './style/AdminDashboard.css';
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { readCertificationClaims, saveCertificationClaims } from '../utils/certificationClaims';
 
 const readOpportunityList = (key) => {
     const storedEntries = localStorage.getItem(key);
@@ -56,6 +57,9 @@ export default function AdminDashboard() {
     const [opportunityExperience, setOpportunityExperience] = useState('');
     const [savedJobs, setSavedJobs] = useState([]);
     const [savedInternships, setSavedInternships] = useState([]);
+    const [certificationClaims, setCertificationClaims] = useState([]);
+    const [certificationClaimsError, setCertificationClaimsError] = useState('');
+    const [claimPhoto, setClaimPhoto] = useState(null);
 
     useEffect(() => {
         const notices = JSON.parse(localStorage.getItem('pt_notices')) || [];
@@ -73,11 +77,57 @@ export default function AdminDashboard() {
         setSavedStudents(students);
         setSavedJobs(jobs);
         setSavedInternships(internships);
+        try {
+            setCertificationClaims(readCertificationClaims());
+        } catch (error) {
+            console.error('Unable to read certification claims from localStorage.', error);
+            setCertificationClaimsError(error.message || 'Unable to read saved certification claims.');
+        }
+    }, []);
+
+    useEffect(() => {
+        const handleStorage = (event) => {
+            if (event.key && event.key !== 'pt_certification_claims') return;
+            try {
+                setCertificationClaims(readCertificationClaims());
+                setCertificationClaimsError('');
+            } catch (error) {
+                console.error('Unable to sync certification claims from localStorage.', error);
+                setCertificationClaimsError(error.message || 'Unable to read saved certification claims.');
+            }
+        };
+        window.addEventListener('storage', handleStorage);
+        return () => window.removeEventListener('storage', handleStorage);
     }, []);
 
     const handleLogout = () => {
         localStorage.removeItem("isAdminAuthenticated");
+        localStorage.removeItem('admin_token');
         navigate('/admin/login');
+    };
+
+    const handleApproveCertificationClaim = (claim) => {
+        const confirmed = window.confirm(`Mark ${claim.fullName}'s contribution claim as approved in this browser? No certificate or email will be sent.`);
+        if (!confirmed) return;
+
+        try {
+            const updatedClaims = certificationClaims.map((entry) => (
+                entry.id === claim.id
+                    ? { ...entry, status: 'approved', reviewedAt: new Date().toISOString() }
+                    : entry
+            ));
+            saveCertificationClaims(updatedClaims);
+            setCertificationClaims(updatedClaims);
+            window.alert('Claim marked approved in this browser. No certificate or email was sent.');
+        } catch (error) {
+            window.alert(error.message || 'Unable to save the claim status in this browser.');
+        }
+    };
+
+    const handleViewClaimPhoto = (claim) => {
+        if (claim.photoDataUrl) {
+            setClaimPhoto({ url: claim.photoDataUrl, fullName: claim.fullName });
+        }
     };
 
     const handlePublishNotice = (e) => {
@@ -295,6 +345,54 @@ export default function AdminDashboard() {
                                 <p style={{ color: '#888', fontSize: '14px', marginTop: '20px' }}>No admission callback requests yet.</p>
                             )}
                         </div>
+                    </div>
+                );
+            case 'certifications':
+                return (
+                    <div className="admin-action-section">
+                        <h3>🏅 BCA Certification Claims ({certificationClaims.length})</h3>
+                        <p>Claims are saved only in this browser. Review and update their local status here; this client-only flow cannot email or issue certificates.</p>
+                        {certificationClaimsError && <p className="admin-certification-error" role="alert">{certificationClaimsError}</p>}
+                        {!certificationClaimsError && certificationClaims.length === 0 && (
+                            <p className="admin-certification-empty">No certification claims have been submitted yet.</p>
+                        )}
+                        <div className="admin-certification-list">
+                            {certificationClaims.map((claim) => (
+                                <article className="admin-certification-claim" key={claim.id}>
+                                    <div className="admin-certification-claim-header">
+                                        <div>
+                                            <h4>{claim.fullName}</h4>
+                                            <a href={`mailto:${claim.email}`}>{claim.email}</a>
+                                        </div>
+                                        <span className={`admin-certification-status is-${claim.status}`}>{claim.status}</span>
+                                    </div>
+                                    <dl>
+                                        <div><dt>OFF username</dt><dd>{claim.offUsername || 'Not provided'}</dd></div>
+                                        <div><dt>GitHub username</dt><dd>{claim.githubUsername || 'Not provided'}</dd></div>
+                                        <div><dt>Contribution type</dt><dd>{claim.contributionType}</dd></div>
+                                        <div><dt>Code of Conduct and Licensing</dt><dd>{claim.agreementAccepted ? 'Accepted' : 'Not accepted'}</dd></div>
+                                        <div><dt>Request receipt email</dt><dd>Not sent (client-only)</dd></div>
+                                        <div><dt>Certificate email</dt><dd>Not sent (client-only)</dd></div>
+                                        <div><dt>Submitted</dt><dd>{new Date(claim.createdAt).toLocaleString()}</dd></div>
+                                        {claim.reviewedAt && <div><dt>Reviewed</dt><dd>{new Date(claim.reviewedAt).toLocaleString()}</dd></div>}
+                                    </dl>
+                                    <div className="admin-certification-actions">
+                                        {claim.photoDataUrl && (
+                                            <button type="button" onClick={() => handleViewClaimPhoto(claim)}>View uploaded photo</button>
+                                        )}
+                                        <button type="button" onClick={() => handleApproveCertificationClaim(claim)} disabled={claim.status === 'approved'}>
+                                            {claim.status === 'approved' ? 'Approved locally' : 'Mark as approved'}
+                                        </button>
+                                    </div>
+                                </article>
+                            ))}
+                        </div>
+                        {claimPhoto && (
+                            <div className="admin-certification-photo-modal" role="dialog" aria-modal="true" aria-label={`${claimPhoto.fullName}'s uploaded photo`}>
+                                <button type="button" onClick={() => setClaimPhoto(null)}>Close</button>
+                                <img src={claimPhoto.url} alt={`${claimPhoto.fullName}'s submitted photo`} />
+                            </div>
+                        )}
                     </div>
                 );
             case 'students':
@@ -687,6 +785,9 @@ export default function AdminDashboard() {
                     </li>
                     <li className={activeTab === 'enquiries' ? 'active' : ''} onClick={() => setActiveTab('enquiries')}>
                         📥 Admission Enquiries ({savedEnquiries.length})
+                    </li>
+                    <li className={activeTab === 'certifications' ? 'active' : ''} onClick={() => setActiveTab('certifications')}>
+                        🏅 Certification Claims ({certificationClaims.length})
                     </li>
                     <li className={activeTab === 'students' ? 'active' : ''} onClick={() => setActiveTab('students')}>
                         🎓 Manage Students

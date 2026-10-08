@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './style/AdminLogin.css';
 
+const adminPasscode = 'ptsriet@admin2026';
+
 export default function AdminLogin() {
     const [passcode, setPasscode] = useState('');
     const [error, setError] = useState('');
@@ -10,10 +12,13 @@ export default function AdminLogin() {
 
     const handleAdminLogin = (e) => {
         e.preventDefault();
-        if (passcode === "ptsriet@admin2026") {
+        setError('');
+        if (passcode === adminPasscode) {
+            localStorage.removeItem('admin_token');
             localStorage.setItem("isAdminAuthenticated", "true");
             navigate('/admin/dashboard');
         } else {
+            localStorage.removeItem('isAdminAuthenticated');
             setError('⚠️ Invalid Admin Passcode!');
         }
     };
