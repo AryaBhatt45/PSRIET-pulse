@@ -294,6 +294,126 @@
     background: #dc2626;
 }
 
+.admin-dashboard-wrapper .admin-certification-list {
+    display: grid;
+    gap: 14px;
+    margin-top: 20px;
+}
+
+.admin-dashboard-wrapper .admin-certification-claim {
+    padding: 17px;
+    border: 1px solid rgba(249, 115, 22, 0.28);
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.38);
+}
+
+.admin-dashboard-wrapper .admin-certification-claim-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.admin-dashboard-wrapper .admin-certification-claim h4 {
+    margin: 0 0 5px;
+    color: #fff;
+}
+
+.admin-dashboard-wrapper .admin-certification-claim a {
+    color: #fdba74;
+    font-size: 13px;
+}
+
+.admin-dashboard-wrapper .admin-certification-status {
+    padding: 4px 9px;
+    border-radius: 999px;
+    background: rgba(245, 158, 11, 0.14);
+    color: #fbbf24;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.admin-dashboard-wrapper .admin-certification-status.is-approved {
+    background: rgba(16, 185, 129, 0.14);
+    color: #34d399;
+}
+
+.admin-dashboard-wrapper .admin-certification-claim dl {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 11px 18px;
+    margin: 17px 0;
+}
+
+.admin-dashboard-wrapper .admin-certification-claim dl div {
+    min-width: 0;
+}
+
+.admin-dashboard-wrapper .admin-certification-claim dt {
+    color: #9ca3af;
+    font-size: 11px;
+}
+
+.admin-dashboard-wrapper .admin-certification-claim dd {
+    overflow-wrap: anywhere;
+    margin: 3px 0 0;
+    color: #e5e7eb;
+    font-size: 13px;
+}
+
+.admin-dashboard-wrapper .admin-certification-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+}
+
+.admin-dashboard-wrapper .admin-certification-actions button,
+.admin-dashboard-wrapper .admin-certification-photo-modal > button {
+    padding: 8px 11px;
+    border: 1px solid rgba(249, 115, 22, 0.45);
+    border-radius: 7px;
+    background: #c2410c;
+    color: #fff;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.admin-dashboard-wrapper .admin-certification-actions button:first-child:last-child {
+    background: #c2410c;
+}
+
+.admin-dashboard-wrapper .admin-certification-error {
+    color: #fca5a5;
+}
+
+.admin-dashboard-wrapper .admin-certification-empty {
+    color: #9ca3af;
+}
+
+.admin-dashboard-wrapper .admin-certification-photo-modal {
+    position: fixed;
+    z-index: 1000;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    background: rgba(0, 0, 0, 0.86);
+}
+
+.admin-dashboard-wrapper .admin-certification-photo-modal img {
+    max-width: min(900px, 100%);
+    max-height: 80vh;
+    object-fit: contain;
+}
+
+.admin-dashboard-wrapper .admin-certification-photo-modal > button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
 @media (max-width: 640px) {
     .admin-dashboard-wrapper .admin-opportunity-form {
         grid-template-columns: minmax(0, 1fr);
@@ -301,5 +421,9 @@
 
     .admin-dashboard-wrapper .admin-opportunity-item {
         align-items: flex-start;
+    }
+
+    .admin-dashboard-wrapper .admin-certification-claim dl {
+        grid-template-columns: minmax(0, 1fr);
     }
 }
