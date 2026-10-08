@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import CurriculumQuickAccess from '../components/CurriculumQuickAccess';
 import CurriculumSemesterCards from '../components/CurriculumSemesterCards';
+import CertificationClaimCard from '../components/CertificationClaimCard';
 import './style/bca.css';
 
 const opportunityStorageKeys = ['pt_jobs', 'pt_internships'];
@@ -184,6 +185,7 @@ const BcaPage = () => {
         <CurriculumSemesterCards semesters={semesters} syllabusPdf="/bca.pdf" />
       </div>
       <CurriculumQuickAccess semesters={semesters} />
+      <CertificationClaimCard />
       {/* Open Source & Earning Hub (Naya Feature add kiya hai) */}
       <div className="opensource-hub-card" style={{ background: '#ffffff', border: '1px solid #cbd5e1', padding: '22px', borderRadius: '16px', marginTop: '25px', marginBottom: '25px', boxShadow: '0 4px 15px rgba(0,0,0,0.03)' }}>
         <div style={{ marginBottom: '18px' }}>
