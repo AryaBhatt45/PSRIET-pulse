@@ -1,6 +1,6 @@
 /* --- Main Container & Layout --- */
 .ba-page-container {
-  background-color: #d4cdc6;
+  background-color: #ddcdbe;
   color: #1e293b;
   min-height: 100vh;
   padding: 16px;
@@ -15,15 +15,15 @@
 }
 
 /* --- Top Bar --- */
-.ba-top-bar {
+.ba-page-container .ba-top-bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
 }
 
-.ba-back-btn {
-  background: #ffffff;
+.ba-page-container .ba-back-btn {
+  background: #dccdcd;
   color: #2563eb;
   padding: 6px 12px;
   border-radius: 8px;
@@ -34,7 +34,7 @@
   box-shadow: 0 2px 5px rgba(0,0,0,0.02);
 }
 
-.ba-badge-top {
+.ba-page-container .ba-badge-top {
   background: #eff6ff;
   color: #2563eb;
   padding: 5px 12px;
@@ -45,8 +45,8 @@
 }
 
 /* --- Hero Section --- */
-.ba-hero-card {
-  background: #ffffff;
+.ba-page-container .ba-hero-card {
+  background: #e3c5c5;
   border: 1px solid #e2e8f0;
   border-left: 6px solid #2563eb;
   padding: 22px 16px;
@@ -59,7 +59,7 @@
 }
 
 @media (min-width: 768px) {
-  .ba-hero-card {
+  .ba-page-container .ba-hero-card {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
@@ -67,7 +67,7 @@
   }
 }
 
-.ba-hero-tag {
+.ba-page-container .ba-hero-tag {
   background: #eff6ff;
   color: #2563eb;
   padding: 4px 10px;
@@ -78,7 +78,7 @@
   border: 1px solid #bfdbfe;
 }
 
-.ba-hero-title {
+.ba-page-container .ba-hero-title {
   font-size: 1.6rem;
   margin: 10px 0 6px 0;
   color: #0f172a;
@@ -86,12 +86,12 @@
 }
 
 @media (min-width: 768px) {
-  .ba-hero-title {
+  .ba-page-container .ba-hero-title {
     font-size: 2.2rem;
   }
 }
 
-.ba-hero-desc {
+.ba-page-container .ba-hero-desc {
   color: #64748b;
   font-size: 0.88rem;
   max-width: 650px;
@@ -99,13 +99,13 @@
   line-height: 1.5;
 }
 
-.ba-hero-info-tags {
+.ba-page-container .ba-hero-info-tags {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
 }
 
-.ba-hero-info-tags span {
+.ba-page-container .ba-hero-info-tags span {
   background: #f8fafc;
   padding: 5px 10px;
   border-radius: 8px;
@@ -115,7 +115,7 @@
   font-weight: 600;
 }
 
-.ba-hero-logo-box {
+.ba-page-container .ba-hero-logo-box {
   width: 130px;
   height: 130px;
   background: #e2e8f0;
@@ -129,13 +129,13 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
-.ba-hero-logo-box img {
+.ba-page-container .ba-hero-logo-box img {
   width: 80px;
   height: 80px;
   object-fit: contain;
 }
 /* --- Infinite Ticker --- */
-.ba-ticker-container {
+.ba-page-container .ba-ticker-container {
   background: #f3e1e1;
   border: 1px solid #e2e8f0;
   border-radius: 10px;
@@ -145,7 +145,7 @@
   margin-bottom: 25px;
 }
 
-.ba-ticker-head {
+.ba-page-container .ba-ticker-head {
   background: #ef4444;
   color: #ffffff;
   padding: 10px 14px;
@@ -155,19 +155,19 @@
   z-index: 2;
 }
 
-.ba-ticker-body {
+.ba-page-container .ba-ticker-body {
   overflow: hidden;
   width: 100%;
   position: relative;
 }
 
-.ticker-track {
+.ba-page-container .ticker-track {
   display: flex;
   width: max-content;
-  animation: tickerScroll 25s linear infinite;
+  animation: ba-tickerScroll 25s linear infinite;
 }
 
-.ba-ticker-item {
+.ba-page-container .ba-ticker-item {
   font-size: 0.8rem;
   color: #191a1a;
   font-weight: 500;
@@ -175,21 +175,21 @@
   padding-right: 40px;
 }
 
-@keyframes tickerScroll {
+@keyframes ba-tickerScroll {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
 }
 
 /* --- Curriculum Section --- */
-.ba-curriculum-section {
+.ba-page-container .ba-curriculum-section {
   margin-bottom: 35px;
 }
 
-.ba-section-header {
+.ba-page-container .ba-section-header {
   margin-bottom: 18px;
 }
 
-.ba-sub-tag {
+.ba-page-container .ba-sub-tag {
   background: #f1f5f9;
   color: #475569;
   padding: 3px 8px;
@@ -198,31 +198,31 @@
   font-weight: 700;
 }
 
-.ba-section-header h2 {
+.ba-page-container .ba-section-header h2 {
   font-size: 1.35rem;
   color: #0f172a;
   margin-top: 5px;
 }
 
-.ba-sem-grid {
+.ba-page-container .ba-sem-grid {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
 @media (min-width: 768px) {
-  .ba-sem-grid {
+  .ba-page-container .ba-sem-grid {
     flex-direction: row;
     flex-wrap: wrap;
     gap: 20px;
     align-items: flex-start;
   }
-  .ba-sem-card {
+  .ba-page-container .ba-sem-card {
     width: calc(33.333% - 14px) !important;
   }
 }
 
-.ba-sem-card {
+.ba-page-container .ba-sem-card {
   background: #ffffff;
   border: 1px solid #cbd5e1;
   padding: 16px;
@@ -234,21 +234,21 @@
   box-sizing: border-box;
 }
 
-.ba-sem-card-top {
+.ba-page-container .ba-sem-card-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 8px;
 }
 
-.ba-sem-card-top h3 {
+.ba-page-container .ba-sem-card-top h3 {
   margin: 0;
   color: #0f172a;
   font-size: 1.1rem;
   font-weight: 700;
 }
 
-.ba-active-dot {
+.ba-page-container .ba-active-dot {
   width: 8px;
   height: 8px;
   background: #10b981;
@@ -256,14 +256,14 @@
   box-shadow: 0 0 6px rgba(16, 185, 129, 0.5);
 }
 
-.ba-sem-preview-text {
+.ba-page-container .ba-sem-preview-text {
   font-size: 0.78rem;
   color: #64748b;
   line-height: 1.4;
   margin-bottom: 12px;
 }
 
-.ba-accordion-btn {
+.ba-page-container .ba-accordion-btn {
   width: 100%;
   border: 1px solid #cbd5e1;
   padding: 8px 12px;
@@ -278,27 +278,27 @@
   color: #334155;
 }
 
-.ba-sem-card.open .ba-accordion-btn {
+.ba-page-container .ba-sem-card.open .ba-accordion-btn {
   background: #eff6ff;
   color: #2563eb;
   border-color: #bfdbfe;
 }
 
 /* --- Accordion Subjects & Buttons Row --- */
-.bca-sub-card {
+.ba-page-container .bca-sub-card {
   margin-top: 12px;
   padding-top: 10px;
   border-top: 1px solid #f1f5f9;
 }
 
-.ba-subject-title {
+.ba-page-container .ba-subject-title {
   margin: 0 0 6px 0;
   font-size: 0.8rem;
   color: #1e293b;
   font-weight: 700;
 }
 
-.bca-links {
+.ba-page-container .bca-links {
   display: flex !important;
   flex-direction: row !important;
   gap: 6px !important;
@@ -307,7 +307,7 @@
   box-sizing: border-box;
 }
 
-.bca-btn {
+.ba-page-container .bca-btn {
   flex: 1 !important;
   text-align: center;
   padding: 6px 2px !important;
@@ -322,12 +322,12 @@
 }
 
 /* Notes Button (Blue Theme) */
-.bca-btn.notes-l {
+.ba-page-container .bca-btn.notes-l {
   background: #eff6ff;
   color: #1d4ed8;
   border: 1px solid #bfdbfe;
 }
-.bca-btn.notes-l:hover {
+.ba-page-container .bca-btn.notes-l:hover {
   background: #1d4ed8;
   color: #ffffff;
   border-color: #1d4ed8;
@@ -335,12 +335,12 @@
 }
 
 /* Quick Notes Button (Orange/Yellow Theme) */
-.bca-btn.quick-l {
+.ba-page-container .bca-btn.quick-l {
   background: #fffbeb;
   color: #b45309;
   border: 1px solid #fde68a;
 }
-.bca-btn.quick-l:hover {
+.ba-page-container .bca-btn.quick-l:hover {
   background: #f59e0b;
   color: #ffffff;
   border-color: #f59e0b;
@@ -348,12 +348,12 @@
 }
 
 /* Syllabus PDF Button (Green Theme) */
-.bca-btn.syllabus-l {
+.ba-page-container .bca-btn.syllabus-l {
   background: #ecfdf5;
   color: #047857;
   border: 1px solid #a7f3d0;
 }
-.bca-btn.syllabus-l:hover {
+.ba-page-container .bca-btn.syllabus-l:hover {
   background: #059669;
   color: #ffffff;
   border-color: #059669;
@@ -361,7 +361,7 @@
 }
 
 /* --- Cheatsheet Hub Card --- */
-.ba-cheatsheet-card {
+.ba-page-container .ba-cheatsheet-card {
   background: #ffffff;
   border: 1px solid #cbd5e1;
   padding: 20px;
@@ -370,7 +370,7 @@
   margin-top: 25px;
 }
 
-.ba-cheatsheet-header {
+.ba-page-container .ba-cheatsheet-header {
   display: flex;
   flex-direction: column;
   gap: 15px;
@@ -378,14 +378,14 @@
 }
 
 @media (min-width: 768px) {
-  .ba-cheatsheet-header {
+  .ba-page-container .ba-cheatsheet-header {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
   }
 }
 
-.ba-cheat-tag {
+.ba-page-container .ba-cheat-tag {
   background: #fef3c7;
   color: #d97706;
   padding: 4px 10px;
@@ -395,19 +395,19 @@
   border: 1px solid #fde68a;
 }
 
-.ba-cheatsheet-card h3 {
+.ba-page-container .ba-cheatsheet-card h3 {
   margin: 8px 0 4px 0;
   font-size: 1.15rem;
   color: #0f172a;
 }
 
-.ba-cheatsheet-card p {
+.ba-page-container .ba-cheatsheet-card p {
   margin: 0;
   font-size: 0.82rem;
   color: #64748b;
 }
 
-.ba-cheat-main-btn {
+.ba-page-container .ba-cheat-main-btn {
   background: #2563eb;
   color: #ffffff;
   padding: 10px 16px;
@@ -419,25 +419,25 @@
   box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
 }
 
-.ba-cheat-grid {
+.ba-page-container .ba-cheat-grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 10px;
 }
 
 @media (min-width: 640px) {
-  .ba-cheat-grid {
+  .ba-page-container .ba-cheat-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (min-width: 1024px) {
-  .ba-cheat-grid {
+  .ba-page-container .ba-cheat-grid {
     grid-template-columns: repeat(4, 1fr);
   }
 }
 
-.ba-cheat-chip {
+.ba-page-container .ba-cheat-chip {
   background: #f8fafc;
   border: 1px solid #e2e8f0;
   padding: 10px 12px;
@@ -452,13 +452,13 @@
   transition: all 0.2s ease;
 }
 
-.ba-cheat-chip:hover {
+.ba-page-container .ba-cheat-chip:hover {
   background: #eff6ff;
   border-color: #bfdbfe;
   color: #2563eb;
 }
 
-.ba-pdf-badge {
+.ba-page-container .ba-pdf-badge {
   font-size: 0.7rem;
   color: #64748b;
   background: #f1f5f9;
@@ -466,7 +466,7 @@
   border-radius: 4px;
 }
 /* --- Scholarship Card Section --- */
-.ba-scholarship-card {
+.ba-page-container .ba-scholarship-card {
   background: #ffffff;
   border: 1px solid #cbd5e1;
   padding: 22px;
@@ -475,7 +475,7 @@
   margin-top: 25px;
 }
 
-.ba-scholarship-header {
+.ba-page-container .ba-scholarship-header {
   display: flex;
   flex-direction: column;
   gap: 15px;
@@ -483,14 +483,14 @@
 }
 
 @media (min-width: 768px) {
-  .ba-scholarship-header {
+  .ba-page-container .ba-scholarship-header {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
   }
 }
 
-.ba-sch-tag {
+.ba-page-container .ba-sch-tag {
   background: #ecfdf5;
   color: #047857;
   padding: 4px 10px;
@@ -500,25 +500,25 @@
   border: 1px solid #a7f3d0;
 }
 
-.ba-scholarship-card h3 {
+.ba-page-container .ba-scholarship-card h3 {
   margin: 8px 0 4px 0;
   font-size: 1.15rem;
   color: #0f172a;
 }
 
-.ba-scholarship-card p {
+.ba-page-container .ba-scholarship-card p {
   margin: 0;
   font-size: 0.82rem;
   color: #64748b;
 }
 
-.ba-sch-buttons {
+.ba-page-container .ba-sch-buttons {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
 }
 
-.ba-sch-btn {
+.ba-page-container .ba-sch-btn {
   padding: 8px 14px;
   border-radius: 8px;
   text-decoration: none;
@@ -528,27 +528,27 @@
   transition: all 0.2s ease;
 }
 
-.apply-btn {
+.ba-page-container .apply-btn {
   background: #2563eb;
   color: #ffffff;
   box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
 }
 
-.apply-btn:hover {
+.ba-page-container .apply-btn:hover {
   background: #1d4ed8;
 }
 
-.status-btn {
+.ba-page-container .status-btn {
   background: #f1f5f9;
   color: #334155;
   border: 1px solid #cbd5e1;
 }
 
-.status-btn:hover {
+.ba-page-container .status-btn:hover {
   background: #e2e8f0;
 }
 
-.ba-sch-criteria-box {
+.ba-page-container .ba-sch-criteria-box {
   display: grid;
   grid-template-columns: 1fr;
   gap: 10px;
@@ -559,25 +559,25 @@
 }
 
 @media (min-width: 640px) {
-  .ba-sch-criteria-box {
+  .ba-page-container .ba-sch-criteria-box {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
-.ba-criteria-item {
+.ba-page-container .ba-criteria-item {
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
 
-.ba-criteria-label {
+.ba-page-container .ba-criteria-label {
   font-size: 0.72rem;
   color: #64748b;
   font-weight: 600;
   text-transform: uppercase;
 }
 
-.ba-criteria-val {
+.ba-page-container .ba-criteria-val {
   font-size: 0.85rem;
   color: #0f172a;
   font-weight: 700;

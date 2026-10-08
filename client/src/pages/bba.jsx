@@ -1,5 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import CurriculumQuickAccess from '../components/CurriculumQuickAccess';
+import CurriculumSemesterCards from '../components/CurriculumSemesterCards';
 import './style/bba.css';
 
 const BbaPage = () => {
@@ -10,17 +12,6 @@ const BbaPage = () => {
     { sem: 'Sem 4', subjects: 'Financial Management, Research Methodology, Indian Banking System, Company Law', syllabusPdf: '/syllabus/bba-sem4-syllabus.pdf' },
     { sem: 'Sem 5', subjects: 'Entrepreneurship Development, Strategic Management, Income Tax Law', syllabusPdf: '/syllabus/bba-sem5-syllabus.pdf' },
     { sem: 'Sem 6', subjects: 'International Business, Project Management & Viva, Business Ethics', syllabusPdf: '/syllabus/bba-sem6-syllabus.pdf' }
-  ];
-
-  const cheatsheets = [
-    { name: 'Principles of Management', pdf: '/syllabus/bba-sem1-syllabus.pdf' },
-    { name: 'Business Economics', pdf: '/syllabus/bba-sem1-syllabus.pdf' },
-    { name: 'Organizational Behavior', pdf: '/syllabus/bba-sem2-syllabus.pdf' },
-    { name: 'Marketing Management', pdf: '/syllabus/bba-sem2-syllabus.pdf' },
-    { name: 'Financial Management', pdf: '/syllabus/bba-sem4-syllabus.pdf' },
-    { name: 'Strategic Management', pdf: '/syllabus/bba-sem5-syllabus.pdf' },
-    { name: 'Business Law', pdf: '/syllabus/bba-sem2-syllabus.pdf' },
-    { name: 'International Business', pdf: '/syllabus/bba-sem6-syllabus.pdf' }
   ];
 
   const announcements = [
@@ -73,45 +64,9 @@ const BbaPage = () => {
           <span className="section-badge">🚀 ROADMAP</span>
           <h2>Semester-wise Curriculum & Notes</h2>
         </div>
-        <div className="bba-sem-grid">
-          {semesters.map((item, index) => (
-            <div key={index} className="bba-sem-card-light">
-              <div className="card-top">
-                <h3>{item.sem}</h3>
-                <span className="active-dot"></span>
-              </div>
-              <p className="sem-subjects">{item.subjects}</p>
-              <div className="bba-links">
-                <a href="#notes" className="bba-btn notes-l">Notes</a>
-                <a href="#quick-notes" className="bba-btn quick-l">Quick Notes ✨</a>
-                <a href={item.syllabusPdf} target="_blank" rel="noopener noreferrer" className="bba-btn syllabus-l">Syllabus PDF</a>
-              </div>
-            </div>
-          ))}
-        </div>
+        <CurriculumSemesterCards semesters={semesters} />
       </div>
-
-      {/* Cheatsheet Hub Card */}
-      <div className="ba-cheatsheet-card">
-        <div className="ba-cheatsheet-header">
-          <div>
-            <span className="ba-cheat-tag">⚡ QUICK ACCESS</span>
-            <h3>BBA All-Subjects Master Cheatsheet Hub</h3>
-            <p>Access one-shot revision notes and summary PDFs for all management subjects instantly.</p>
-          </div>
-          <a href="/syllabus/bba-sem1-syllabus.pdf" target="_blank" rel="noopener noreferrer" className="ba-cheat-main-btn">
-            View All Cheatsheets 📄
-          </a>
-        </div>
-        <div className="ba-cheat-grid">
-          {cheatsheets.map((subj, sIdx) => (
-            <a key={sIdx} href={subj.pdf} target="_blank" rel="noopener noreferrer" className="ba-cheat-chip">
-              <span>{subj.name}</span>
-              <span className="ba-pdf-badge">PDF view ↗</span>
-            </a>
-          ))}
-        </div>
-      </div>
+      <CurriculumQuickAccess semesters={semesters} />
 
       {/* Scholarship & Eligibility Hub */}
       <div className="ba-scholarship-card" style={{ marginTop: '25px', marginBottom: '30px' }}>

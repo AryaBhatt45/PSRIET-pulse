@@ -1,24 +1,19 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
+import CurriculumQuickAccess from '../components/CurriculumQuickAccess';
+import CurriculumSemesterCards from '../components/CurriculumSemesterCards';
 import './style/ba.css';
 
 const BaPage = () => {
-  const [activeSem, setActiveSem] = useState(null);
-
-  const toggleAccordion = (index) => {
-    setActiveSem(activeSem === index ? null : index);
-  };
-
-  // Har semester mein same 8 major subjects with dummy links
   const subjectsList = [
-    { name: 'Ancient History', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/ba-dummy.pdf' },
-    { name: 'Modern History', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/ba-dummy.pdf' },
-    { name: 'Geography', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/ba-dummy.pdf' },
-    { name: 'Education', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/ba-dummy.pdf' },
-    { name: 'Sociology', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/ba-dummy.pdf' },
-    { name: 'English Literature', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/ba-dummy.pdf' },
-    { name: 'Hindi Literature', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/ba-dummy.pdf' },
-    { name: 'CTS (Co-Curricular)', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/ba-dummy.pdf' }
+    'Ancient History',
+    'Modern History',
+    'Geography',
+    'Education',
+    'Sociology',
+    'English Literature',
+    'Hindi Literature',
+    'CTS (Co-Curricular)'
   ];
 
   const semesters = [
@@ -31,10 +26,10 @@ const BaPage = () => {
   ];
 
   const announcements = [
-    "📢 B.A. (Bachelor of Arts) Admissions Active for 2026 Session[cite: 16]",
-    "📖 Special Civil Services Foundation Guidance Cell meeting this Saturday[cite: 16]",
-    "📝 Internal assignment submission notice for Semester 2, 4 & 6[cite: 16]",
-    "🎭 Annual Cultural & Literary Inter-College Fest registrations open[cite: 16]."
+    "📢 Check the latest institute notice for B.A. admissions and application dates.",
+    "📖 Contact the department for current academic guidance and programme details.",
+    "📝 Verify assignment deadlines with your semester coordinator.",
+    "🎭 Follow institute announcements for upcoming cultural and literary events."
   ];
 
   return (
@@ -54,8 +49,8 @@ const BaPage = () => {
           <p className="ba-hero-desc">Gain comprehensive critical thinking, social insights, and literary appreciation through a structured multidisciplinary curriculum.</p>
           <div className="ba-hero-info-tags">
             <span>⏳ 3 Years</span>
-            <span>🪑 150 Seats</span>
-            <span>💰 ₹10,000 / Year</span>
+            <span>🪑 90 Seats</span>
+            <span>💰 ₹7000/ Year</span>
           </div>
         </div>
         <div className="ba-hero-logo-box">
@@ -82,66 +77,10 @@ const BaPage = () => {
           <h2>Semester-wise Curriculum & Notes</h2>
         </div>
 
-        <div className="ba-sem-grid">
-          {semesters.map((item, index) => {
-            const isOpen = activeSem === index;
-            return (
-              <div key={index} className={`ba-sem-card ${isOpen ? 'open' : ''}`}>
-                <div className="ba-sem-card-top">
-                  <h3>{item.sem}</h3>
-                  <span className="ba-active-dot"></span>
-                </div>
-
-                <p className="ba-sem-preview-text">
-                  {item.subjects.map(s => s.name).join(', ')}
-                </p>
-
-                <button onClick={() => toggleAccordion(index)} className="ba-accordion-btn">
-                  <span>{isOpen ? 'Hide Subjects' : 'View Subjects & Resources'}</span>
-                  <span>{isOpen ? '▲' : '▼'}</span>
-                </button>
-
-                {isOpen && (
-                  <div className="bca-sub-subjects-container">
-                    {item.subjects.map((sub, subIdx) => (
-                      <div key={subIdx} className="bca-sub-card">
-                        <h4 className="ba-subject-title">{sub.name}</h4>
-                        <div className="bca-links">
-                          <a href={sub.notesUrl} className="bca-btn notes-l">Notes</a>
-                          <a href={sub.quickUrl} className="bca-btn quick-l">Quick ✨</a>
-                          <a href={sub.pdfUrl} target="_blank" rel="noopener noreferrer" className="bca-btn syllabus-l">Syllabus</a>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
+        <CurriculumSemesterCards semesters={semesters} />
       </div>
+      <CurriculumQuickAccess semesters={semesters} />
 
-      {/* Cheatsheet Hub Card (Replaces HOD section) */}
-      <div className="ba-cheatsheet-card">
-        <div className="ba-cheatsheet-header">
-          <div>
-            <span className="ba-cheat-tag">⚡ QUICK ACCESS</span>
-            <h3>B.A. All-Subjects Master Cheatsheet Hub</h3>
-            <p>Access one-shot revision notes and summary PDFs for all major subjects instantly.</p>
-          </div>
-          <a href="/syllabus/ba-dummy.pdf" target="_blank" rel="noopener noreferrer" className="ba-cheat-main-btn">
-            View All Cheatsheets 📄
-          </a>
-        </div>
-        <div className="ba-cheat-grid">
-          {subjectsList.map((subj, sIdx) => (
-            <a key={sIdx} href={subj.pdfUrl} target="_blank" rel="noopener noreferrer" className="ba-cheat-chip">
-              <span>{subj.name}</span>
-              <span className="ba-pdf-badge">PDF view ↗</span>
-            </a>
-          ))}
-        </div>
-      </div>
       {/* Scholarship & Eligibility Hub */}
       <div className="ba-scholarship-card">
         <div className="ba-scholarship-header">
@@ -151,8 +90,8 @@ const BaPage = () => {
             <p>Check your eligibility criteria and apply for government scholarship schemes directly.</p>
           </div>
           <div className="ba-sch-buttons">
-            <a href="#" className="ba-sch-btn apply-btn">Apply Now 🚀</a>
-            <a href="#" className="ba-sch-btn status-btn">Check Status 🔍</a>
+            <a href="https://scholarship.up.gov.in/" target="_blank" rel="noopener noreferrer" className="ba-sch-btn apply-btn">Apply Now 🚀</a>
+            <a href="https://scholarship.up.gov.in/" target="_blank" rel="noopener noreferrer" className="ba-sch-btn status-btn">Check Status 🔍</a>
           </div>
         </div>
 

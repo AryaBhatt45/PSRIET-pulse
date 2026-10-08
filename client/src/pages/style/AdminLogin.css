@@ -82,8 +82,7 @@
     transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.admin-login-body .input-box input:focus~label,
-.admin-login-body .input-box label.active {
+.admin-login-body .input-box input:focus~label, .admin-login-body .input-box label.active {
     top: 10px;
     font-size: 0.75em;
     color: #ff3333;
@@ -106,9 +105,7 @@
 }
 
 /* Browser autofill fix */
-.admin-login-body .input-box input:-webkit-autofill,
-.admin-login-body .input-box input:-webkit-autofill:hover,
-.admin-login-body .input-box input:-webkit-autofill:focus {
+.admin-login-body .input-box input:-webkit-autofill, .admin-login-body .input-box input:-webkit-autofill:hover, .admin-login-body .input-box input:-webkit-autofill:focus {
     -webkit-text-fill-color: #ffffff;
     -webkit-box-shadow: 0 0 0px 1000px #0a0505 inset;
     transition: background-color 5000s ease-in-out 0s;

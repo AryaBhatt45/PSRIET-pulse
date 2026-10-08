@@ -6,7 +6,7 @@
     font-family: sans-serif;
 }
 
-.support-popup-menu {
+.support-widget-container .support-popup-menu {
     position: absolute;
     bottom: 70px;
     right: 0;
@@ -16,35 +16,35 @@
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
     border: 1px solid rgba(255, 255, 255, 0.1);
     overflow: hidden;
-    animation: fadeInScale 0.2s ease-in-out;
+    animation: support-widget-fadeInScale 0.2s ease-in-out;
 }
 
-.support-popup-header {
+.support-widget-container .support-popup-header {
     background: #0f172a;
     padding: 12px 15px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.support-title {
+.support-widget-container .support-title {
     margin: 0;
     color: #fff;
     font-size: 14px;
 }
 
-.support-subtitle {
+.support-widget-container .support-subtitle {
     margin: 2px 0 0;
     color: #94a3b8;
     font-size: 11px;
 }
 
-.support-links-container {
+.support-widget-container .support-links-container {
     padding: 10px;
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
 
-.support-btn {
+.support-widget-container .support-btn {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -57,19 +57,19 @@
     transition: opacity 0.2s;
 }
 
-.support-btn:hover {
+.support-widget-container .support-btn:hover {
     opacity: 0.9;
 }
 
-.whatsapp-btn {
+.support-widget-container .whatsapp-btn {
     background: #25D366;
 }
 
-.telegram-btn {
+.support-widget-container .telegram-btn {
     background: #229ED9;
 }
 
-.support-toggle-btn {
+.support-widget-container .support-toggle-btn {
     width: 55px;
     height: 55px;
     border-radius: 50%;
@@ -84,16 +84,16 @@
     transition: transform 0.2s;
 }
 
-.support-toggle-btn:hover {
+.support-widget-container .support-toggle-btn:hover {
     transform: scale(1.05);
 }
 
-.support-close-icon {
+.support-widget-container .support-close-icon {
     font-size: 24px;
     font-weight: bold;
 }
 
-@keyframes fadeInScale {
+@keyframes support-widget-fadeInScale {
     from {
         opacity: 0;
         transform: translateY(10px) scale(0.95);

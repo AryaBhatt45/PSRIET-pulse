@@ -2,6 +2,20 @@ import './style/AdminDashboard.css';
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 
+const readOpportunityList = (key) => {
+    const storedEntries = localStorage.getItem(key);
+    if (!storedEntries) return [];
+
+    try {
+        const entries = JSON.parse(storedEntries);
+        if (!Array.isArray(entries)) throw new Error(`Expected ${key} to contain an array.`);
+        return entries;
+    } catch (error) {
+        console.error(`Unable to read ${key} from localStorage.`, error);
+        return [];
+    }
+};
+
 export default function AdminDashboard() {
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('overview');
@@ -32,6 +46,16 @@ export default function AdminDashboard() {
     const [newCourse, setNewCourse] = useState('BCA');
     const [studentSearch, setStudentSearch] = useState('');
     const [savedEnquiries, setSavedEnquiries] = useState([]);
+    const [opportunityType, setOpportunityType] = useState('job');
+    const [opportunityRole, setOpportunityRole] = useState('');
+    const [opportunityCompany, setOpportunityCompany] = useState('');
+    const [opportunityLink, setOpportunityLink] = useState('');
+    const [opportunityLastDate, setOpportunityLastDate] = useState('');
+    const [opportunityDescription, setOpportunityDescription] = useState('');
+    const [opportunityEligibility, setOpportunityEligibility] = useState('');
+    const [opportunityExperience, setOpportunityExperience] = useState('');
+    const [savedJobs, setSavedJobs] = useState([]);
+    const [savedInternships, setSavedInternships] = useState([]);
 
     useEffect(() => {
         const notices = JSON.parse(localStorage.getItem('pt_notices')) || [];
@@ -39,12 +63,16 @@ export default function AdminDashboard() {
         const results = JSON.parse(localStorage.getItem('pt_results')) || [];
         const students = JSON.parse(localStorage.getItem('pt_students')) || [];
         const enquiries = JSON.parse(localStorage.getItem('pt_enquiries')) || [];
+        const jobs = readOpportunityList('pt_jobs');
+        const internships = readOpportunityList('pt_internships');
 
         setSavedEnquiries(enquiries);
         setSavedNotices(notices);
         setSavedEvents(events);
         setSavedResults(results);
         setSavedStudents(students);
+        setSavedJobs(jobs);
+        setSavedInternships(internships);
     }, []);
 
     const handleLogout = () => {
@@ -153,6 +181,81 @@ export default function AdminDashboard() {
         const updated = savedEnquiries.filter((_, i) => i !== index);
         localStorage.setItem('pt_enquiries', JSON.stringify(updated));
         setSavedEnquiries(updated);
+    };
+
+    const handlePublishOpportunity = (e) => {
+        e.preventDefault();
+        const role = opportunityRole.trim();
+        const company = opportunityCompany.trim();
+        const description = opportunityDescription.trim();
+        const applyLink = opportunityLink.trim();
+
+        const eligibility = opportunityEligibility.trim();
+        const experience = opportunityExperience.trim();
+
+        if (!role || !company || !description || !opportunityLastDate || !applyLink || !eligibility || !experience) return;
+
+        let url;
+        try {
+            url = new URL(applyLink);
+        } catch {
+            alert('Enter a valid external application URL.');
+            return;
+        }
+
+        if (url.protocol !== 'https:' && url.protocol !== 'http:') {
+            alert('The application URL must use HTTP or HTTPS.');
+            return;
+        }
+
+        const key = opportunityType === 'internship' ? 'pt_internships' : 'pt_jobs';
+        const currentEntries = opportunityType === 'internship' ? savedInternships : savedJobs;
+        const updatedEntries = [{
+            id: Date.now(),
+            role,
+            company,
+            applyLink,
+            lastDate: opportunityLastDate,
+            description,
+            eligibility,
+            experience
+        }, ...currentEntries];
+
+        try {
+            localStorage.setItem(key, JSON.stringify(updatedEntries));
+        } catch (error) {
+            console.error(`Unable to save entries to ${key}.`, error);
+            alert('Unable to save this opportunity. Please check browser storage and try again.');
+            return;
+        }
+
+        if (opportunityType === 'internship') setSavedInternships(updatedEntries);
+        else setSavedJobs(updatedEntries);
+        setOpportunityRole('');
+        setOpportunityCompany('');
+        setOpportunityLink('');
+        setOpportunityLastDate('');
+        setOpportunityDescription('');
+        setOpportunityEligibility('');
+        setOpportunityExperience('');
+        alert(`${opportunityType === 'internship' ? 'Internship' : 'Job'} published successfully!`);
+    };
+
+    const handleDeleteOpportunity = (type, index) => {
+        const key = type === 'internship' ? 'pt_internships' : 'pt_jobs';
+        const entries = type === 'internship' ? savedInternships : savedJobs;
+        const updatedEntries = entries.filter((_, entryIndex) => entryIndex !== index);
+
+        try {
+            localStorage.setItem(key, JSON.stringify(updatedEntries));
+        } catch (error) {
+            console.error(`Unable to update ${key}.`, error);
+            alert('Unable to delete this opportunity. Please try again.');
+            return;
+        }
+
+        if (type === 'internship') setSavedInternships(updatedEntries);
+        else setSavedJobs(updatedEntries);
     };
 
     const filteredStudents = savedStudents.filter(s =>
@@ -384,6 +487,93 @@ export default function AdminDashboard() {
                         </div>
                     </div>
                 );
+            case 'opportunities':
+                return (
+                    <div className="admin-action-section">
+                        <h3>💼 Manage BCA Jobs &amp; Internships</h3>
+                        <p>Publish opportunities for the live ticker on the BCA page.</p>
+                        <form className="admin-opportunity-form" onSubmit={handlePublishOpportunity}>
+                            <select value={opportunityType} onChange={(e) => setOpportunityType(e.target.value)}>
+                                <option value="job">Job</option>
+                                <option value="internship">Internship</option>
+                            </select>
+                            <input
+                                type="text"
+                                placeholder="Job or internship role"
+                                value={opportunityRole}
+                                onChange={(e) => setOpportunityRole(e.target.value)}
+                                required
+                            />
+                            <input
+                                type="text"
+                                placeholder="Company name"
+                                value={opportunityCompany}
+                                onChange={(e) => setOpportunityCompany(e.target.value)}
+                                required
+                            />
+                            <input
+                                type="text"
+                                placeholder="Eligibility (e.g., BCA / B.Tech / Final Year)"
+                                value={opportunityEligibility}
+                                onChange={(e) => setOpportunityEligibility(e.target.value)}
+                                required
+                            />
+                            <input
+                                type="text"
+                                placeholder="Experience (e.g., Fresher / 1+ Years)"
+                                value={opportunityExperience}
+                                onChange={(e) => setOpportunityExperience(e.target.value)}
+                                required
+                            />
+                            <input
+                                type="url"
+                                placeholder="External application link (https://...)"
+                                value={opportunityLink}
+                                onChange={(e) => setOpportunityLink(e.target.value)}
+                                required
+                            />
+                            <label>
+                                Last date to apply
+                                <input
+                                    type="date"
+                                    value={opportunityLastDate}
+                                    onChange={(e) => setOpportunityLastDate(e.target.value)}
+                                    required
+                                />
+                            </label>
+                            <textarea
+                                placeholder="Short description"
+                                rows="3"
+                                value={opportunityDescription}
+                                onChange={(e) => setOpportunityDescription(e.target.value)}
+                                required
+                            />
+                            <button type="submit">Publish Opportunity</button>
+                        </form>
+
+                        {[
+                            { type: 'job', title: 'Active Jobs', entries: savedJobs },
+                            { type: 'internship', title: 'Active Internships', entries: savedInternships }
+                        ].map(({ type, title, entries }) => (
+                            <div className="admin-opportunity-list" key={type}>
+                                <h4>{title} ({entries.length})</h4>
+                                {entries.map((entry, index) => (
+                                    <div className="admin-opportunity-item" key={entry.id || `${entry.role}-${index}`}>
+                                        <div>
+                                            <strong>{entry.role || entry.title}</strong>
+                                            <p className="admin-opportunity-company">{entry.company || 'Company not specified'}</p>
+                                            <p>{entry.description || entry.intro || entry.content}</p>
+                                            <span>Eligibility: {entry.eligibility || 'Not specified'} · Experience: {entry.experience || 'Not specified'}</span>
+                                            <br />
+                                            <span>Last date: {entry.lastDate || entry.deadline || entry.date}</span>
+                                        </div>
+                                        <button type="button" onClick={() => handleDeleteOpportunity(type, index)}>Delete</button>
+                                    </div>
+                                ))}
+                            </div>
+                        ))}
+                    </div>
+                );
             case 'results':
                 return (
                     <div className="admin-action-section">
@@ -506,6 +696,9 @@ export default function AdminDashboard() {
                     </li>
                     <li className={activeTab === 'events' ? 'active' : ''} onClick={() => setActiveTab('events')}>
                         🗓️ Manage Events
+                    </li>
+                    <li className={activeTab === 'opportunities' ? 'active' : ''} onClick={() => setActiveTab('opportunities')}>
+                        💼 Jobs &amp; Internships
                     </li>
                     <li className={activeTab === 'results' ? 'active' : ''} onClick={() => setActiveTab('results')}>
                         📝 Update Results

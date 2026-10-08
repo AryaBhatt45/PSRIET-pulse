@@ -1,24 +1,19 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
+import CurriculumQuickAccess from '../components/CurriculumQuickAccess';
+import CurriculumSemesterCards from '../components/CurriculumSemesterCards';
 import './style/bsc.css';
 
 const BscPage = () => {
-  const [activeSem, setActiveSem] = useState(null);
-
-  const toggleAccordion = (index) => {
-    setActiveSem(activeSem === index ? null : index);
-  };
-
-  // B.Sc ke 8 major subjects har semester ke liye
   const subjectsList = [
-    { name: 'Mechanics & Wave Motion', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/bsc-dummy.pdf' },
-    { name: 'Calculus & Algebra', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/bsc-dummy.pdf' },
-    { name: 'Fundamentals of Chemistry', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/bsc-dummy.pdf' },
-    { name: 'Thermal Physics & Semiconductor', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/bsc-dummy.pdf' },
-    { name: 'Differential Equations', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/bsc-dummy.pdf' },
-    { name: 'Organic & Inorganic Chemistry', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/bsc-dummy.pdf' },
-    { name: 'Computer Science Basics', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/bsc-dummy.pdf' },
-    { name: 'CTS (Co-Curricular)', notesUrl: '#', quickUrl: '#', pdfUrl: '/syllabus/bsc-dummy.pdf' }
+    { name: 'Mechanics & Wave Motion' },
+    { name: 'Calculus & Algebra' },
+    { name: 'Fundamentals of Chemistry' },
+    { name: 'Thermal Physics & Semiconductor' },
+    { name: 'Differential Equations' },
+    { name: 'Organic & Inorganic Chemistry' },
+    { name: 'Computer Science Basics' },
+    { name: 'CTS (Co-Curricular)' }
   ];
 
   const semesters = [
@@ -31,14 +26,14 @@ const BscPage = () => {
   ];
 
   const announcements = [
-    "📢 B.Sc Admission 2026: Online Registrations Open[cite: 13]",
-    "🔬 Physics & Chemistry practical batches schedule announced[cite: 13]",
-    "📝 Back Paper examination dates released for 2nd & 4th semesters[cite: 13]",
-    "💡 Inter-college Science Model competition on 22nd October[cite: 13]."
+    "📢 Check the latest institute notice for B.Sc. admissions and application dates.",
+    "🔬 Confirm practical batch schedules with the science department.",
+    "📝 Verify examination forms and back-paper dates with the official notice.",
+    "💡 Follow institute announcements for upcoming science events."
   ];
 
   return (
-    <div className="ba-page-container">
+    <div className="bsc-page-container">
 
       {/* Top Bar */}
       <div className="ba-top-bar">
@@ -82,66 +77,9 @@ const BscPage = () => {
           <h2>Semester-wise Curriculum & Notes</h2>
         </div>
 
-        <div className="ba-sem-grid">
-          {semesters.map((item, index) => {
-            const isOpen = activeSem === index;
-            return (
-              <div key={index} className={`ba-sem-card ${isOpen ? 'open' : ''}`}>
-                <div className="ba-sem-card-top">
-                  <h3>{item.sem}</h3>
-                  <span className="ba-active-dot"></span>
-                </div>
-
-                <p className="ba-sem-preview-text">
-                  {item.subjects.map(s => s.name).join(', ')}
-                </p>
-
-                <button onClick={() => toggleAccordion(index)} className="ba-accordion-btn">
-                  <span>{isOpen ? 'Hide Subjects' : 'View Subjects & Resources'}</span>
-                  <span>{isOpen ? '▲' : '▼'}</span>
-                </button>
-
-                {isOpen && (
-                  <div className="bca-sub-subjects-container">
-                    {item.subjects.map((sub, subIdx) => (
-                      <div key={subIdx} className="bca-sub-card">
-                        <h4 className="ba-subject-title">{sub.name}</h4>
-                        <div className="bca-links">
-                          <a href={sub.notesUrl} className="bca-btn notes-l">Notes</a>
-                          <a href={sub.quickUrl} className="bca-btn quick-l">Quick ✨</a>
-                          <a href={sub.pdfUrl} target="_blank" rel="noopener noreferrer" className="bca-btn syllabus-l">Syllabus</a>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
+        <CurriculumSemesterCards semesters={semesters} />
       </div>
-
-      {/* Cheatsheet Hub Card */}
-      <div className="ba-cheatsheet-card">
-        <div className="ba-cheatsheet-header">
-          <div>
-            <span className="ba-cheat-tag">⚡ QUICK ACCESS</span>
-            <h3>B.Sc. All-Subjects Master Cheatsheet Hub</h3>
-            <p>Access one-shot revision notes and summary PDFs for all major science subjects instantly.</p>
-          </div>
-          <a href="/syllabus/bsc-dummy.pdf" target="_blank" rel="noopener noreferrer" className="ba-cheat-main-btn">
-            View All Cheatsheets 📄
-          </a>
-        </div>
-        <div className="ba-cheat-grid">
-          {subjectsList.map((subj, sIdx) => (
-            <a key={sIdx} href={subj.pdfUrl} target="_blank" rel="noopener noreferrer" className="ba-cheat-chip">
-              <span>{subj.name}</span>
-              <span className="ba-pdf-badge">PDF view ↗</span>
-            </a>
-          ))}
-        </div>
-      </div>
+      <CurriculumQuickAccess semesters={semesters} />
 
       {/* Scholarship & Eligibility Hub */}
       <div className="ba-scholarship-card">
@@ -152,8 +90,8 @@ const BscPage = () => {
             <p>Check your eligibility criteria and apply for government scholarship schemes directly.</p>
           </div>
           <div className="ba-sch-buttons">
-            <a href="#" className="ba-sch-btn apply-btn">Apply Now 🚀</a>
-            <a href="#" className="ba-sch-btn status-btn">Check Status 🔍</a>
+            <a href="https://scholarship.up.gov.in/" target="_blank" rel="noopener noreferrer" className="ba-sch-btn apply-btn">Apply Now 🚀</a>
+            <a href="https://scholarship.up.gov.in/" target="_blank" rel="noopener noreferrer" className="ba-sch-btn status-btn">Check Status 🔍</a>
           </div>
         </div>
 

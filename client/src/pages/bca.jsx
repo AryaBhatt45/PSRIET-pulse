@@ -1,17 +1,89 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import CurriculumQuickAccess from '../components/CurriculumQuickAccess';
+import CurriculumSemesterCards from '../components/CurriculumSemesterCards';
 import './style/bca.css';
+
+const opportunityStorageKeys = ['pt_jobs', 'pt_internships'];
+
+const readOpportunities = () => opportunityStorageKeys.flatMap((key) => {
+  const rawEntries = localStorage.getItem(key);
+  if (!rawEntries) return [];
+
+  let entries;
+  try {
+    entries = JSON.parse(rawEntries);
+  } catch (error) {
+    console.error(`Unable to read ${key} from localStorage.`, error);
+    return [];
+  }
+
+  if (!Array.isArray(entries)) {
+    console.error(`Expected ${key} to contain an array of opportunities.`);
+    return [];
+  }
+
+  return entries.flatMap((entry) => {
+    const title = entry?.role || entry?.title || entry?.name;
+    const description = entry?.description || entry?.intro || entry?.content;
+    const lastDate = entry?.lastDate || entry?.deadline || entry?.date;
+    const applyLink = entry?.applyLink || entry?.externalApplyLink || entry?.link || entry?.url;
+
+    if (![title, description, lastDate, applyLink].every((value) => typeof value === 'string' && value.trim())) {
+      console.error(`Skipping an incomplete opportunity in ${key}.`);
+      return [];
+    }
+
+    try {
+      const url = new URL(applyLink);
+      if (url.protocol !== 'https:' && url.protocol !== 'http:') {
+        console.error(`Skipping an opportunity in ${key} with an unsupported apply link.`);
+        return [];
+      }
+    } catch (error) {
+      console.error(`Skipping an opportunity in ${key} with an invalid apply link.`, error);
+      return [];
+    }
+
+    return [{
+      id: `${key}-${entry.id || title}-${lastDate}`,
+      title: title.trim(),
+      company: typeof entry.company === 'string' && entry.company.trim() ? entry.company.trim() : 'Company not specified',
+      description: description.trim(),
+      eligibility: entry.eligibility || 'Not specified',
+      experience: entry.experience || 'Not specified',
+      lastDate: lastDate.trim(),
+      applyLink: applyLink.trim(),
+      type: key === 'pt_internships' ? 'Internship' : 'Job'
+    }];
+  });
+});
 
 const BcaPage = () => {
   const [expandedId, setExpandedId] = useState(null);
+  const [opportunities, setOpportunities] = useState([]);
+
+  useEffect(() => {
+    const updateOpportunities = () => {
+      setOpportunities(readOpportunities());
+    };
+    updateOpportunities();
+
+    const handleStorage = (event) => {
+      if (!event.key || opportunityStorageKeys.includes(event.key)) updateOpportunities();
+    };
+
+    window.addEventListener('storage', handleStorage);
+    return () => window.removeEventListener('storage', handleStorage);
+  }, []);
 
   const semesters = [
-    { sem: 'Sem 1', subjects: 'C Programming, Computer Fundamentals, Basic Math', syllabusPdf: '/syllabus/sem1-syllabus.pdf' },
-    { sem: 'Sem 2', subjects: 'C++, Web Designing (HTML/CSS/JS), Digital Electronics', syllabusPdf: '/syllabus/sem2-syllabus.pdf' },
-    { sem: 'Sem 3', subjects: 'Data Structures (DSA), Python OOPs, DBMS & SQL', syllabusPdf: '/syllabus/sem3-syllabus.pdf' },
-    { sem: 'Sem 4', subjects: 'Advanced Java, Software Engineering, Computer Networks', syllabusPdf: '/syllabus/sem4-syllabus.pdf' },
-    { sem: 'Sem 5', subjects: 'Full-Stack Development (MERN), Cyber Security', syllabusPdf: '/syllabus/sem5-syllabus.pdf' },
-    { sem: 'Sem 6', subjects: 'Cloud Computing, Major Live Project, AI Basics', syllabusPdf: '/syllabus/sem6-syllabus.pdf' }
+    { sem: 'Sem 1', subjects: ['C Programming', 'Computer Fundamentals', 'Basic Mathematics', 'Digital Logic', 'Communication Skills'] },
+    { sem: 'Sem 2', subjects: ['C++ Programming', 'Web Designing (HTML/CSS/JS)', 'Digital Electronics', 'Discrete Mathematics', 'Operating Systems'] },
+    { sem: 'Sem 3', subjects: ['Data Structures (DSA)', 'Python OOP', 'DBMS & SQL', 'Computer Organization', 'Statistics'] },
+    { sem: 'Sem 4', subjects: ['Advanced Java', 'Software Engineering', 'Computer Networks', 'Linux & Shell Programming', 'Theory of Computation'] },
+    { sem: 'Sem 5', subjects: ['Full-Stack Development (MERN)', 'Cyber Security', 'Cloud Computing', 'Data Analytics'] },
+    { sem: 'Sem 6', subjects: ['Cloud Computing', 'Major Live Project', 'AI Basics'] }
   ];
 
   const gloryStudents = [
@@ -21,7 +93,7 @@ const BcaPage = () => {
     { name: 'Neha Singh', achievement: 'AI Research Paper Published', image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&h=200&q=80' }
   ];
 
- const openSourcePrograms = [
+  const openSourcePrograms = [
     {
       id: 1,
       title: 'Google Summer of Code (GSoC)',
@@ -61,10 +133,10 @@ const BcaPage = () => {
   ];
 
   const announcements = [
-    "📢 BCA Admission Last Date: 15th July 2026",
-    "💡 National Scholarship Portal (NSP) Form submission open - Apply Now!",
-    "📝 Semester Back Exam Form filling started - Submit before 30th June",
-    "🚀 New Practical Lab Sessions scheduled for odd semesters."
+    "📢 Check the latest official institute notice for BCA admissions and application dates.",
+    "💡 Confirm scholarship eligibility and deadlines on the official scholarship portal.",
+    "📝 Verify examination form deadlines in official notices.",
+    "🚀 Consult department updates for practical lab schedules."
   ];
 
   const toggleExpand = (id) => {
@@ -109,23 +181,9 @@ const BcaPage = () => {
           <span className="section-badge">🚀 ROADMAP</span>
           <h2>Semester-wise Curriculum & Notes</h2>
         </div>
-        <div className="bca-sem-grid">
-          {semesters.map((item, index) => (
-            <div key={index} className="bca-sem-card-light">
-              <div className="card-top">
-                <h3>{item.sem}</h3>
-                <span className="active-dot"></span>
-              </div>
-              <p className="sem-subjects">{item.subjects}</p>
-              <div className="bca-links">
-                <a href="#notes" className="bca-btn notes-l">Notes</a>
-                <a href="#quick-notes" className="bca-btn quick-l">Quick Notes ✨</a>
-                <a href={item.syllabusPdf} target="_blank" rel="noopener noreferrer" className="bca-btn syllabus-l">Syllabus PDF</a>
-              </div>
-            </div>
-          ))}
-        </div>
+        <CurriculumSemesterCards semesters={semesters} />
       </div>
+      <CurriculumQuickAccess semesters={semesters} />
       {/* Open Source & Earning Hub (Naya Feature add kiya hai) */}
       <div className="opensource-hub-card" style={{ background: '#ffffff', border: '1px solid #cbd5e1', padding: '22px', borderRadius: '16px', marginTop: '25px', marginBottom: '25px', boxShadow: '0 4px 15px rgba(0,0,0,0.03)' }}>
         <div style={{ marginBottom: '18px' }}>
@@ -202,6 +260,100 @@ const BcaPage = () => {
           </div>
         </div>
       </div>
+      {/* Scholarship & Financial Aid Section */}
+      <section className="dashboard-section-box">
+        <div className="section-header-wrap">
+          <div className="title-with-badge">
+            <span className="badge-tag">🎓 FINANCIAL AID</span>
+          </div>
+          <h2>State Scholarship & Fee Reimbursement</h2>
+          <p className="section-subtitle">Check your eligibility criteria and apply for government scholarship schemes directly.</p>
+        </div>
+
+        <div className="scholarship-main-card">
+          <div className="scholarship-card-header">
+            <div className="scholarship-title-area">
+              <span className="scholarship-badge">🏛️ Government Scheme</span>
+              <h3>Post-Matric Scholarship for BCA Students</h3>
+              <p>Eligible students can claim tuition fee reimbursement and maintenance allowances provided by the state government.</p>
+            </div>
+            <div className="scholarship-action-btns">
+              <a href="https://scholarships.gov.in/" target="_blank" rel="noreferrer" className="primary-apply-btn">
+                Apply Now 🚀
+              </a>
+              <button onClick={() => alert("Checking application status...")} className="secondary-status-btn">
+                Check Status 🔍
+              </button>
+            </div>
+          </div>
+
+          <div className="scholarship-rules-grid">
+            <div className="rule-box">
+              <span className="rule-label">ACADEMIC CUTOFF:</span>
+              <span className="rule-value">Minimum 75% Marks</span>
+            </div>
+            <div className="rule-box">
+              <span className="rule-label">BACKLOG RULE:</span>
+              <span className="rule-value">No Active Backlogs (0 Failures)</span>
+            </div>
+            <div className="rule-box">
+              <span className="rule-label">ATTENDANCE:</span>
+              <span className="rule-value">Minimum 75% Required</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="bca-live-opportunities" aria-labelledby="bca-live-opportunities-title">
+        <div className="bca-live-opportunities-heading">
+          <div>
+            <span className="bca-live-opportunities-badge">LIVE OPPORTUNITIES</span>
+            <h2 id="bca-live-opportunities-title">Jobs &amp; Internships</h2>
+          </div>
+          <span className="bca-live-opportunities-count">{opportunities.length} available</span>
+        </div>
+        {opportunities.length > 0 ? (
+          <div className="bca-opportunities-viewport" aria-label="Latest jobs and internships">
+            <div
+              className={`bca-opportunities-track${opportunities.length > 1 ? ' is-animated' : ''}`}
+              style={{ '--opportunity-duration': `${opportunities.length * 4}s` }}
+            >
+              {[...opportunities, ...(opportunities.length > 1 ? opportunities : [])].map((opportunity, index) => (
+                <article
+                  className="bca-opportunity-card"
+                  key={`${opportunity.id}-${index}`}
+                  aria-hidden={index >= opportunities.length}
+                >
+                  <div className="bca-opportunity-copy">
+                    <span className="bca-opportunity-type">{opportunity.type}</span>
+                    <h3>{opportunity.title}</h3>
+                    <p className="bca-opportunity-company">{opportunity.company}</p>
+                    <p className="bca-opportunity-description">{opportunity.description}</p>
+                    <div className="bca-opportunity-requirements">
+                      <span><strong>Eligibility:</strong> {opportunity.eligibility}</span>
+                      <span><strong>Experience:</strong> {opportunity.experience}</span>
+                    </div>
+                  </div>
+                  <div className="bca-opportunity-actions">
+                    <span className="bca-opportunity-deadline">Last date: {opportunity.lastDate}</span>
+                    <a
+                      href={opportunity.applyLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      tabIndex={index >= opportunities.length ? -1 : undefined}
+                      className="bca-opportunity-apply"
+                    >
+                      Apply Now ↗
+                    </a>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <p className="bca-opportunities-empty">New job and internship opportunities will appear here.</p>
+        )}
+      </section>
 
       <div className="bca-hod-card-light">
         <img src="/pradeeppandey.jpg" className="hod-img-light" alt="HOD" />

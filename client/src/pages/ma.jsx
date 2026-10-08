@@ -1,13 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import CurriculumQuickAccess from '../components/CurriculumQuickAccess';
+import CurriculumSemesterCards from '../components/CurriculumSemesterCards';
 import './style/bca.css';
 
 const MaPage = () => {
   const semesters = [
-    { sem: 'Sem 1', subjects: 'Advanced Literary Theory, Research Methodology, Classical Political Thought, Sociological Concepts', syllabusPdf: '/syllabus/ma-sem1-syllabus.pdf' },
-    { sem: 'Sem 2', subjects: 'Comparative Literature, Modern Indian Historiography, Indian Political System, Stratification', syllabusPdf: '/syllabus/ma-sem2-syllabus.pdf' },
-    { sem: 'Sem 3', subjects: 'Specialized Thematic Elective, Interdisciplinary Seminars, Public Policy Analysis', syllabusPdf: '/syllabus/ma-sem3-syllabus.pdf' },
-    { sem: 'Sem 4', subjects: 'Master Dissertation / Thesis Submission, Comprehensive Academic Viva, Research Workshop', syllabusPdf: '/syllabus/ma-sem4-syllabus.pdf' }
+    { sem: 'Sem 1', subjects: 'Advanced Literary Theory, Research Methodology, Classical Political Thought, Sociological Concepts' },
+    { sem: 'Sem 2', subjects: 'Comparative Literature, Modern Indian Historiography, Indian Political System, Stratification' },
+    { sem: 'Sem 3', subjects: 'Specialized Thematic Elective, Interdisciplinary Seminars, Public Policy Analysis' },
+    { sem: 'Sem 4', subjects: 'Master Dissertation / Thesis Submission, Comprehensive Academic Viva, Research Workshop' }
   ];
 
   const gloryStudents = [
@@ -63,23 +65,9 @@ const MaPage = () => {
           <span className="section-badge">🚀 ROADMAP</span>
           <h2>Semester-wise Curriculum & Notes</h2>
         </div>
-        <div className="bca-sem-grid">
-          {semesters.map((item, index) => (
-            <div key={index} className="bca-sem-card-light">
-              <div className="card-top">
-                <h3>{item.sem}</h3>
-                <span className="active-dot"></span>
-              </div>
-              <p className="sem-subjects">{item.subjects}</p>
-              <div className="bca-links">
-                <a href="#notes" className="bca-btn notes-l">Notes</a>
-                <a href="#quick-notes" className="bca-btn quick-l">Quick Notes ✨</a>
-                <a href={item.syllabusPdf} target="_blank" rel="noopener noreferrer" className="bca-btn syllabus-l">Syllabus PDF</a>
-              </div>
-            </div>
-          ))}
-        </div>
+        <CurriculumSemesterCards semesters={semesters} />
       </div>
+      <CurriculumQuickAccess semesters={semesters} />
 
       <div className="bca-section glory-wrapper">
         <div className="bca-section-header text-center">

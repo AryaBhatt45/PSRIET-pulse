@@ -39,6 +39,16 @@ const Dashboard = () => {
     const [selectedEvent, setSelectedEvent] = useState(null);
 
     const [alumniIndex, setAlumniIndex] = useState(0);
+    const [attendanceAttended, setAttendanceAttended] = useState('');
+    const [attendanceHeld, setAttendanceHeld] = useState('');
+    const [attendanceTarget, setAttendanceTarget] = useState('75');
+    const [attendanceResult, setAttendanceResult] = useState('');
+    const [marksObtained, setMarksObtained] = useState('');
+    const [marksTotal, setMarksTotal] = useState('');
+    const [marksResult, setMarksResult] = useState('');
+    const [examDate, setExamDate] = useState('');
+    const [examCountdown, setExamCountdown] = useState('');
+    const [expandedTool, setExpandedTool] = useState(null);
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -93,6 +103,69 @@ const Dashboard = () => {
     const prevSlide = () => setCurrentIdx((prev) => (prev - 1 + bannerImages.length) % bannerImages.length);
     const currentAlumni = alumniList[alumniIndex];
 
+    const calculateAttendance = (event) => {
+        event.preventDefault();
+        const attended = Number(attendanceAttended);
+        const held = Number(attendanceHeld);
+        const target = Number(attendanceTarget);
+
+        if (!attendanceAttended || !attendanceHeld || !attendanceTarget ||
+            !Number.isFinite(attended) || !Number.isFinite(held) || !Number.isFinite(target) ||
+            attended < 0 || held <= 0 || attended > held || target <= 0 || target > 100) {
+            setAttendanceResult('Enter valid class counts and a target between 1% and 100%.');
+            return;
+        }
+
+        const currentPercentage = (attended / held) * 100;
+        if (currentPercentage >= target) {
+            const classesCanMiss = Math.floor(attended / (target / 100) - held);
+            setAttendanceResult(`Current attendance: ${currentPercentage.toFixed(1)}%. You can miss up to ${Math.max(0, classesCanMiss)} more class${classesCanMiss === 1 ? '' : 'es'} and stay at ${target}%.`);
+            return;
+        }
+
+        if (target === 100) {
+            setAttendanceResult(`Current attendance: ${currentPercentage.toFixed(1)}%. A 100% target is no longer reachable after missing a class.`);
+            return;
+        }
+
+        const classesNeeded = Math.ceil((target * held - 100 * attended) / (100 - target));
+        setAttendanceResult(`Current attendance: ${currentPercentage.toFixed(1)}%. Attend the next ${classesNeeded} consecutive class${classesNeeded === 1 ? '' : 'es'} to reach ${target}%.`);
+    };
+
+    const calculateMarksPercentage = (event) => {
+        event.preventDefault();
+        const obtained = Number(marksObtained);
+        const total = Number(marksTotal);
+
+        if (!marksObtained || !marksTotal || !Number.isFinite(obtained) ||
+            !Number.isFinite(total) || obtained < 0 || total <= 0 || obtained > total) {
+            setMarksResult('Enter valid marks; obtained marks cannot exceed the total.');
+            return;
+        }
+
+        setMarksResult(`Percentage: ${((obtained / total) * 100).toFixed(2)}%`);
+    };
+
+    const calculateExamCountdown = (event) => {
+        event.preventDefault();
+        if (!examDate) {
+            setExamCountdown('Choose your exam date to see the countdown.');
+            return;
+        }
+
+        const [year, month, day] = examDate.split('-').map(Number);
+        const selectedDay = Date.UTC(year, month - 1, day);
+        const today = new Date();
+        const todayStart = Date.UTC(today.getFullYear(), today.getMonth(), today.getDate());
+        const daysRemaining = Math.round((selectedDay - todayStart) / 86400000);
+
+        setExamCountdown(daysRemaining < 0
+            ? 'That exam date has already passed.'
+            : daysRemaining === 0
+                ? 'Your exam is today. Good luck!'
+                : `${daysRemaining} day${daysRemaining === 1 ? '' : 's'} until your exam.`);
+    };
+
     return (
         <div className="dashboard-container">
 
@@ -109,6 +182,7 @@ const Dashboard = () => {
                     <a href="tel:+917398663942" className="support-phone-btn">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" /></svg>
                         <span>+91 7398663942</span>
+                        <span>+91 7525857887</span>
                     </a>
 
                     <a href="https://wa.me/7398663942?text=Hello%20PTSRIET%20Support,%20I%20need%20assistance." target="_blank" rel="noopener noreferrer" className="support-whatsapp-btn">
@@ -246,7 +320,122 @@ const Dashboard = () => {
                     ))}
                 </div>
             </section>
+            <section className="student-toolkit-section" aria-labelledby="student-toolkit-title">
+                <div className="student-toolkit-heading">
+                    <span className="student-toolkit-badge">🎒 STUDENT TOOLKIT</span>
+                    <h2 id="student-toolkit-title">Quick tools for your semester</h2>
+                    <p>Check attendance, calculate marks, and keep your next exam in sight.</p>
+                </div>
+                <div className="student-toolkit-grid">
+                    <article className={`student-tool-card${expandedTool === 'attendance' ? ' is-expanded' : ''}`}>
+                        <button
+                            type="button"
+                            className="student-tool-header"
+                            aria-expanded={expandedTool === 'attendance'}
+                            aria-controls="student-tool-attendance"
+                            onClick={() => setExpandedTool((current) => current === 'attendance' ? null : 'attendance')}
+                        >
+                            <span className="student-tool-icon" aria-hidden="true">📊</span>
+                            <span className="student-tool-header-copy">
+                                <span className="student-tool-title">Attendance Planner</span>
+                                <span className="student-tool-description">See how many classes you need to attend or can miss.</span>
+                            </span>
+                            <span className="student-tool-toggle">
+                                <span className="student-tool-toggle-label">{expandedTool === 'attendance' ? 'Close tool' : 'Open tool'}</span>
+                                <span className="student-tool-chevron" aria-hidden="true">⌄</span>
+                            </span>
+                        </button>
+                        <div id="student-tool-attendance" className="student-tool-content" aria-hidden={expandedTool !== 'attendance'} inert={expandedTool !== 'attendance'}>
+                            <div className="student-tool-content-inner">
+                                <form onSubmit={calculateAttendance} className="student-tool-form">
+                                    <label>
+                                        Classes attended
+                                        <input type="number" min="0" step="1" value={attendanceAttended} onChange={(event) => setAttendanceAttended(event.target.value)} required />
+                                    </label>
+                                    <label>
+                                        Classes held
+                                        <input type="number" min="1" step="1" value={attendanceHeld} onChange={(event) => setAttendanceHeld(event.target.value)} required />
+                                    </label>
+                                    <label>
+                                        Target attendance (%)
+                                        <input type="number" min="1" max="100" step="0.1" value={attendanceTarget} onChange={(event) => setAttendanceTarget(event.target.value)} required />
+                                    </label>
+                                    <button type="submit" className="student-tool-button">Check attendance</button>
+                                    {attendanceResult && <p className="student-tool-result" aria-live="polite">{attendanceResult}</p>}
+                                </form>
+                            </div>
+                        </div>
+                    </article>
 
+                    <article className={`student-tool-card${expandedTool === 'marks' ? ' is-expanded' : ''}`}>
+                        <button
+                            type="button"
+                            className="student-tool-header"
+                            aria-expanded={expandedTool === 'marks'}
+                            aria-controls="student-tool-marks"
+                            onClick={() => setExpandedTool((current) => current === 'marks' ? null : 'marks')}
+                        >
+                            <span className="student-tool-icon" aria-hidden="true">🧮</span>
+                            <span className="student-tool-header-copy">
+                                <span className="student-tool-title">Marks Calculator</span>
+                                <span className="student-tool-description">Calculate your score percentage from marks.</span>
+                            </span>
+                            <span className="student-tool-toggle">
+                                <span className="student-tool-toggle-label">{expandedTool === 'marks' ? 'Close tool' : 'Open tool'}</span>
+                                <span className="student-tool-chevron" aria-hidden="true">⌄</span>
+                            </span>
+                        </button>
+                        <div id="student-tool-marks" className="student-tool-content" aria-hidden={expandedTool !== 'marks'} inert={expandedTool !== 'marks'}>
+                            <div className="student-tool-content-inner">
+                                <form onSubmit={calculateMarksPercentage} className="student-tool-form">
+                                    <label>
+                                        Marks obtained
+                                        <input type="number" min="0" step="any" value={marksObtained} onChange={(event) => setMarksObtained(event.target.value)} required />
+                                    </label>
+                                    <label>
+                                        Total marks
+                                        <input type="number" min="0.01" step="any" value={marksTotal} onChange={(event) => setMarksTotal(event.target.value)} required />
+                                    </label>
+                                    <button type="submit" className="student-tool-button">Calculate percentage</button>
+                                    {marksResult && <p className="student-tool-result" aria-live="polite">{marksResult}</p>}
+                                </form>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article className={`student-tool-card${expandedTool === 'countdown' ? ' is-expanded' : ''}`}>
+                        <button
+                            type="button"
+                            className="student-tool-header"
+                            aria-expanded={expandedTool === 'countdown'}
+                            aria-controls="student-tool-countdown"
+                            onClick={() => setExpandedTool((current) => current === 'countdown' ? null : 'countdown')}
+                        >
+                            <span className="student-tool-icon" aria-hidden="true">📅</span>
+                            <span className="student-tool-header-copy">
+                                <span className="student-tool-title">Exam Countdown</span>
+                                <span className="student-tool-description">Set an exam date and track the days remaining.</span>
+                            </span>
+                            <span className="student-tool-toggle">
+                                <span className="student-tool-toggle-label">{expandedTool === 'countdown' ? 'Close tool' : 'Open tool'}</span>
+                                <span className="student-tool-chevron" aria-hidden="true">⌄</span>
+                            </span>
+                        </button>
+                        <div id="student-tool-countdown" className="student-tool-content" aria-hidden={expandedTool !== 'countdown'} inert={expandedTool !== 'countdown'}>
+                            <div className="student-tool-content-inner">
+                                <form onSubmit={calculateExamCountdown} className="student-tool-form">
+                                    <label>
+                                        Exam date
+                                        <input type="date" value={examDate} onChange={(event) => setExamDate(event.target.value)} required />
+                                    </label>
+                                    <button type="submit" className="student-tool-button">Start countdown</button>
+                                    {examCountdown && <p className="student-tool-result" aria-live="polite">{examCountdown}</p>}
+                                </form>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </section>
             {/* Upcoming Events & Important Updates Section */}
             <section className="dashboard-section-box">
                 <div className="section-header-wrap">
@@ -358,7 +547,7 @@ const Dashboard = () => {
                     <div className="enquiry-text">
                         <span className="badge-tag">🎓 ADMISSIONS OPEN 2026</span>
                         <h2>Want to Join PTSRIET?</h2>
-                        <p>Fill out this quick form and our admission counsellor will call you back within 24 hours with complete details and fee structure.</p>
+                        <p>This form saves your enquiry in this browser only. For a response or fee details, please contact the institute directly.</p>
                     </div>
                     <form className="enquiry-form" onSubmit={(e) => {
                         e.preventDefault();
@@ -400,37 +589,6 @@ const Dashboard = () => {
                 </div>
             </section>
 
-            <section className="dashboard-section-box">
-                <div className="section-header-wrap text-center">
-                    <span className="badge-tag">🌟 WALL OF FAME</span>
-                    <h2>Our Proud Achievers & Alumni</h2>
-                    <p className="section-sub">Hear from our brilliant graduates who started their journey at PTSRIET.</p>
-                </div>
-
-                <div className="alumni-single-slider-card">
-                    <div className="slider-image-side">
-                        <img src={currentAlumni.image} alt={currentAlumni.name} />
-                        <p className="slider-role-text">{currentAlumni.role}</p>
-                        <div className="slider-company-badge">{currentAlumni.role}</div>
-                    </div>
-                    <div className="slider-content-side">
-                        <span className="slider-batch-tag">{currentAlumni.batch}</span>
-                        <h3>{currentAlumni.name}</h3>
-                        <p className="slider-quote">"{currentAlumni.quote}"</p>
-
-                        <div className="slider-dots">
-                            {alumniList.map((_, idx) => (
-                                <span
-                                    key={idx}
-                                    className={`dot ${alumniIndex === idx ? 'active' : ''}`}
-                                    onClick={() => setAlumniIndex(idx)}
-                                ></span>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-            </section>
-
             <section className="university-about-section" id="about">
                 <div className="about-header-title">
                     <span className="about-subtitle-tag">ABOUT THE INSTITUTE</span>
@@ -453,16 +611,16 @@ const Dashboard = () => {
                     <div className="about-cards-wrapper">
                         <div className="uni-profile-card">
                             <div className="uni-card-img-container">
-                                <img src="/college .png" alt="Chairman / Principal" className="uni-profile-img" />
+                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYCea70h3XgTlVdYgvSMvtEf6QRfB0UlupRGpCE5edYQ&s=10" alt="Chairman / Principal" className="uni-profile-img" />
                             </div>
-                            <h3>Dr. R. K. Vishwakarma</h3>
+                            <h3>Dr.Lal ji Tripathi</h3>
                             <p className="uni-role">Managing Director & Patron</p>
                             <p className="uni-subtext">PTSRIET Institution, U.P.</p>
                         </div>
 
                         <div className="uni-profile-card">
                             <div className="uni-card-img-container">
-                                <img src="/nilesh.jpg" alt="HOD / Academic Head" className="uni-profile-img" />
+                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYCea70h3XgTlVdYgvSMvtEf6QRfB0UlupRGpCE5edYQ&s=10" alt="HOD / Academic Head" className="uni-profile-img" />
                             </div>
                             <h3>Pradeep Pandey</h3>
                             <p className="uni-role">HOD - Computer Science</p>
