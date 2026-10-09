@@ -222,7 +222,7 @@ const Dashboard = () => {
                     <a href="tel:+917398663942" className="support-phone-btn">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" /></svg>
                         <span>+91 7398663942</span>
-                        <span>+91 7525857887</span>
+
                     </a>
 
                     <a href="https://wa.me/7398663942?text=Hello%20PTSRIET%20Support,%20I%20need%20assistance." target="_blank" rel="noopener noreferrer" className="support-whatsapp-btn">
@@ -606,10 +606,32 @@ const Dashboard = () => {
                         <h2>Want to Join PTSRIET?</h2>
                         <p>Your enquiry will be shared with the institute. For an immediate response or fee details, please contact us directly.</p>
                     </div>
-                        <form className="enquiry-form" onSubmit={handleEnquirySubmit}>
-                            <input type="text" name="name" placeholder="Your Full Name" required className="enquiry-input" />
-                            <input type="tel" name="phone" placeholder="Phone Number" required className="enquiry-input" />
-                            <select name="course" className="enquiry-input" required>
+                    <form className="enquiry-form" onSubmit={(e) => {
+                        e.preventDefault();
+
+                        const name = e.target[0].value;
+                        const phone = e.target[1].value;
+                        const course = e.target[2].value;
+
+                        const newEnquiry = {
+                            id: Date.now(),
+                            name: name,
+                            phone: phone,
+                            course: course,
+                            date: new Date().toLocaleDateString('hi-IN', { day: '2-digit', month: 'short', year: 'numeric' })
+                        };
+
+                        const existingEnquiries = JSON.parse(localStorage.getItem('pt_enquiries')) || [];
+                        const updatedEnquiries = [newEnquiry, ...existingEnquiries];
+
+                        localStorage.setItem('pt_enquiries', JSON.stringify(updatedEnquiries));
+
+                        alert('Query submitted successfully! Admission cell will contact you soon.');
+                        e.target.reset();
+                    }}>
+                        <input type="text" placeholder="Your Full Name" required className="enquiry-input" />
+                        <input type="tel" placeholder="Phone Number" required className="enquiry-input" />
+                        <select className="enquiry-input" required>
                             <option value="">Select Interested Course</option>
                             <option value="bca">BCA (Computer Applications)</option>
                             <option value="bsc">BSc (Bachelor of Science)</option>

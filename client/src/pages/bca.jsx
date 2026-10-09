@@ -137,6 +137,7 @@ const BcaPage = () => {
   const toggleExpand = (id) => {
     setExpandedId(expandedId === id ? null : id);
   };
+
   return (
     <div className="bca-dashboard-theme">
       <div className="bca-top-bar">
@@ -171,6 +172,7 @@ const BcaPage = () => {
         </div>
       </div>
 
+      {/* Red mark wala syllabus part (original bca.pdf par set hai) */}
       <div className="bca-section">
         <div className="bca-section-header">
           <span className="section-badge">🚀 ROADMAP</span>
@@ -178,9 +180,11 @@ const BcaPage = () => {
         </div>
         <CurriculumSemesterCards semesters={semesters} syllabusPdf="/bca.pdf" />
       </div>
-      <CurriculumQuickAccess semesters={semesters} />
+
+      {/* Yellow mark wala Quick Access / Cheatsheet Hub jahan C Programming ka PDF link jayega */}
+      <CurriculumQuickAccess semesters={semesters} cProgrammingPdf="/c-programming.pdf" />
       <CertificationClaimCard />
-      {/* Open Source & Earning Hub (Naya Feature add kiya hai) */}
+
       <div className="opensource-hub-card" style={{ background: '#ffffff', border: '1px solid #cbd5e1', padding: '22px', borderRadius: '16px', marginTop: '25px', marginBottom: '25px', boxShadow: '0 4px 15px rgba(0,0,0,0.03)' }}>
         <div style={{ marginBottom: '18px' }}>
           <span style={{ background: '#ecfdf5', color: '#047857', padding: '4px 10px', borderRadius: '6px', fontSize: '0.7rem', fontWeight: '700', border: '1px solid #a7f3d0' }}>💰 SKILLS & EARNINGS HUB</span>
@@ -256,7 +260,7 @@ const BcaPage = () => {
           </div>
         </div>
       </div>
-      {/* Scholarship & Financial Aid Section */}
+
       <section className="dashboard-section-box">
         <div className="section-header-wrap">
           <div className="title-with-badge">
