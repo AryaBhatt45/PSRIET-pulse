@@ -32,32 +32,32 @@ const PrivacyPolicy = () => (
         Privacy Policy
       </h1>
       <p style={{ color: '#64748b', fontSize: '0.85rem', margin: '0 0 26px', borderBottom: '1px solid #e2e8f0', paddingBottom: '16px' }}>
-        Last updated: October 5, 2026
+        Last updated: October 9, 2026
       </p>
 
       <p style={paragraph}>
-        This policy explains how PTSRIET Pulse handles information when you use this website. The site currently keeps its interactive data in your browser using local storage; it does not send form submissions to a shared application server.
+        This policy explains how PTSRIET Pulse handles information when you use this website. Portal content and form submissions are stored in the institute's Supabase PostgreSQL database.
       </p>
 
       <h2 style={sectionHeading}>Information you enter</h2>
       <p style={paragraph}>
-        If you use the admissions enquiry form, the name, phone number, selected course, and submission date are saved in local storage in the browser where you submit the form. The result lookup page uses the roll number you enter to search result records already saved in that browser; it does not save the search input.
+        The admissions enquiry form submits your name, phone number, selected course, and submission date to the shared portal database so the admissions team can follow up. The result lookup uses the roll number you enter to retrieve the matching result and does not save the search input.
       </p>
       <p style={paragraph}>
-        The Admin Dashboard can also store notices, events, job and internship listings, student details, results, and enquiry records in local storage. This storage is specific to that browser profile and device. It is not a shared or encrypted database, and information may be accessible to other people who can use the same browser profile.
+        Administrators can manage notices, events, job and internship listings, student details, results, enquiries, and certification claims through the Admin Dashboard. Certification claim photos submitted by signed-in users are included with their claim. Row-level security restricts administrative records to authorized administrators and claim details to their submitter and administrators.
       </p>
 
       <h2 style={sectionHeading}>How information is used and retained</h2>
       <p style={paragraph}>
-        Information stored in local storage is used to display and manage the relevant portal features in that browser. It remains there until it is removed by the site’s available controls or you clear the browser’s site data. Because data is not synchronized to a shared server, submitting an enquiry through this version of the site does not itself deliver it to the admissions team or guarantee a callback.
+        Submitted information is used to provide and operate the relevant portal features and is retained in the shared database until removed by an authorized administrator. Submitting an enquiry does not guarantee a callback.
       </p>
       <p style={paragraph}>
-        Do not enter passwords, payment details, government identity numbers, health information, or other sensitive information into the portal. Use a private device when possible, and clear its site data if you no longer want locally saved information on it.
+        Do not enter passwords, payment details, government identity numbers, health information, or other sensitive information into the portal. Use a private device when possible and sign out when you finish using the portal.
       </p>
 
       <h2 style={sectionHeading}>Cookies, analytics, and advertising</h2>
       <p style={paragraph}>
-        The current frontend uses browser local storage for the features described above and does not implement its own analytics or advertising cookies. Google AdSense is not currently integrated into this frontend. If third-party analytics or advertising services are added later, those providers may use cookies or similar technologies, and this policy and any required consent controls should be updated before they are enabled.
+        The current frontend does not implement its own analytics or advertising cookies. Google AdSense is not currently integrated into this frontend. If third-party analytics or advertising services are added later, those providers may use cookies or similar technologies, and this policy and any required consent controls should be updated before they are enabled.
       </p>
 
       <h2 style={sectionHeading}>External websites</h2>
@@ -67,7 +67,7 @@ const PrivacyPolicy = () => (
 
       <h2 style={sectionHeading}>Your choices</h2>
       <p style={paragraph}>
-        You can remove locally stored information by using the browser’s site-data or storage controls. Clearing that data may also remove saved notices, opportunities, results, and other portal content from that browser. There is no account-based request or server-side deletion process in the current frontend.
+        Contact the institute to request access to or deletion of information submitted through the portal. Clearing browser data does not delete information stored in the shared database.
       </p>
 
       <h2 style={sectionHeading}>Changes and contact</h2>

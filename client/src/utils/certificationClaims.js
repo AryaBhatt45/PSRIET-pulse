@@ -1,27 +1,3 @@
-export const certificationClaimsStorageKey = 'pt_certification_claims';
-
-export const readCertificationClaims = () => {
-  const storedClaims = localStorage.getItem(certificationClaimsStorageKey);
-  if (!storedClaims) return [];
-
-  const claims = JSON.parse(storedClaims);
-  if (!Array.isArray(claims)) {
-    throw new Error('Saved certification claims are not in the expected format.');
-  }
-  return claims;
-};
-
-export const saveCertificationClaims = (claims) => {
-  try {
-    localStorage.setItem(certificationClaimsStorageKey, JSON.stringify(claims));
-  } catch (error) {
-    if (error?.name === 'QuotaExceededError' || error?.name === 'NS_ERROR_DOM_QUOTA_REACHED') {
-      throw new Error('Browser storage is full. Remove the photo or choose a smaller image, then try again.');
-    }
-    throw new Error('Unable to save certification claims in this browser. Check that site storage is enabled.');
-  }
-};
-
 export const readPhotoAsDataUrl = async (file) => {
   if (!file) {
     return null;
@@ -51,7 +27,7 @@ export const readPhotoAsDataUrl = async (file) => {
       const dataUrl = canvas.toDataURL('image/jpeg', quality);
       if (dataUrl.length <= 1_200_000) return dataUrl;
     }
-    throw new Error('The photo could not be compressed enough for browser storage. Choose a smaller image.');
+    throw new Error('The photo could not be compressed enough to submit. Choose a smaller image.');
   } finally {
     image.close();
   }
