@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './src/context/AuthContext';
 
 // Main Portal & Courses Imports
 import Dashboard from "./src/pages/Dashboard";
@@ -14,6 +15,7 @@ import LlbPage from "./src/pages/llb";
 import MaPage from "./src/pages/ma";
 import PrivacyPolicy from './src/pages/PrivacyPolicy';
 import TermsConditions from './src/pages/TermsConditions';
+import LoginPage from './src/pages/LoginPage';
 
 // Admin Panel Imports & Protected Route
 import AdminLogin from './src/pages/AdminLogin';
@@ -21,45 +23,44 @@ import AdminDashboard from './src/pages/AdminDashboard';
 import ProtectedAdminRoute from './src/components/ProtectedAdminRoute';
 import StudentResult from './src/components/StudentResult';
 
-// Support Widget Import (Path check kar lena agar component kisi aur folder me ho)
+// Support Widget Import
 import SupportWidget from './src/components/SupportWidget';
 
 function App() {
     return (
-        <Router>
-            <Routes>
-                {/* Main Dashboard Page */}
-                <Route path="/" element={<Dashboard />} />
+        <AuthProvider>
+            <Router>
+                <Routes>
+                    <Route path="/" element={<Dashboard />} />
+                    <Route path="/login" element={<LoginPage />} />
 
-                {/* Sabhi Courses ke alag-alag independent pages */}
-                <Route path="/ba" element={<BaPage />} />
-                <Route path="/bba" element={<BbaPage />} />
-                <Route path="/bca" element={<BcaPage />} />
-                <Route path="/bcom" element={<BcomPage />} />
-                <Route path="/bed" element={<BedPage />} />
-                <Route path="/bsc" element={<BscPage />} />
-                <Route path="/dled" element={<DledPage />} />
-                <Route path="/llb" element={<LlbPage />} />
-                <Route path="/ma" element={<MaPage />} />
-                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-                <Route path="/terms-conditions" element={<TermsConditions />} />
-                <Route path="/student/result" element={<StudentResult />} />
+                    <Route path="/ba" element={<BaPage />} />
+                    <Route path="/bba" element={<BbaPage />} />
+                    <Route path="/bca" element={<BcaPage />} />
+                    <Route path="/bcom" element={<BcomPage />} />
+                    <Route path="/bed" element={<BedPage />} />
+                    <Route path="/bsc" element={<BscPage />} />
+                    <Route path="/dled" element={<DledPage />} />
+                    <Route path="/llb" element={<LlbPage />} />
+                    <Route path="/ma" element={<MaPage />} />
+                    <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                    <Route path="/terms-conditions" element={<TermsConditions />} />
+                    <Route path="/student/result" element={<StudentResult />} />
 
-                {/* Separate Admin Panel Routes */}
-                <Route path="/admin/login" element={<AdminLogin />} />
-                <Route
-                    path="/admin/dashboard"
-                    element={
-                        <ProtectedAdminRoute>
-                            <AdminDashboard />
-                        </ProtectedAdminRoute>
-                    }
-                />
-            </Routes>
+                    <Route path="/admin/login" element={<AdminLogin />} />
+                    <Route
+                        path="/admin/dashboard"
+                        element={
+                            <ProtectedAdminRoute>
+                                <AdminDashboard />
+                            </ProtectedAdminRoute>
+                        }
+                    />
+                </Routes>
 
-            {/* Floating WhatsApp/Telegram Support Widget - Yeh har page par bottom-right me dikhega */}
-            <SupportWidget />
-        </Router>
+                <SupportWidget />
+            </Router>
+        </AuthProvider>
     );
 }
 

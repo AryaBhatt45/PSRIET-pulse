@@ -3,27 +3,10 @@ import { Link } from 'react-router-dom';
 import CurriculumQuickAccess from '../components/CurriculumQuickAccess';
 import CurriculumSemesterCards from '../components/CurriculumSemesterCards';
 import CertificationClaimCard from '../components/CertificationClaimCard';
+import { fetchPortalRecords, portalRecordTypes } from '../services/portalData';
 import './style/bca.css';
 
-const opportunityStorageKeys = ['pt_jobs', 'pt_internships'];
-
-const readOpportunities = () => opportunityStorageKeys.flatMap((key) => {
-  const rawEntries = localStorage.getItem(key);
-  if (!rawEntries) return [];
-
-  let entries;
-  try {
-    entries = JSON.parse(rawEntries);
-  } catch (error) {
-    console.error(`Unable to read ${key} from localStorage.`, error);
-    return [];
-  }
-
-  if (!Array.isArray(entries)) {
-    console.error(`Expected ${key} to contain an array of opportunities.`);
-    return [];
-  }
-
+const formatOpportunities = (entries, type) => {
   return entries.flatMap((entry) => {
     const title = entry?.role || entry?.title || entry?.name;
     const description = entry?.description || entry?.intro || entry?.content;
@@ -31,23 +14,23 @@ const readOpportunities = () => opportunityStorageKeys.flatMap((key) => {
     const applyLink = entry?.applyLink || entry?.externalApplyLink || entry?.link || entry?.url;
 
     if (![title, description, lastDate, applyLink].every((value) => typeof value === 'string' && value.trim())) {
-      console.error(`Skipping an incomplete opportunity in ${key}.`);
+      console.error(`Skipping an incomplete ${type.toLowerCase()} opportunity.`);
       return [];
     }
 
     try {
       const url = new URL(applyLink);
       if (url.protocol !== 'https:' && url.protocol !== 'http:') {
-        console.error(`Skipping an opportunity in ${key} with an unsupported apply link.`);
+        console.error(`Skipping an ${type.toLowerCase()} opportunity with an unsupported apply link.`);
         return [];
       }
     } catch (error) {
-      console.error(`Skipping an opportunity in ${key} with an invalid apply link.`, error);
+      console.error(`Skipping an ${type.toLowerCase()} opportunity with an invalid apply link.`, error);
       return [];
     }
 
     return [{
-      id: `${key}-${entry.id || title}-${lastDate}`,
+      id: entry.id,
       title: title.trim(),
       company: typeof entry.company === 'string' && entry.company.trim() ? entry.company.trim() : 'Company not specified',
       description: description.trim(),
@@ -55,27 +38,38 @@ const readOpportunities = () => opportunityStorageKeys.flatMap((key) => {
       experience: entry.experience || 'Not specified',
       lastDate: lastDate.trim(),
       applyLink: applyLink.trim(),
-      type: key === 'pt_internships' ? 'Internship' : 'Job'
+      type
     }];
   });
-});
+};
 
 const BcaPage = () => {
   const [expandedId, setExpandedId] = useState(null);
   const [opportunities, setOpportunities] = useState([]);
+  const [opportunityError, setOpportunityError] = useState('');
 
   useEffect(() => {
-    const updateOpportunities = () => {
-      setOpportunities(readOpportunities());
+    let isMounted = true;
+    const loadOpportunities = async () => {
+      try {
+        const [jobs, internships] = await Promise.all([
+          fetchPortalRecords(portalRecordTypes.job),
+          fetchPortalRecords(portalRecordTypes.internship)
+        ]);
+        if (!isMounted) return;
+        setOpportunities([
+          ...formatOpportunities(jobs, 'Job'),
+          ...formatOpportunities(internships, 'Internship')
+        ]);
+        setOpportunityError('');
+      } catch (error) {
+        console.error('Unable to load opportunities from Supabase.', error);
+        if (isMounted) setOpportunityError(error.message || 'Unable to load opportunities right now.');
+      }
     };
-    updateOpportunities();
 
-    const handleStorage = (event) => {
-      if (!event.key || opportunityStorageKeys.includes(event.key)) updateOpportunities();
-    };
-
-    window.addEventListener('storage', handleStorage);
-    return () => window.removeEventListener('storage', handleStorage);
+    loadOpportunities();
+    return () => { isMounted = false; };
   }, []);
 
   const semesters = [
@@ -318,6 +312,7 @@ const BcaPage = () => {
           </div>
           <span className="bca-live-opportunities-count">{opportunities.length} available</span>
         </div>
+        {opportunityError && <p role="alert">{opportunityError}</p>}
         {opportunities.length > 0 ? (
           <div className="bca-opportunities-viewport" aria-label="Latest jobs and internships">
             <div

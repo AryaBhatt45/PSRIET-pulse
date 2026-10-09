@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import { createPortalRecord, fetchPortalRecords, portalRecordTypes } from '../services/portalData';
 import AboutUsPage from './AboutUsPage';
 import './style/Dashboard.css';
 
@@ -33,9 +35,12 @@ const coursesList = [
 const Dashboard = () => {
     const [currentIdx, setCurrentIdx] = useState(0);
     const [showFullAbout, setShowFullAbout] = useState(false);
+    const { user, isAuthenticated, signOut } = useAuth();
 
     const [dynamicNotices, setDynamicNotices] = useState([]);
     const [dynamicEvents, setDynamicEvents] = useState([]);
+    const [dynamicDataError, setDynamicDataError] = useState('');
+    const [enquiryError, setEnquiryError] = useState('');
     const [selectedEvent, setSelectedEvent] = useState(null);
 
     const [alumniIndex, setAlumniIndex] = useState(0);
@@ -55,13 +60,28 @@ const Dashboard = () => {
             setCurrentIdx((prev) => (prev + 1) % bannerImages.length);
         }, 4000);
 
-        const savedNotices = JSON.parse(localStorage.getItem('pt_notices')) || [];
-        setDynamicNotices(savedNotices);
+        let isMounted = true;
+        const loadUpdates = async () => {
+            try {
+                const [notices, events] = await Promise.all([
+                    fetchPortalRecords(portalRecordTypes.notice),
+                    fetchPortalRecords(portalRecordTypes.event)
+                ]);
+                if (!isMounted) return;
+                setDynamicNotices(notices);
+                setDynamicEvents(events);
+                setDynamicDataError('');
+            } catch (error) {
+                console.error('Unable to load notices and events from Supabase.', error);
+                if (isMounted) setDynamicDataError(error.message || 'Unable to load announcements right now.');
+            }
+        };
+        loadUpdates();
 
-        const savedEvents = JSON.parse(localStorage.getItem('pt_events')) || [];
-        setDynamicEvents(savedEvents);
-
-        return () => clearInterval(timer);
+        return () => {
+            isMounted = false;
+            clearInterval(timer);
+        };
     }, []);
 
     const alumniList = [
@@ -166,6 +186,26 @@ const Dashboard = () => {
                 : `${daysRemaining} day${daysRemaining === 1 ? '' : 's'} until your exam.`);
     };
 
+    const handleEnquirySubmit = async (event) => {
+        event.preventDefault();
+        setEnquiryError('');
+        const form = event.currentTarget;
+        const formData = new FormData(form);
+        try {
+            await createPortalRecord(portalRecordTypes.enquiry, {
+                name: formData.get('name').trim(),
+                phone: formData.get('phone').trim(),
+                course: formData.get('course'),
+                date: new Date().toLocaleDateString('hi-IN', { day: '2-digit', month: 'short', year: 'numeric' })
+            }, null, false);
+            window.alert('Your enquiry was submitted successfully. Please contact the institute directly if you need an immediate response.');
+            form.reset();
+        } catch (error) {
+            console.error('Unable to submit admission enquiry to Supabase.', error);
+            setEnquiryError(error.message || 'Unable to submit your enquiry. Please try again.');
+        }
+    };
+
     return (
         <div className="dashboard-container">
 
@@ -190,7 +230,7 @@ const Dashboard = () => {
                         <span>WhatsApp</span>
                     </a>
                 </div>
-                <div className="header-right" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div className="header-right" style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
                     <a
                         href="http://mresult.prsuprayagraj.in/prsu_Results.aspx"
                         target="_blank"
@@ -200,7 +240,23 @@ const Dashboard = () => {
                         <span>Check Result</span>
                         <span className="bouncing-arrow">↙️</span>
                     </a>
-                    <span className="session-pill">Academic Session 2026</span>
+
+                    {isAuthenticated ? (
+                        <div className="header-user-status">
+                            <div className="header-user-pill">
+                                <span className="header-user-avatar" aria-hidden="true">
+                                    {(user?.user_metadata?.full_name || user?.email || 'S').trim().charAt(0).toUpperCase()}
+                                </span>
+                                <span>{user?.user_metadata?.full_name || user?.user_metadata?.name || user?.email?.split('@')[0] || 'Student'}</span>
+                            </div>
+                            <button type="button" className="header-login-btn" onClick={async () => { await signOut(); }}>
+                                Logout
+                            </button>
+                        </div>
+                    ) : (
+                        <Link to="/login" className="header-login-btn">Login</Link>
+                    )}
+
                 </div>
             </header>
 
@@ -446,6 +502,7 @@ const Dashboard = () => {
                     <h2>Upcoming Events & Important Updates</h2>
                 </div>
 
+                {dynamicDataError && <p className="portal-data-error" role="alert">{dynamicDataError}</p>}
                 <div className="horizontal-events-grid">
                     {dynamicEvents.length > 0 ? (
                         dynamicEvents.slice(0, 4).map((event, idx) => (
@@ -547,7 +604,7 @@ const Dashboard = () => {
                     <div className="enquiry-text">
                         <span className="badge-tag">🎓 ADMISSIONS OPEN 2026</span>
                         <h2>Want to Join PTSRIET?</h2>
-                        <p>This form saves your enquiry in this browser only. For a response or fee details, please contact the institute directly.</p>
+                        <p>Your enquiry will be shared with the institute. For an immediate response or fee details, please contact us directly.</p>
                     </div>
                     <form className="enquiry-form" onSubmit={(e) => {
                         e.preventDefault();
@@ -584,6 +641,7 @@ const Dashboard = () => {
                             <option value="bed">B.Ed / D.El.Ed (Education)</option>
                             <option value="ba">BA (Bachelor of Art)</option>
                         </select>
+                        {enquiryError && <p className="portal-data-error" role="alert">{enquiryError}</p>}
                         <button type="submit" className="enquiry-submit-btn">Request Callback 🚀</button>
                     </form>
                 </div>
