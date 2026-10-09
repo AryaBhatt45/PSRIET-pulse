@@ -1,4 +1,5 @@
-.dashboard-container, .dashboard-container * {
+.dashboard-container,
+.dashboard-container * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -949,6 +950,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .dashboard-container .student-tool-card,
   .dashboard-container .student-tool-content,
   .dashboard-container .student-tool-content-inner,
@@ -1155,6 +1157,30 @@
   color: #475569;
   font-weight: 600;
   gap: 6px;
+}
+
+.notice-time,
+.notice-location {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@keyframes pulse-dot {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+  }
+
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 6px rgba(239, 68, 68, 0);
+  }
+
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+  }
 }
 
 /* Scholarship Card Styling */
@@ -1365,6 +1391,7 @@
 .dashboard-container .enquiry-submit-btn:hover {
   background: #f1f5f9;
 }
+
 /* College Main Footer */
 .dashboard-container .college-main-footer {
   background: #ffffff;
@@ -1910,4 +1937,40 @@
     display: none;
     /* Mobile par header clutter avoid karne ke liye hide kar sakte hain, floating widget already hai */
   }
+}
+
+.view-subjects-btn {
+  /* baaki purani properties jo hain wo rehne de, bas ye add kar: */
+  position: relative;
+  z-index: 2;
+  cursor: pointer;
+}
+
+.view-subjects-btn * {
+  pointer-events: none;
+  /* Ye ensure karega ki click seedha button par lage, span par nahi */
+}
+
+.notice-card {
+  display: flex;
+  flex-direction: column;
+  /* baaki jo purani properties hain jaise background, border, padding, wo sab rehne dena */
+}
+
+.notice-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  /* Ye sabhi cards ki height ko barabar kar dega */
+}
+
+/* Agar notice-card-desc (description) par koi margin-bottom hai toh usko auto kar sakte hain */
+.notice-card-desc {
+  flex-grow: 1;
+  /* Description jitna bhi chhota ho, bacha hua space le lega aur button ko neeche bhej dega */
+  margin-bottom: 15px;
+}
+
+.horizontal-events-grid * {
+  pointer-events: auto !important;
 }
