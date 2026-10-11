@@ -1,28 +1,23 @@
-# PTSRIET Pulse 🚀
+# PTSRIET Pulse
 
-A comprehensive full-stack college portal built for **Pt. Sukhraj Raghunath Institute of Education and Technology (PTSRIET)**. This platform serves as a centralized hub for students to access academic details, course information, fee structures, faculty profiles, and smart quick-revision guides for exams.
+A React and Vite portal for Pt. Sukhraj Raghunath Institute of Education and Technology. The client uses Supabase Auth and PostgreSQL for accounts, announcements, events, results, student records, admission enquiries, opportunities, and certification claims.
 
-## 🛠️ Tech Stack
-- **Frontend:** React, Vite, React Router
-- **Backend:** Node.js, Express.js
-- **Database:** PostgreSQL
-- **Authentication:** JWT & Bcrypt
+## Run the client
 
-## ✨ Key Features
-- **Main Dashboard:** Displays college glory, important links, and live announcements/updates.
-- **Course Explorer:** Dedicated sections for various degrees (BCA, BSc, BA, B.Ed, B.Com, etc.).
-- **Detailed Course Views:** Complete info on duration, total seats, fees, syllabus, and HOD/faculty details.
-- **Exam Prep & Quick Revision:** Smart study tips and "direct pass" guides to help students score better in tests and exams.
-- **Admin Management:** Secure backend endpoints to manage courses, faculty, and updates.
+```bash
+cd client
+npm install
+npm run dev
+```
 
-## 🚀 Getting Started & Setup
+Create a production build with `npm run build` from the `client` directory.
 
-### Prerequisites
-Make sure you have **Node.js** and **PostgreSQL** installed on your system.
+## Supabase setup
 
-### Installation Steps
+1. Apply [`supabase/migrations/20261009000000_portal_records.sql`](./supabase/migrations/20261009000000_portal_records.sql) to the Supabase project connected by `client/src/supabaseClient.js`.
+2. Create or invite the administrator in Supabase Auth, then set its **app metadata** to include `"role": "admin"` (for example, `{"role":"admin"}`). Do not use user metadata for this role; users can edit their own user metadata. The database policies use this app metadata claim to authorize administrative operations.
+3. Sign in at `/admin/login` with that Supabase Auth account. Student accounts can submit certification claims; public visitors can submit admission enquiries.
 
-1. **Clone the repository:**
-   ```bash
-   git clone [https://github.com/your-username/ptsriet-pulse.git](https://github.com/your-username/ptsriet-pulse.git)
-   cd ptsriet-pulse
+The migration enables row-level security. Public reads are limited to announcements, events, and opportunities; administrative records are restricted to admins. Student results are retrieved through a database function that returns only the record matching the submitted roll number. Do not put a Supabase service-role key in the frontend.
+
+Data previously saved in browser local storage is not automatically imported. Re-enter any existing notices, events, results, students, or opportunities in the Admin Dashboard after setup.

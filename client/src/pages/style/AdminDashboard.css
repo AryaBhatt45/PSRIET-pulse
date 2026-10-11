@@ -1,7 +1,9 @@
 /* Admin Dashboard Red & Black Enterprise Theme */
 .admin-dashboard-wrapper {
     display: flex;
-    width: 100vw;
+    width: 100%;
+    max-width: 100%;
+    min-height: 100vh;
     height: 100vh;
     background-color: #050505;
     font-family: "Montserrat", 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -96,6 +98,7 @@
 /* Main Content Area */
 .admin-dashboard-wrapper .admin-main-content {
     flex: 1;
+    min-width: 0;
     height: 100%;
     padding: 30px;
     overflow-y: auto;
@@ -417,6 +420,57 @@
 @media (max-width: 640px) {
     .admin-dashboard-wrapper .admin-opportunity-form {
         grid-template-columns: minmax(0, 1fr);
+    }
+
+    @media (max-width: 760px) {
+        .admin-dashboard-wrapper {
+            flex-direction: column;
+            height: auto;
+            min-height: 100vh;
+            overflow: visible;
+        }
+
+        .admin-dashboard-wrapper .admin-sidebar {
+            width: 100%;
+            height: auto;
+            padding: 16px;
+        }
+
+        .admin-dashboard-wrapper .sidebar-menu {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 140px), 1fr));
+            gap: 4px;
+            max-height: 32vh;
+            overflow-y: auto;
+        }
+
+        .admin-dashboard-wrapper .sidebar-menu li {
+            min-width: 0;
+            margin-bottom: 0;
+            overflow-wrap: anywhere;
+        }
+
+        .admin-dashboard-wrapper .admin-main-content {
+            height: auto;
+            overflow: visible;
+            padding: 20px 16px;
+        }
+
+        .admin-dashboard-wrapper .admin-topbar {
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .admin-dashboard-wrapper .admin-topbar h2 {
+            white-space: normal;
+            font-size: clamp(18px, 5vw, 24px);
+        }
+
+        .admin-dashboard-wrapper .admin-action-section {
+            min-width: 0;
+            padding: 20px 16px;
+        }
     }
 
     .admin-dashboard-wrapper .admin-opportunity-item {

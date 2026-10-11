@@ -1,25 +1,47 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { isPortalAdmin, useAuth } from '../context/AuthContext';
 import './style/AdminLogin.css';
 
-const adminPasscode = 'ptsriet@admin2026';
-
 export default function AdminLogin() {
-    const [passcode, setPasscode] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const [showPassword, setShowPassword] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const navigate = useNavigate();
+    const { signInWithPassword, signOut } = useAuth();
 
-    const handleAdminLogin = (e) => {
+    const handleAdminLogin = async (e) => {
         e.preventDefault();
         setError('');
-        if (passcode === adminPasscode) {
-            localStorage.removeItem('admin_token');
-            localStorage.setItem("isAdminAuthenticated", "true");
-            navigate('/admin/dashboard');
-        } else {
-            localStorage.removeItem('isAdminAuthenticated');
-            setError('⚠️ Invalid Admin Passcode!');
+        setIsSubmitting(true);
+        try {
+            const authResult = await signInWithPassword({ email, password });
+            const authError = authResult?.error ?? authResult?.data?.error;
+
+            if (authError) throw authError;
+
+            const authenticatedUser = authResult?.user
+                ?? authResult?.data?.user
+                ?? authResult?.session?.user
+                ?? authResult?.data?.session?.user;
+
+            if (!authenticatedUser) {
+                throw new Error('Sign-in succeeded, but Supabase did not return a user.');
+            }
+
+            if (!isPortalAdmin(authenticatedUser)) {
+                await signOut();
+                setError('This account is not authorized for administrator access.');
+                return;
+            }
+
+            navigate('/admin/dashboard', { replace: true });
+        } catch (authError) {
+            console.error('Unable to sign in administrator.', authError);
+            setError(authError.message || 'Unable to sign in. Check your credentials and try again.');
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -27,62 +49,47 @@ export default function AdminLogin() {
         <div className="admin-login-body">
             <div className="container">
                 <div className="login-box">
-                    <form onSubmit={handleAdminLogin} autoComplete="off">
+                    <form onSubmit={handleAdminLogin} autoComplete="on">
                         <h2>Admin Login</h2>
 
-                        {/* Yahan humne flexbox laga diya hai taaki input aur eye icon side-by-side ekdam fit aayein */}
                         <div className="input-box" style={{
                             position: 'relative',
                             display: 'flex',
                             alignItems: 'center'
                         }}>
-                            <span className="icon" style={{ position: 'absolute', left: '15px', zIndex: '2' }}>
-                                <i className="fa-solid fa-lock"></i>
-                            </span>
-
                             <input
-                                type={showPassword ? "text" : "password"}
-                                value={passcode}
-                                onChange={(e) => setPasscode(e.target.value)}
-                                autoComplete="new-password"
-                                name="random-admin-passcode-field"
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                autoComplete="username"
+                                name="email"
                                 required
-                                style={{
-                                    width: '100%',
-                                    paddingLeft: '45px',
-                                    paddingRight: '45px', // Icon ke liye jagah chhori hai
-                                    boxSizing: 'border-box'
-                                }}
                             />
-
-                            <span
-                                onClick={() => setShowPassword(!showPassword)}
-                                style={{
-                                    cursor: 'pointer',
-                                    position: 'absolute',
-                                    right: '15px',
-                                    top: '50%',
-                                    transform: 'translateY(-50%)',
-                                    fontSize: '18px',
-                                    background: 'transparent',
-                                    border: 'none',
-                                    zIndex: '99'
-                                }}
-                            >
-                                {showPassword ? "👁️‍🗨️" : "👁️"}
-                            </span>
-
-                            <label className={passcode ? 'active' : ''} style={{ left: '45px' }}>Admin Passcode</label>
+                            <label className={email ? 'active' : ''}>Administrator email</label>
+                        </div>
+                        <div className="input-box" style={{
+                            position: 'relative',
+                            display: 'flex',
+                            alignItems: 'center'
+                        }}>
+                            <input
+                                type="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                autoComplete="current-password"
+                                name="password"
+                                required
+                            />
+                            <label className={password ? 'active' : ''}>Password</label>
                         </div>
 
                         {error && <p style={{ color: '#ff4d4d', fontSize: '0.85em', marginBottom: '10px', textAlign: 'center' }}>{error}</p>}
 
                         <div className="remember-forgot">
-                            <label><input type="checkbox" /> Remember me</label>
-                            <a href="#" onClick={(e) => { e.preventDefault(); alert("Contact Admin"); }}>Forgot Password?</a>
+                            <span>Sign in with your Supabase administrator account.</span>
                         </div>
 
-                        <button type="submit">Login</button>
+                        <button type="submit" disabled={isSubmitting}>{isSubmitting ? 'Signing in...' : 'Login'}</button>
 
                         <div className="register-link">
                             <p><a href="/" onClick={(e) => { e.preventDefault(); navigate('/'); }}>← Back to Home</a></p>

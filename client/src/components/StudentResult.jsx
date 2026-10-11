@@ -1,28 +1,32 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { fetchStudentResult } from '../services/portalData';
 
 export default function StudentResult() {
     const [rollNoInput, setRollNoInput] = useState('');
     const [searchedResult, setSearchedResult] = useState(null);
-    const [allResults, setAllResults] = useState([]);
     const [hasSearched, setHasSearched] = useState(false);
+    const [isSearching, setIsSearching] = useState(false);
+    const [searchError, setSearchError] = useState('');
 
-    useEffect(() => {
-        // Admin dashboard se save kiye gaye results load karna
-        const results = JSON.parse(localStorage.getItem('pt_results')) || [];
-        setAllResults(results);
-    }, []);
-
-    const handleSearch = (e) => {
+    const handleSearch = async (e) => {
         e.preventDefault();
         if (!rollNoInput.trim()) return;
 
-        const found = allResults.find(
-            (res) => res.rollNo.toLowerCase() === rollNoInput.trim().toLowerCase()
-        );
-
-        setSearchedResult(found || null);
-        setHasSearched(true);
+        setIsSearching(true);
+        setHasSearched(false);
+        setSearchedResult(null);
+        setSearchError('');
+        try {
+            const result = await fetchStudentResult(rollNoInput);
+            setSearchedResult(result || null);
+            setHasSearched(true);
+        } catch (error) {
+            console.error('Unable to search student result in Supabase.', error);
+            setSearchError(error.message || 'Unable to search results right now.');
+        } finally {
+            setIsSearching(false);
+        }
     };
 
     return (
@@ -48,12 +52,13 @@ export default function StudentResult() {
                         style={{ flex: 1, padding: '12px', background: 'rgba(0,0,0,0.5)', border: '1px solid rgba(255,40,40,0.3)', borderRadius: '8px', color: '#fff', outline: 'none' }}
                         required
                     />
-                    <button type="submit" style={{ padding: '12px 20px', background: '#e60000', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer' }}>
-                        Search
+                    <button type="submit" disabled={isSearching} style={{ padding: '12px 20px', background: '#e60000', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer' }}>
+                        {isSearching ? 'Searching...' : 'Search'}
                     </button>
                 </form>
 
                 {/* Result Display Section */}
+                {searchError && <p role="alert" style={{ color: '#ef4444' }}>{searchError}</p>}
                 {hasSearched && (
                     <div>
                         {searchedResult ? (

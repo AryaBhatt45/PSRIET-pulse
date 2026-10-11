@@ -1,5 +1,8 @@
 import React, { useRef, useState } from 'react';
-import { readCertificationClaims, readPhotoAsDataUrl, saveCertificationClaims } from '../utils/certificationClaims';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import { createPortalRecord, portalRecordTypes } from '../services/portalData';
+import { readPhotoAsDataUrl } from '../utils/certificationClaims';
 import './CertificationClaimCard.css';
 
 const maxPhotoSize = 5 * 1024 * 1024;
@@ -15,6 +18,8 @@ const contributionTypes = [
 ];
 
 export default function CertificationClaimCard() {
+  const navigate = useNavigate();
+  const { isAuthenticated, user } = useAuth();
   const fileInputRef = useRef(null);
   const [photo, setPhoto] = useState(null);
   const [photoError, setPhotoError] = useState('');
@@ -49,6 +54,14 @@ export default function CertificationClaimCard() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setMessage('');
+
+    if (!isAuthenticated) {
+      setMessageType('error');
+      setMessage('Please sign in before submitting a certification claim.');
+      navigate('/login', { state: { from: '/bca' } });
+      return;
+    }
+
     if (photoError) {
       setMessageType('error');
       setMessage(photoError);
@@ -58,10 +71,8 @@ export default function CertificationClaimCard() {
     setIsSubmitting(true);
     try {
       const formData = new FormData(form);
-      const claims = readCertificationClaims();
       const photoDataUrl = await readPhotoAsDataUrl(photo);
       const newClaim = {
-        id: globalThis.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`,
         fullName: formData.get('fullName').trim(),
         email: formData.get('email').trim().toLowerCase(),
         offUsername: formData.get('offUsername').trim(),
@@ -71,20 +82,20 @@ export default function CertificationClaimCard() {
         photoDataUrl,
         photoName: photo?.name || '',
         status: 'pending',
-        receiptEmailStatus: 'not sent (client-only)',
-        certificateEmailStatus: 'not sent (client-only)',
-        createdAt: new Date().toISOString()
+        receiptEmailStatus: 'not sent',
+        certificateEmailStatus: 'not sent'
       };
 
-      saveCertificationClaims([newClaim, ...claims]);
+      await createPortalRecord(portalRecordTypes.certificationClaim, newClaim, user.id);
       setMessageType('success');
-      setMessage('Your certification request has been saved in this browser for admin review. No email has been sent.');
+      setMessage('Your certification request has been saved for admin review. No email has been sent.');
       form.reset();
       setPhoto(null);
       setPhotoError('');
     } catch (error) {
       setMessageType('error');
-      setMessage(error.message || 'Unable to save your request in this browser.');
+      console.error('Unable to submit certification claim to Supabase.', error);
+      setMessage(error.message || 'Unable to save your request. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -122,6 +133,14 @@ export default function CertificationClaimCard() {
         <div className="certification-form-panel">
           <h2 id="certification-claim-title">Claim Your Certification</h2>
           <p className="certification-form-subtitle">Fill out the form to submit your certification request</p>
+          {!isAuthenticated && (
+            <div className="certification-login-banner">
+              <span>Required sign-in</span>
+              <button type="button" onClick={() => navigate('/login', { state: { from: '/bca' } })}>
+                Sign in or create account
+              </button>
+            </div>
+          )}
           <form onSubmit={handleSubmit}>
             <div className="certification-fields-grid">
               <label>

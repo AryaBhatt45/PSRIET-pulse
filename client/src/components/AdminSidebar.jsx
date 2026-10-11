@@ -1,7 +1,21 @@
 import React, { useState } from 'react';
+import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const AdminSidebar = ({ activeTab, setActiveTab }) => {
     const [isCollapsed, setIsCollapsed] = useState(false);
+    const { signOut } = useAuth();
+    const navigate = useNavigate();
+
+    const handleLogout = async () => {
+        try {
+            await signOut();
+            navigate('/admin/login');
+        } catch (error) {
+            console.error('Unable to sign out administrator.', error);
+            window.alert(error.message || 'Unable to log out. Please try again.');
+        }
+    };
 
     const menuItems = [
         { id: 'overview', label: 'Overview', icon: '📊' },
@@ -102,10 +116,7 @@ const AdminSidebar = ({ activeTab, setActiveTab }) => {
             {/* Logout Section */}
             <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '15px' }}>
                 <button
-                    onClick={() => {
-                        localStorage.removeItem('admin_auth');
-                        window.location.reload();
-                    }}
+                    onClick={handleLogout}
                     style={{
                         width: '100%',
                         padding: '10px',

@@ -1,25 +1,20 @@
 import './style/AdminDashboard.css';
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { readCertificationClaims, saveCertificationClaims } from '../utils/certificationClaims';
-
-const readOpportunityList = (key) => {
-    const storedEntries = localStorage.getItem(key);
-    if (!storedEntries) return [];
-
-    try {
-        const entries = JSON.parse(storedEntries);
-        if (!Array.isArray(entries)) throw new Error(`Expected ${key} to contain an array.`);
-        return entries;
-    } catch (error) {
-        console.error(`Unable to read ${key} from localStorage.`, error);
-        return [];
-    }
-};
+import { useAuth } from '../context/AuthContext';
+import {
+    createPortalRecord,
+    deletePortalRecord,
+    fetchPortalRecords,
+    portalRecordTypes,
+    updatePortalRecord
+} from '../services/portalData';
 
 export default function AdminDashboard() {
     const navigate = useNavigate();
+    const { signOut } = useAuth();
     const [activeTab, setActiveTab] = useState('overview');
+    const [dataError, setDataError] = useState('');
 
     // States for Notices
     const [noticeTitle, setNoticeTitle] = useState('');
@@ -62,65 +57,76 @@ export default function AdminDashboard() {
     const [claimPhoto, setClaimPhoto] = useState(null);
 
     useEffect(() => {
-        const notices = JSON.parse(localStorage.getItem('pt_notices')) || [];
-        const events = JSON.parse(localStorage.getItem('pt_events')) || [];
-        const results = JSON.parse(localStorage.getItem('pt_results')) || [];
-        const students = JSON.parse(localStorage.getItem('pt_students')) || [];
-        const enquiries = JSON.parse(localStorage.getItem('pt_enquiries')) || [];
-        const jobs = readOpportunityList('pt_jobs');
-        const internships = readOpportunityList('pt_internships');
-
-        setSavedEnquiries(enquiries);
-        setSavedNotices(notices);
-        setSavedEvents(events);
-        setSavedResults(results);
-        setSavedStudents(students);
-        setSavedJobs(jobs);
-        setSavedInternships(internships);
-        try {
-            setCertificationClaims(readCertificationClaims());
-        } catch (error) {
-            console.error('Unable to read certification claims from localStorage.', error);
-            setCertificationClaimsError(error.message || 'Unable to read saved certification claims.');
-        }
-    }, []);
-
-    useEffect(() => {
-        const handleStorage = (event) => {
-            if (event.key && event.key !== 'pt_certification_claims') return;
+        let isMounted = true;
+        const loadPortalData = async () => {
             try {
-                setCertificationClaims(readCertificationClaims());
+                const [
+                    notices,
+                    events,
+                    results,
+                    students,
+                    enquiries,
+                    jobs,
+                    internships,
+                    claims
+                ] = await Promise.all([
+                    fetchPortalRecords(portalRecordTypes.notice),
+                    fetchPortalRecords(portalRecordTypes.event),
+                    fetchPortalRecords(portalRecordTypes.result),
+                    fetchPortalRecords(portalRecordTypes.student),
+                    fetchPortalRecords(portalRecordTypes.enquiry),
+                    fetchPortalRecords(portalRecordTypes.job),
+                    fetchPortalRecords(portalRecordTypes.internship),
+                    fetchPortalRecords(portalRecordTypes.certificationClaim)
+                ]);
+
+                if (!isMounted) return;
+                setSavedNotices(notices);
+                setSavedEvents(events);
+                setSavedResults(results);
+                setSavedStudents(students);
+                setSavedEnquiries(enquiries);
+                setSavedJobs(jobs);
+                setSavedInternships(internships);
+                setCertificationClaims(claims);
                 setCertificationClaimsError('');
+                setDataError('');
             } catch (error) {
-                console.error('Unable to sync certification claims from localStorage.', error);
-                setCertificationClaimsError(error.message || 'Unable to read saved certification claims.');
+                console.error('Unable to load admin portal data from Supabase.', error);
+                if (isMounted) {
+                    setDataError(error.message || 'Unable to load portal data from Supabase.');
+                    setCertificationClaimsError(error.message || 'Unable to load certification claims.');
+                }
             }
         };
-        window.addEventListener('storage', handleStorage);
-        return () => window.removeEventListener('storage', handleStorage);
+
+        loadPortalData();
+        return () => { isMounted = false; };
     }, []);
 
-    const handleLogout = () => {
-        localStorage.removeItem("isAdminAuthenticated");
-        localStorage.removeItem('admin_token');
-        navigate('/admin/login');
+    const handleLogout = async () => {
+        try {
+            await signOut();
+            navigate('/admin/login');
+        } catch (error) {
+            console.error('Unable to sign out administrator.', error);
+            alert(error.message || 'Unable to log out. Please try again.');
+        }
     };
 
-    const handleApproveCertificationClaim = (claim) => {
-        const confirmed = window.confirm(`Mark ${claim.fullName}'s contribution claim as approved in this browser? No certificate or email will be sent.`);
+    const handleApproveCertificationClaim = async (claim) => {
+        const confirmed = window.confirm(`Mark ${claim.fullName}'s contribution claim as approved? No certificate or email will be sent.`);
         if (!confirmed) return;
 
         try {
-            const updatedClaims = certificationClaims.map((entry) => (
-                entry.id === claim.id
-                    ? { ...entry, status: 'approved', reviewedAt: new Date().toISOString() }
-                    : entry
-            ));
-            saveCertificationClaims(updatedClaims);
-            setCertificationClaims(updatedClaims);
-            window.alert('Claim marked approved in this browser. No certificate or email was sent.');
+            const updatedClaim = { ...claim, status: 'approved', reviewedAt: new Date().toISOString() };
+            const { id, createdAt, ...payload } = updatedClaim;
+            await updatePortalRecord(portalRecordTypes.certificationClaim, id, payload);
+            setCertificationClaims((claims) => claims.map((entry) => entry.id === id ? updatedClaim : entry));
+            window.alert('Claim marked approved. No certificate or email was sent.');
         } catch (error) {
-            window.alert(error.message || 'Unable to save the claim status in this browser.');
+            console.error('Unable to approve certification claim in Supabase.', error);
+            window.alert(error.message || 'Unable to save the claim status.');
         }
     };
 
@@ -130,110 +136,148 @@ export default function AdminDashboard() {
         }
     };
 
-    const handlePublishNotice = (e) => {
+    const handlePublishNotice = async (e) => {
         e.preventDefault();
         if (!noticeTitle || !noticeContent) return;
 
         const formattedDate = noticeDate ? new Date(noticeDate).toLocaleDateString() : new Date().toLocaleDateString();
-        const newNotice = { title: noticeTitle, content: noticeContent, date: formattedDate };
-        const updatedNotices = [newNotice, ...savedNotices];
-
-        localStorage.setItem('pt_notices', JSON.stringify(updatedNotices));
-        setSavedNotices(updatedNotices);
-        alert('Notice published successfully!');
-        setNoticeTitle('');
-        setNoticeContent('');
-        setNoticeDate('');
+        try {
+            const notice = await createPortalRecord(portalRecordTypes.notice, {
+                title: noticeTitle,
+                content: noticeContent,
+                date: formattedDate
+            });
+            setSavedNotices((entries) => [notice, ...entries]);
+            alert('Notice published successfully!');
+            setNoticeTitle('');
+            setNoticeContent('');
+            setNoticeDate('');
+        } catch (error) {
+            console.error('Unable to publish notice to Supabase.', error);
+            alert(error.message || 'Unable to publish the notice.');
+        }
     };
 
-    const handleDeleteNotice = (index) => {
-        const updated = savedNotices.filter((_, i) => i !== index);
-        localStorage.setItem('pt_notices', JSON.stringify(updated));
-        setSavedNotices(updated);
+    const handleDeleteNotice = async (notice) => {
+        try {
+            await deletePortalRecord(portalRecordTypes.notice, notice.id);
+            setSavedNotices((entries) => entries.filter((entry) => entry.id !== notice.id));
+        } catch (error) {
+            console.error('Unable to delete notice from Supabase.', error);
+            alert(error.message || 'Unable to delete the notice.');
+        }
     };
 
-    const handlePublishEvent = (e) => {
+    const handlePublishEvent = async (e) => {
         e.preventDefault();
         if (!eventTitle || !eventContent) return;
 
         const formattedDate = eventDate ? new Date(eventDate).toLocaleDateString() : new Date().toLocaleDateString();
-        const newEvent = {
+        try {
+            const newEvent = await createPortalRecord(portalRecordTypes.event, {
             title: eventTitle,
             content: eventContent,
             date: formattedDate,
             tag: eventTag || 'NEW LIVE',
             location: 'PTSRIET Portal'
-        };
-        const updatedEvents = [newEvent, ...savedEvents];
-
-        localStorage.setItem('pt_events', JSON.stringify(updatedEvents));
-        setSavedEvents(updatedEvents);
-        alert('Event / Update added successfully!');
-        setEventTitle('');
-        setEventContent('');
-        setEventDate('');
+            });
+            setSavedEvents((entries) => [newEvent, ...entries]);
+            alert('Event / Update added successfully!');
+            setEventTitle('');
+            setEventContent('');
+            setEventDate('');
+        } catch (error) {
+            console.error('Unable to publish event to Supabase.', error);
+            alert(error.message || 'Unable to publish the event.');
+        }
     };
 
-    const handleDeleteEvent = (index) => {
-        const updated = savedEvents.filter((_, i) => i !== index);
-        localStorage.setItem('pt_events', JSON.stringify(updated));
-        setSavedEvents(updated);
+    const handleDeleteEvent = async (event) => {
+        try {
+            await deletePortalRecord(portalRecordTypes.event, event.id);
+            setSavedEvents((entries) => entries.filter((entry) => entry.id !== event.id));
+        } catch (error) {
+            console.error('Unable to delete event from Supabase.', error);
+            alert(error.message || 'Unable to delete the event.');
+        }
     };
 
-    const handleUploadResult = (e) => {
+    const handleUploadResult = async (e) => {
         e.preventDefault();
         if (!rollNo || !semester) return;
 
-        const newResult = {
-            rollNo,
-            studentName: studentName || 'Student',
-            semester,
-            marks: marks || 'Passed',
-            date: new Date().toLocaleDateString()
-        };
-
-        const updatedResults = [newResult, ...savedResults];
-        localStorage.setItem('pt_results', JSON.stringify(updatedResults));
-        setSavedResults(updatedResults);
-        alert('Result uploaded successfully!');
-        setRollNo('');
-        setStudentName('');
-        setSemester('');
-        setMarks('');
+        try {
+            const result = await createPortalRecord(portalRecordTypes.result, {
+                rollNo,
+                studentName: studentName || 'Student',
+                semester,
+                marks: marks || 'Passed',
+                date: new Date().toLocaleDateString()
+            });
+            setSavedResults((entries) => [result, ...entries]);
+            alert('Result uploaded successfully!');
+            setRollNo('');
+            setStudentName('');
+            setSemester('');
+            setMarks('');
+        } catch (error) {
+            console.error('Unable to upload result to Supabase.', error);
+            alert(error.message || 'Unable to upload the result.');
+        }
     };
 
-    const handleAddStudent = (e) => {
+    const handleDeleteResult = async (result) => {
+        try {
+            await deletePortalRecord(portalRecordTypes.result, result.id);
+            setSavedResults((entries) => entries.filter((entry) => entry.id !== result.id));
+        } catch (error) {
+            console.error('Unable to delete result from Supabase.', error);
+            alert(error.message || 'Unable to delete the result.');
+        }
+    };
+
+    const handleAddStudent = async (e) => {
         e.preventDefault();
         if (!newName || !newRollNo) return;
 
-        const newStudent = {
-            name: newName,
-            rollNo: newRollNo,
-            course: newCourse,
-            date: new Date().toLocaleDateString()
-        };
-
-        const updatedStudents = [newStudent, ...savedStudents];
-        localStorage.setItem('pt_students', JSON.stringify(updatedStudents));
-        setSavedStudents(updatedStudents);
-        alert('Student registered successfully!');
-        setNewName('');
-        setNewRollNo('');
+        try {
+            const student = await createPortalRecord(portalRecordTypes.student, {
+                name: newName,
+                rollNo: newRollNo,
+                course: newCourse,
+                date: new Date().toLocaleDateString()
+            });
+            setSavedStudents((entries) => [student, ...entries]);
+            alert('Student registered successfully!');
+            setNewName('');
+            setNewRollNo('');
+        } catch (error) {
+            console.error('Unable to register student in Supabase.', error);
+            alert(error.message || 'Unable to register the student.');
+        }
     };
 
-    const handleDeleteStudent = (index) => {
-        const updated = savedStudents.filter((_, i) => i !== index);
-        localStorage.setItem('pt_students', JSON.stringify(updated));
-        setSavedStudents(updated);
+    const handleDeleteStudent = async (student) => {
+        try {
+            await deletePortalRecord(portalRecordTypes.student, student.id);
+            setSavedStudents((entries) => entries.filter((entry) => entry.id !== student.id));
+        } catch (error) {
+            console.error('Unable to delete student from Supabase.', error);
+            alert(error.message || 'Unable to remove the student.');
+        }
     };
 
-    const handleDeleteEnquiry = (index) => {
-        const updated = savedEnquiries.filter((_, i) => i !== index);
-        localStorage.setItem('pt_enquiries', JSON.stringify(updated));
-        setSavedEnquiries(updated);
+    const handleDeleteEnquiry = async (enquiry) => {
+        try {
+            await deletePortalRecord(portalRecordTypes.enquiry, enquiry.id);
+            setSavedEnquiries((entries) => entries.filter((entry) => entry.id !== enquiry.id));
+        } catch (error) {
+            console.error('Unable to delete enquiry from Supabase.', error);
+            alert(error.message || 'Unable to delete the enquiry.');
+        }
     };
 
-    const handlePublishOpportunity = (e) => {
+    const handlePublishOpportunity = async (e) => {
         e.preventDefault();
         const role = opportunityRole.trim();
         const company = opportunityCompany.trim();
@@ -258,54 +302,46 @@ export default function AdminDashboard() {
             return;
         }
 
-        const key = opportunityType === 'internship' ? 'pt_internships' : 'pt_jobs';
-        const currentEntries = opportunityType === 'internship' ? savedInternships : savedJobs;
-        const updatedEntries = [{
-            id: Date.now(),
-            role,
-            company,
-            applyLink,
-            lastDate: opportunityLastDate,
-            description,
-            eligibility,
-            experience
-        }, ...currentEntries];
-
         try {
-            localStorage.setItem(key, JSON.stringify(updatedEntries));
+            const type = opportunityType === 'internship' ? portalRecordTypes.internship : portalRecordTypes.job;
+            const opportunity = await createPortalRecord(type, {
+                role,
+                company,
+                applyLink,
+                lastDate: opportunityLastDate,
+                description,
+                eligibility,
+                experience
+            });
+            if (opportunityType === 'internship') setSavedInternships((entries) => [opportunity, ...entries]);
+            else setSavedJobs((entries) => [opportunity, ...entries]);
+            setOpportunityRole('');
+            setOpportunityCompany('');
+            setOpportunityLink('');
+            setOpportunityLastDate('');
+            setOpportunityDescription('');
+            setOpportunityEligibility('');
+            setOpportunityExperience('');
+            alert(`${opportunityType === 'internship' ? 'Internship' : 'Job'} published successfully!`);
         } catch (error) {
-            console.error(`Unable to save entries to ${key}.`, error);
-            alert('Unable to save this opportunity. Please check browser storage and try again.');
-            return;
+            console.error('Unable to publish opportunity to Supabase.', error);
+            alert(error.message || 'Unable to save this opportunity.');
         }
-
-        if (opportunityType === 'internship') setSavedInternships(updatedEntries);
-        else setSavedJobs(updatedEntries);
-        setOpportunityRole('');
-        setOpportunityCompany('');
-        setOpportunityLink('');
-        setOpportunityLastDate('');
-        setOpportunityDescription('');
-        setOpportunityEligibility('');
-        setOpportunityExperience('');
-        alert(`${opportunityType === 'internship' ? 'Internship' : 'Job'} published successfully!`);
     };
 
-    const handleDeleteOpportunity = (type, index) => {
-        const key = type === 'internship' ? 'pt_internships' : 'pt_jobs';
-        const entries = type === 'internship' ? savedInternships : savedJobs;
-        const updatedEntries = entries.filter((_, entryIndex) => entryIndex !== index);
-
+    const handleDeleteOpportunity = async (type, opportunity) => {
         try {
-            localStorage.setItem(key, JSON.stringify(updatedEntries));
+            const recordType = type === 'internship' ? portalRecordTypes.internship : portalRecordTypes.job;
+            await deletePortalRecord(recordType, opportunity.id);
+            if (type === 'internship') {
+                setSavedInternships((entries) => entries.filter((entry) => entry.id !== opportunity.id));
+            } else {
+                setSavedJobs((entries) => entries.filter((entry) => entry.id !== opportunity.id));
+            }
         } catch (error) {
-            console.error(`Unable to update ${key}.`, error);
-            alert('Unable to delete this opportunity. Please try again.');
-            return;
+            console.error('Unable to delete opportunity from Supabase.', error);
+            alert(error.message || 'Unable to delete this opportunity.');
         }
-
-        if (type === 'internship') setSavedInternships(updatedEntries);
-        else setSavedJobs(updatedEntries);
     };
 
     const filteredStudents = savedStudents.filter(s =>
@@ -323,8 +359,8 @@ export default function AdminDashboard() {
 
                         <div style={{ marginTop: '20px' }}>
                             {savedEnquiries.length > 0 ? (
-                                savedEnquiries.map((enq, idx) => (
-                                    <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(0,0,0,0.4)', padding: '15px', borderRadius: '8px', marginBottom: '12px', border: '1px solid rgba(59,130,246,0.3)' }}>
+                                savedEnquiries.map((enq) => (
+                                    <div key={enq.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(0,0,0,0.4)', padding: '15px', borderRadius: '8px', marginBottom: '12px', border: '1px solid rgba(59,130,246,0.3)' }}>
                                         <div>
                                             <strong style={{ color: '#fff', fontSize: '16px' }}>{enq.name || 'N/A'}</strong>
                                             <span style={{ fontSize: '12px', background: '#3b82f6', color: '#fff', padding: '2px 8px', borderRadius: '4px', marginLeft: '10px' }}>
@@ -337,7 +373,7 @@ export default function AdminDashboard() {
                                         </div>
                                         <div style={{ display: 'flex', gap: '10px' }}>
                                             <a href={`tel:${enq.phone}`} style={{ background: '#10b981', color: '#fff', padding: '6px 12px', borderRadius: '6px', textDecoration: 'none', fontSize: '13px', fontWeight: '600' }}>Call Now</a>
-                                            <button onClick={() => handleDeleteEnquiry(idx)} style={{ background: '#ef4444', color: '#fff', border: 'none', padding: '6px 12px', borderRadius: '6px', cursor: 'pointer', fontSize: '13px' }}>Delete</button>
+                                            <button onClick={() => handleDeleteEnquiry(enq)} style={{ background: '#ef4444', color: '#fff', border: 'none', padding: '6px 12px', borderRadius: '6px', cursor: 'pointer', fontSize: '13px' }}>Delete</button>
                                         </div>
                                     </div>
                                 ))
@@ -351,7 +387,7 @@ export default function AdminDashboard() {
                 return (
                     <div className="admin-action-section">
                         <h3>🏅 BCA Certification Claims ({certificationClaims.length})</h3>
-                        <p>Claims are saved only in this browser. Review and update their local status here; this client-only flow cannot email or issue certificates.</p>
+                        <p>Review certification claims submitted by signed-in users. Approving a claim does not send a certificate or email.</p>
                         {certificationClaimsError && <p className="admin-certification-error" role="alert">{certificationClaimsError}</p>}
                         {!certificationClaimsError && certificationClaims.length === 0 && (
                             <p className="admin-certification-empty">No certification claims have been submitted yet.</p>
@@ -371,8 +407,8 @@ export default function AdminDashboard() {
                                         <div><dt>GitHub username</dt><dd>{claim.githubUsername || 'Not provided'}</dd></div>
                                         <div><dt>Contribution type</dt><dd>{claim.contributionType}</dd></div>
                                         <div><dt>Code of Conduct and Licensing</dt><dd>{claim.agreementAccepted ? 'Accepted' : 'Not accepted'}</dd></div>
-                                        <div><dt>Request receipt email</dt><dd>Not sent (client-only)</dd></div>
-                                        <div><dt>Certificate email</dt><dd>Not sent (client-only)</dd></div>
+                                        <div><dt>Request receipt email</dt><dd>Not sent</dd></div>
+                                        <div><dt>Certificate email</dt><dd>Not sent</dd></div>
                                         <div><dt>Submitted</dt><dd>{new Date(claim.createdAt).toLocaleString()}</dd></div>
                                         {claim.reviewedAt && <div><dt>Reviewed</dt><dd>{new Date(claim.reviewedAt).toLocaleString()}</dd></div>}
                                     </dl>
@@ -381,7 +417,7 @@ export default function AdminDashboard() {
                                             <button type="button" onClick={() => handleViewClaimPhoto(claim)}>View uploaded photo</button>
                                         )}
                                         <button type="button" onClick={() => handleApproveCertificationClaim(claim)} disabled={claim.status === 'approved'}>
-                                            {claim.status === 'approved' ? 'Approved locally' : 'Mark as approved'}
+                                            {claim.status === 'approved' ? 'Approved' : 'Mark as approved'}
                                         </button>
                                     </div>
                                 </article>
@@ -449,13 +485,13 @@ export default function AdminDashboard() {
                             />
                             <h4 style={{ color: '#fff', marginBottom: '15px' }}>Registered Students ({filteredStudents.length})</h4>
                             {filteredStudents.length > 0 ? (
-                                filteredStudents.map((st, idx) => (
-                                    <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(0,0,0,0.4)', padding: '12px', borderRadius: '8px', marginBottom: '10px', border: '1px solid rgba(255,40,40,0.2)' }}>
+                                filteredStudents.map((st) => (
+                                    <div key={st.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(0,0,0,0.4)', padding: '12px', borderRadius: '8px', marginBottom: '10px', border: '1px solid rgba(255,40,40,0.2)' }}>
                                         <div>
                                             <strong style={{ color: '#fff' }}>{st.name}</strong> <span style={{ fontSize: '12px', color: '#3b82f6', marginLeft: '10px' }}>[{st.course}]</span>
                                             <p style={{ margin: '4px 0 0', fontSize: '13px', color: '#aaa' }}>Roll No: {st.rollNo} | Added: {st.date}</p>
                                         </div>
-                                        <button onClick={() => handleDeleteStudent(idx)} style={{ background: '#ef4444', color: '#fff', border: 'none', padding: '6px 12px', borderRadius: '6px', cursor: 'pointer' }}>Remove</button>
+                                        <button onClick={() => handleDeleteStudent(st)} style={{ background: '#ef4444', color: '#fff', border: 'none', padding: '6px 12px', borderRadius: '6px', cursor: 'pointer' }}>Remove</button>
                                     </div>
                                 ))
                             ) : (
@@ -506,13 +542,13 @@ export default function AdminDashboard() {
 
                         <div style={{ marginTop: '30px' }}>
                             <h4 style={{ color: '#fff', marginBottom: '15px' }}>Active Notices ({savedNotices.length})</h4>
-                            {savedNotices.map((n, idx) => (
-                                <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(0,0,0,0.4)', padding: '12px', borderRadius: '8px', marginBottom: '10px', border: '1px solid rgba(255,40,40,0.2)' }}>
+                            {savedNotices.map((n) => (
+                                <div key={n.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(0,0,0,0.4)', padding: '12px', borderRadius: '8px', marginBottom: '10px', border: '1px solid rgba(255,40,40,0.2)' }}>
                                     <div>
                                         <strong style={{ color: '#fff' }}>{n.title}</strong> <span style={{ fontSize: '11px', color: '#ff4d4d', marginLeft: '10px' }}>({n.date})</span>
                                         <p style={{ margin: '4px 0 0', fontSize: '13px', color: '#aaa' }}>{n.content}</p>
                                     </div>
-                                    <button onClick={() => handleDeleteNotice(idx)} style={{ background: '#ef4444', color: '#fff', border: 'none', padding: '6px 12px', borderRadius: '6px', cursor: 'pointer' }}>Delete</button>
+                                    <button onClick={() => handleDeleteNotice(n)} style={{ background: '#ef4444', color: '#fff', border: 'none', padding: '6px 12px', borderRadius: '6px', cursor: 'pointer' }}>Delete</button>
                                 </div>
                             ))}
                         </div>
@@ -572,14 +608,14 @@ export default function AdminDashboard() {
 
                         <div style={{ marginTop: '30px' }}>
                             <h4 style={{ color: '#fff', marginBottom: '15px' }}>Active Event Cards ({savedEvents.length})</h4>
-                            {savedEvents.map((ev, idx) => (
-                                <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(0,0,0,0.4)', padding: '12px', borderRadius: '8px', marginBottom: '10px', border: '1px solid rgba(59,130,246,0.3)' }}>
+                            {savedEvents.map((ev) => (
+                                <div key={ev.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(0,0,0,0.4)', padding: '12px', borderRadius: '8px', marginBottom: '10px', border: '1px solid rgba(59,130,246,0.3)' }}>
                                     <div>
                                         <strong style={{ color: '#fff' }}>{ev.title}</strong> <span style={{ fontSize: '11px', background: '#3b82f6', color: '#fff', padding: '2px 6px', borderRadius: '4px', marginLeft: '10px' }}>{ev.tag}</span>
                                         <p style={{ margin: '4px 0 0', fontSize: '13px', color: '#aaa' }}>{ev.content}</p>
                                         <span style={{ fontSize: '11px', color: '#888' }}>Date: {ev.date}</span>
                                     </div>
-                                    <button onClick={() => handleDeleteEvent(idx)} style={{ background: '#ef4444', color: '#fff', border: 'none', padding: '6px 12px', borderRadius: '6px', cursor: 'pointer' }}>Delete</button>
+                                    <button onClick={() => handleDeleteEvent(ev)} style={{ background: '#ef4444', color: '#fff', border: 'none', padding: '6px 12px', borderRadius: '6px', cursor: 'pointer' }}>Delete</button>
                                 </div>
                             ))}
                         </div>
@@ -655,8 +691,8 @@ export default function AdminDashboard() {
                         ].map(({ type, title, entries }) => (
                             <div className="admin-opportunity-list" key={type}>
                                 <h4>{title} ({entries.length})</h4>
-                                {entries.map((entry, index) => (
-                                    <div className="admin-opportunity-item" key={entry.id || `${entry.role}-${index}`}>
+                                {entries.map((entry) => (
+                                    <div className="admin-opportunity-item" key={entry.id}>
                                         <div>
                                             <strong>{entry.role || entry.title}</strong>
                                             <p className="admin-opportunity-company">{entry.company || 'Company not specified'}</p>
@@ -665,7 +701,7 @@ export default function AdminDashboard() {
                                             <br />
                                             <span>Last date: {entry.lastDate || entry.deadline || entry.date}</span>
                                         </div>
-                                        <button type="button" onClick={() => handleDeleteOpportunity(type, index)}>Delete</button>
+                                        <button type="button" onClick={() => handleDeleteOpportunity(type, entry)}>Delete</button>
                                     </div>
                                 ))}
                             </div>
@@ -714,17 +750,13 @@ export default function AdminDashboard() {
                         <div style={{ marginTop: '30px' }}>
                             <h4 style={{ color: '#fff', marginBottom: '15px' }}>Uploaded Results ({savedResults.length})</h4>
                             {savedResults.length > 0 ? (
-                                savedResults.map((res, idx) => (
-                                    <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(0,0,0,0.4)', padding: '12px', borderRadius: '8px', marginBottom: '10px', border: '1px solid rgba(16,185,129,0.3)' }}>
+                                savedResults.map((res) => (
+                                    <div key={res.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(0,0,0,0.4)', padding: '12px', borderRadius: '8px', marginBottom: '10px', border: '1px solid rgba(16,185,129,0.3)' }}>
                                         <div>
                                             <strong style={{ color: '#fff' }}>{res.studentName}</strong> <span style={{ fontSize: '12px', color: '#10b981', marginLeft: '10px' }}>[{res.semester}]</span>
                                             <p style={{ margin: '4px 0 0', fontSize: '13px', color: '#aaa' }}>Roll No: {res.rollNo} | Marks/Grade: {res.marks}</p>
                                         </div>
-                                        <button onClick={() => {
-                                            const updated = savedResults.filter((_, i) => i !== idx);
-                                            localStorage.setItem('pt_results', JSON.stringify(updated));
-                                            setSavedResults(updated);
-                                        }} style={{ background: '#ef4444', color: '#fff', border: 'none', padding: '6px 12px', borderRadius: '6px', cursor: 'pointer' }}>Delete</button>
+                                        <button onClick={() => handleDeleteResult(res)} style={{ background: '#ef4444', color: '#fff', border: 'none', padding: '6px 12px', borderRadius: '6px', cursor: 'pointer' }}>Delete</button>
                                     </div>
                                 ))
                             ) : (
@@ -740,7 +772,7 @@ export default function AdminDashboard() {
                         <p>Configure portal security parameters and monitor admin activity.</p>
                         <div style={{ marginTop: '20px', color: '#ccc' }}>
                             <p style={{ marginBottom: '10px' }}>🔐 <strong>Security Status:</strong> Fully Encrypted & Secured</p>
-                            <p>🛡 <strong>Session Storage:</strong> Active (Local Storage Handled)</p>
+                            <p>🛡 <strong>Data Storage:</strong> Supabase PostgreSQL with row-level security</p>
                         </div>
                     </div>
                 );
@@ -827,6 +859,7 @@ export default function AdminDashboard() {
                     </div>
                 </header>
 
+                {dataError && <p role="alert" className="admin-certification-error">{dataError}</p>}
                 {renderContent()}
             </main>
         </div>
