@@ -73,12 +73,12 @@ const BcaPage = () => {
   }, []);
 
   const semesters = [
-    { sem: 'Sem 1', subjects: ['C Programming', 'Computer Fundamentals', 'Basic Mathematics', 'Digital Logic', 'Communication Skills'] },
-    { sem: 'Sem 2', subjects: ['C++ Programming', 'Web Designing (HTML/CSS/JS)', 'Digital Electronics', 'Discrete Mathematics', 'Operating Systems'] },
-    { sem: 'Sem 3', subjects: ['Data Structures (DSA)', 'Python OOP', 'DBMS & SQL', 'Computer Organization', 'Statistics'] },
-    { sem: 'Sem 4', subjects: ['Advanced Java', 'Software Engineering', 'Computer Networks', 'Linux & Shell Programming', 'Theory of Computation'] },
-    { sem: 'Sem 5', subjects: ['Full-Stack Development (MERN)', 'Cyber Security', 'Cloud Computing', 'Data Analytics'] },
-    { sem: 'Sem 6', subjects: ['Cloud Computing', 'Major Live Project', 'AI Basics'] }
+    { sem: 'Sem 1', subjects: ['Principles of Programming Using ‘C’- I ', 'Computer Fundamentals', 'Mathematical Foundations ', 'Digital Electronics', ' E-Commerce & Application'] },
+    { sem: 'Sem 2', subjects: ['Computer System Architecture', 'Principles of Programming Using ‘C’- II ', 'Statistics', 'Discrete Mathematics', 'Cyber Security'] },
+    { sem: 'Sem 3', subjects: ['Data Structures (DSA)', 'Data communo & Computer Network', 'Object Oriented Methodology using C++', 'Introduction to Artificial Intelligence', 'Block chain Technology'] },
+    { sem: 'Sem 4', subjects: ['Java Programming ', 'Software Engineering', 'Database Management Systems', 'Introduction to Python', 'Operating Systems'] },
+    { sem: 'Sem 5', subjects: ['Multimedia and Graphics ', 'Design and Analysis of Algorithm', 'Introduction to Data Science', 'Introduction to PHP'] },
+    { sem: 'Sem 6', subjects: ['Cloud Computing', 'Data Mining', 'Soft Computing'] }
   ];
 
   const gloryStudents = [

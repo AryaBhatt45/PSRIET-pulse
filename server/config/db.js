@@ -21,9 +21,14 @@ if (!['postgres:', 'postgresql:'].includes(parsedDatabaseUrl.protocol)) {
   throw new Error('DATABASE_URL must use the PostgreSQL protocol.');
 }
 
+// Yahan hum smart check laga rahe hain: Agar Supabase ya production hai toh SSL on, warna off
+const isCloudOrSupabase = databaseUrl.includes('supabase.co') || process.env.NODE_ENV === 'production';
+
 const pool = new Pool({
   connectionString: databaseUrl,
-  ssl: { rejectUnauthorized: true }
+  ssl: isCloudOrSupabase 
+    ? { rejectUnauthorized: false } // Supabase ke liye flexible SSL
+    : false                        // Local ke liye bilkul band
 });
 
 pool.on('error', (error) => {
