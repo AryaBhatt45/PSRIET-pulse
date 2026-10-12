@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import { createPortalRecord, fetchPortalRecords, portalRecordTypes } from '../services/portalData';
 import AboutUsPage from './AboutUsPage';
 import './style/Dashboard.css';
 
@@ -33,9 +35,12 @@ const coursesList = [
 const Dashboard = () => {
     const [currentIdx, setCurrentIdx] = useState(0);
     const [showFullAbout, setShowFullAbout] = useState(false);
+    const { user, isAuthenticated, signOut } = useAuth();
 
     const [dynamicNotices, setDynamicNotices] = useState([]);
     const [dynamicEvents, setDynamicEvents] = useState([]);
+    const [dynamicDataError, setDynamicDataError] = useState('');
+    const [enquiryError, setEnquiryError] = useState('');
     const [selectedEvent, setSelectedEvent] = useState(null);
 
     const [alumniIndex, setAlumniIndex] = useState(0);
@@ -55,13 +60,28 @@ const Dashboard = () => {
             setCurrentIdx((prev) => (prev + 1) % bannerImages.length);
         }, 4000);
 
-        const savedNotices = JSON.parse(localStorage.getItem('pt_notices')) || [];
-        setDynamicNotices(savedNotices);
+        let isMounted = true;
+        const loadUpdates = async () => {
+            try {
+                const [notices, events] = await Promise.all([
+                    fetchPortalRecords(portalRecordTypes.notice),
+                    fetchPortalRecords(portalRecordTypes.event)
+                ]);
+                if (!isMounted) return;
+                setDynamicNotices(notices);
+                setDynamicEvents(events);
+                setDynamicDataError('');
+            } catch (error) {
+                console.error('Unable to load notices and events from Supabase.', error);
+                if (isMounted) setDynamicDataError(error.message || 'Unable to load announcements right now.');
+            }
+        };
+        loadUpdates();
 
-        const savedEvents = JSON.parse(localStorage.getItem('pt_events')) || [];
-        setDynamicEvents(savedEvents);
-
-        return () => clearInterval(timer);
+        return () => {
+            isMounted = false;
+            clearInterval(timer);
+        };
     }, []);
 
     const alumniList = [
@@ -166,6 +186,26 @@ const Dashboard = () => {
                 : `${daysRemaining} day${daysRemaining === 1 ? '' : 's'} until your exam.`);
     };
 
+    const handleEnquirySubmit = async (event) => {
+        event.preventDefault();
+        setEnquiryError('');
+        const form = event.currentTarget;
+        const formData = new FormData(form);
+        try {
+            await createPortalRecord(portalRecordTypes.enquiry, {
+                name: formData.get('name').trim(),
+                phone: formData.get('phone').trim(),
+                course: formData.get('course'),
+                date: new Date().toLocaleDateString('hi-IN', { day: '2-digit', month: 'short', year: 'numeric' })
+            }, null, false);
+            window.alert('Your enquiry was submitted successfully. Please contact the institute directly if you need an immediate response.');
+            form.reset();
+        } catch (error) {
+            console.error('Unable to submit admission enquiry to Supabase.', error);
+            setEnquiryError(error.message || 'Unable to submit your enquiry. Please try again.');
+        }
+    };
+
     return (
         <div className="dashboard-container">
 
@@ -178,11 +218,11 @@ const Dashboard = () => {
                         style={{ width: '150px', height: 'auto', objectFit: 'contain', borderRadius: '8px' }}
                     />
                 </div>
-                {/* Header Quick Support Contacts */}
                 <div className="header-support-contacts">
                     <a href="tel:+917398663942" className="support-phone-btn">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" /></svg>
                         <span>+91 7398663942</span>
+
                     </a>
 
                     <a href="https://wa.me/7398663942?text=Hello%20PTSRIET%20Support,%20I%20need%20assistance." target="_blank" rel="noopener noreferrer" className="support-whatsapp-btn">
@@ -190,7 +230,7 @@ const Dashboard = () => {
                         <span>WhatsApp</span>
                     </a>
                 </div>
-                <div className="header-right" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div className="header-right" style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
                     <a
                         href="http://mresult.prsuprayagraj.in/prsu_Results.aspx"
                         target="_blank"
@@ -200,7 +240,23 @@ const Dashboard = () => {
                         <span>Check Result</span>
                         <span className="bouncing-arrow">↙️</span>
                     </a>
-                    <span className="session-pill">Academic Session 2026</span>
+
+                    {isAuthenticated ? (
+                        <div className="header-user-status">
+                            <div className="header-user-pill">
+                                <span className="header-user-avatar" aria-hidden="true">
+                                    {(user?.user_metadata?.full_name || user?.email || 'S').trim().charAt(0).toUpperCase()}
+                                </span>
+                                <span>{user?.user_metadata?.full_name || user?.user_metadata?.name || user?.email?.split('@')[0] || 'Student'}</span>
+                            </div>
+                            <button type="button" className="header-login-btn" onClick={async () => { await signOut(); }}>
+                                Logout
+                            </button>
+                        </div>
+                    ) : (
+                        <Link to="/login" className="header-login-btn">Login</Link>
+                    )}
+
                 </div>
             </header>
 
@@ -217,7 +273,7 @@ const Dashboard = () => {
                         </p>
                         <div className="hero-action-buttons">
                             <a href="#courses" className="hero-btn-primary">Explore Courses</a>
-                            <a href="#about" className="hero-btn-outline">About College</a>
+                            <button onClick={() => setShowFullAbout(true)} className="hero-btn-outline" style={{ background: 'transparent', cursor: 'pointer' }}>About College</button>
                         </div>
                     </div>
 
@@ -264,7 +320,7 @@ const Dashboard = () => {
                 </div>
             </div>
 
-            <section className="infinite-facilities-section">
+            <section className="infinite-facilities-section" id="facilities">
                 <div className="infinite-header">
                     <h2>Campus Facilities & Infrastructure</h2>
                     <p>Explore world-class amenities designed for student growth</p>
@@ -310,13 +366,13 @@ const Dashboard = () => {
                 </div>
                 <div className="course-btn-grid">
                     {coursesList.map((course, index) => (
-                        <a href={course.link} className="course-btn" key={index}>
+                        <Link to={course.link} className="course-btn" key={index}>
                             <div className="icon">{course.icon}</div>
                             <div>
                                 <h3>{course.title}</h3>
                                 <p>{course.desc}</p>
                             </div>
-                        </a>
+                        </Link>
                     ))}
                 </div>
             </section>
@@ -446,23 +502,30 @@ const Dashboard = () => {
                     <h2>Upcoming Events & Important Updates</h2>
                 </div>
 
+                {dynamicDataError && <p className="portal-data-error" role="alert">{dynamicDataError}</p>}
                 <div className="horizontal-events-grid">
                     {dynamicEvents.length > 0 ? (
                         dynamicEvents.slice(0, 4).map((event, idx) => (
                             <div className="notice-card highlight-card" key={idx}>
-                                <div className="notice-date-box">
-                                    <span className="date-num">NEW</span>
-                                    <span className="date-mon">LIVE</span>
+                                <div className="notice-header-row" style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
+                                    <div className="notice-date-box">
+                                        <span className="date-num">NEW</span>
+                                        <span className="date-mon">LIVE</span>
+                                    </div>
+                                    <span className="event-category tech">Admin Event</span>
                                 </div>
                                 <div className="notice-content">
-                                    <span className="event-category tech">Admin Event</span>
                                     <h3 className="notice-card-title">{event.title}</h3>
                                     <p className="notice-card-desc">{event.content}</p>
                                     <button
-                                        onClick={() => setSelectedEvent(event)}
-                                        className="inline-read-more-btn"
+                                        type="button"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setSelectedEvent(event);
+                                        }}
+                                        className="view-subjects-btn"
                                     >
-                                        Read More →
+                                        Read More ▼
                                     </button>
                                     <div className="notice-footer">
                                         <span className="notice-time">⏰ {event.date}</span>
@@ -476,12 +539,14 @@ const Dashboard = () => {
                     )}
 
                     <div className="notice-card highlight-card">
-                        <div className="notice-date-box">
-                            <span className="date-num">15</span>
-                            <span className="date-mon">JUL</span>
+                        <div className="notice-header-row" style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
+                            <div className="notice-date-box">
+                                <span className="date-num">15</span>
+                                <span className="date-mon">JUL</span>
+                            </div>
+                            <span className="event-category tech">Tech Fest</span>
                         </div>
                         <div className="notice-content">
-                            <span className="event-category tech">Tech Fest</span>
                             <h3 className="notice-card-title">Annual Tech Fest - "TechnoPulse 2026"</h3>
                             <p className="notice-card-desc">Coding competition, web design hackathon, and AI model showcase for all departments.</p>
                             <button
@@ -491,9 +556,9 @@ const Dashboard = () => {
                                     date: '15 JUL 2026',
                                     location: 'Main Auditorium'
                                 })}
-                                className="inline-read-more-btn"
+                                className="view-subjects-btn"
                             >
-                                Read More →
+                                Read More ▼
                             </button>
                             <div className="notice-footer">
                                 <span className="notice-time">⏰ 10:00 AM onwards</span>
@@ -504,60 +569,46 @@ const Dashboard = () => {
                 </div>
             </section>
 
-            {/* Scholarship & Financial Aid Section (Jaise BA me hai) */}
-            <section className="dashboard-section-box">
-                <div className="section-header-wrap">
-                    <div className="title-with-badge">
-                        <span className="badge-tag">🎓 FINANCIAL AID</span>
-                    </div>
-                    <h2>State Scholarship & Fee Reimbursement</h2>
-                    <p className="section-subtitle">Check your eligibility criteria and apply for government scholarship schemes directly.</p>
-                </div>
-
-                <div className="scholarship-main-card">
-                    <div className="scholarship-card-header">
-                        <div className="scholarship-title-area">
-                            <span className="scholarship-badge">🏛️ Government Scheme</span>
-                            <h3>Post-Matric Scholarship Scheme</h3>
-                            <p>Eligible students can claim tuition fee reimbursement and maintenance allowances provided by the state government.</p>
-                        </div>
-                        <div className="scholarship-action-btns">
-                            <a href="https://scholarships.gov.in/" target="_blank" rel="noreferrer" className="primary-apply-btn">
-                                Apply Now 🚀
-                            </a>
-                            <button onClick={() => alert("Checking application status...")} className="secondary-status-btn">
-                                Check Status 🔍
-                            </button>
-                        </div>
-                    </div>
-
-                    <div className="scholarship-rules-grid">
-                        <div className="rule-box">
-                            <span className="rule-label">ACADEMIC CUTOFF:</span>
-                            <span className="rule-value">Minimum 75% Marks</span>
-                        </div>
-                        <div className="rule-box">
-                            <span className="rule-label">BACKLOG RULE:</span>
-                            <span className="rule-value">No Active Backlogs (0 Failures)</span>
-                        </div>
-                        <div className="rule-box">
-                            <span className="rule-label">ATTENDANCE:</span>
-                            <span className="rule-value">Minimum 75% Required</span>
-                        </div>
+            {/* Event Details Popup Modal (Fix for Read More click issue) */}
+            {selectedEvent && (
+                <div className="modal-overlay" style={{
+                    position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+                    backgroundColor: 'rgba(0,0,0,0.6)', display: 'flex', justifyContent: 'center',
+                    alignItems: 'center', zIndex: 1000, padding: '20px'
+                }}>
+                    <div className="modal-content" style={{
+                        background: '#fff', padding: '30px', borderRadius: '12px',
+                        maxWidth: '500px', width: '100%', boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
+                        position: 'relative'
+                    }}>
+                        <h3 style={{ marginBottom: '15px', color: '#1a1a1a' }}>{selectedEvent.title}</h3>
+                        <p style={{ marginBottom: '15px', color: '#555', lineHeight: '1.6' }}>{selectedEvent.content}</p>
+                        <p style={{ fontSize: '14px', color: '#775', marginBottom: '8px' }}><strong>Date:</strong> {selectedEvent.date}</p>
+                        <p style={{ fontSize: '14px', color: '#775', marginBottom: '20px' }}><strong>Location:</strong> {selectedEvent.location || 'PTSRIET Campus'}</p>
+                        <button
+                            onClick={() => setSelectedEvent(null)}
+                            style={{
+                                background: '#dc3545', color: '#fff', border: 'none',
+                                padding: '10px 20px', borderRadius: '6px', cursor: 'pointer',
+                                fontWeight: 'bold', width: '100%'
+                            }}
+                        >
+                            Close
+                        </button>
                     </div>
                 </div>
-            </section>
+            )}
 
-            {/* Admissions Enquiry Section (Fixed Layout) */}
             <section className="dashboard-section-box">
                 <div className="admission-enquiry-card">
                     <div className="enquiry-text">
                         <span className="badge-tag">🎓 ADMISSIONS OPEN 2026</span>
                         <h2>Want to Join PTSRIET?</h2>
-                        <p>This form saves your enquiry in this browser only. For a response or fee details, please contact the institute directly.</p>
+                        <p>Your enquiry will be shared with the institute. For an immediate response or fee details, please contact us directly.</p>
                     </div>
                     <form className="enquiry-form" onSubmit={(e) => {
                         e.preventDefault();
+
                         const name = e.target[0].value;
                         const phone = e.target[1].value;
                         const course = e.target[2].value;
@@ -575,7 +626,7 @@ const Dashboard = () => {
 
                         localStorage.setItem('pt_enquiries', JSON.stringify(updatedEnquiries));
 
-                        alert('Your enquiry was saved in this browser only. Please contact the institute directly to request a callback.');
+                        alert('Query submitted successfully! Admission cell will contact you soon.');
                         e.target.reset();
                     }}>
                         <input type="text" placeholder="Your Full Name" required className="enquiry-input" />
@@ -590,6 +641,7 @@ const Dashboard = () => {
                             <option value="bed">B.Ed / D.El.Ed (Education)</option>
                             <option value="ba">BA (Bachelor of Art)</option>
                         </select>
+                        {enquiryError && <p className="portal-data-error" role="alert">{enquiryError}</p>}
                         <button type="submit" className="enquiry-submit-btn">Request Callback 🚀</button>
                     </form>
                 </div>
@@ -609,9 +661,9 @@ const Dashboard = () => {
                         <p>
                             Guided by strong core values of discipline, integrity, and social responsibility, the institute provides a vibrant learning environment equipped with modern labs, expert faculty, and structured career pathways to empower the youth.
                         </p>
-                        <a href="#more-about" className="read-more-btn">
+                        <button onClick={() => setShowFullAbout(true)} className="read-more-btn" style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
                             Read More About Us
-                        </a>
+                        </button>
                     </div>
 
                     <div className="about-cards-wrapper">
@@ -622,7 +674,6 @@ const Dashboard = () => {
                             <h3>Dr.Lal ji Tripathi</h3>
                             <p className="uni-role">Managing Director & Patron</p>
                             <p className="uni-subtext">PTSRIET Institution, U.P.</p>
-                            <a href="#profile-1" className="view-profile-btn">VIEW PROFILE</a>
                         </div>
 
                         <div className="uni-profile-card">
@@ -632,7 +683,6 @@ const Dashboard = () => {
                             <h3>Pradeep Pandey</h3>
                             <p className="uni-role">HOD - Computer Science</p>
                             <p className="uni-subtext">Technical & Academic Cell</p>
-                            <a href="#profile-2" className="view-profile-btn">VIEW PROFILE & MESSAGE</a>
                         </div>
                     </div>
                 </div>
@@ -648,16 +698,16 @@ const Dashboard = () => {
                         <h4>Quick Links</h4>
                         <ul>
                             <li><a href="#courses">Courses</a></li>
-                            <li><a href="#about">About Us</a></li>
+                            <li><button onClick={() => setShowFullAbout(true)} style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', padding: 0, font: 'inherit' }}>About Us</button></li>
                             <li><a href="#facilities">Facilities</a></li>
                         </ul>
                     </div>
                     <div className="footer-col">
                         <h4>Departments</h4>
                         <ul>
-                            <li><a href="#bca">Computer Applications</a></li>
-                            <li><a href="#bed">Education & Training</a></li>
-                            <li><a href="#llb">Faculty of Law</a></li>
+                            <li><a href="#courses">Computer Applications</a></li>
+                            <li><a href="#courses">Education & Training</a></li>
+                            <li><a href="#courses">Faculty of Law</a></li>
                         </ul>
                     </div>
                     <div className="footer-col">
@@ -666,7 +716,6 @@ const Dashboard = () => {
                             <li><Link to="/privacy-policy">Privacy Policy</Link></li>
                             <li><Link to="/terms-conditions">Terms & Conditions</Link></li>
                         </ul>
-                        {/* Subtly visible Admin Login button */}
                         <div style={{ marginTop: '30px' }}>
                             <Link
                                 to="/admin/login"

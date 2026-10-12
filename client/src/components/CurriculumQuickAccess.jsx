@@ -3,6 +3,24 @@ import './CurriculumQuickAccess.css';
 
 const sampleNotesPdf = '/assets/sample-notes.pdf';
 
+// Subject-wise specific PDF mapping helper function
+const getPdfForSubject = (subjectName) => {
+  const normalized = subjectName.trim().toLowerCase();
+  if (normalized === 'c programming') {
+    return '/c-programming.pdf';
+  }
+  if (normalized === 'c++ programming') {
+    return '/cpp-programming.pdf'; // Yahan apni PDF ka naam rakh dena jo public folder me dali hai
+  }
+  if (normalized === 'python oop') {
+    return '/python-oop.pdf'; // Yahan apni Python PDF ka naam rakh dena
+  }
+  // Aap yahan baaki subjects ke liye bhi add kar sakte ho, jaise:
+  // if (normalized === 'c++ programming') return '/c-plus-plus.pdf';
+
+  return sampleNotesPdf;
+};
+
 const CurriculumQuickAccess = ({ semesters }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const subjectsId = useId();
@@ -38,19 +56,22 @@ const CurriculumQuickAccess = ({ semesters }) => {
       </div>
       {isExpanded && (
         <div className="curriculum-quick-access-list" id={subjectsId} role="region" aria-label="Course subject PDFs">
-          {subjects.map((subject) => (
-            <div className="curriculum-quick-access-row" key={subject}>
-              <span className="curriculum-quick-access-subject">{subject}</span>
-              <a
-                className="curriculum-quick-access-link"
-                href={sampleNotesPdf}
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                View PDF
-              </a>
-            </div>
-          ))}
+          {subjects.map((subject) => {
+            const pdfLink = getPdfForSubject(subject);
+            return (
+              <div className="curriculum-quick-access-row" key={subject}>
+                <span className="curriculum-quick-access-subject">{subject}</span>
+                <a
+                  className="curriculum-quick-access-link"
+                  href={pdfLink}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  View PDF
+                </a>
+              </div>
+            );
+          })}
         </div>
       )}
     </section>

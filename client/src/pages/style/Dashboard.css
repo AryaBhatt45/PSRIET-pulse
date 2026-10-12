@@ -1,4 +1,5 @@
-.dashboard-container, .dashboard-container * {
+.dashboard-container,
+.dashboard-container * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -25,6 +26,7 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
   flex-wrap: wrap;
   gap: 12px;
+  min-width: 0;
 }
 
 .dashboard-container .college-seal-icon {
@@ -38,18 +40,77 @@
   display: flex;
   align-items: center;
   gap: 14px;
+  min-width: 0;
 }
 
 
-.dashboard-container .session-pill {
-  background: #eff6ff;
+.dashboard-container .header-right {
+  margin-left: auto;
+  justify-content: flex-end;
+  min-width: 0;
+}
+
+.dashboard-container .header-user-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.dashboard-container .header-user-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #f8fafc;
+  border: 1px solid #dfe7f1;
+  color: #0f172a;
+  border-radius: 999px;
+  padding: 6px 10px 6px 8px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.dashboard-container .header-user-avatar {
+  display: inline-grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #dbeafe;
   color: #1d4ed8;
-  border: 1px solid #bfdbfe;
-  padding: 6px 14px;
-  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.dashboard-container .header-login-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: 1px solid #cbd5e1;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  color: #ffffff;
   font-size: 0.82rem;
-  font-weight: 600;
-  white-space: nowrap;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 10px 20px rgba(37, 99, 235, 0.18);
+}
+
+.dashboard-container .header-login-btn:hover {
+  transform: translateY(-1px);
+}
+
+.dashboard-container .portal-data-error {
+  color: #b91c1c;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin: 12px 0;
+  font-size: 0.9rem;
 }
 
 /* Split Hero Section */
@@ -243,15 +304,15 @@
 
 /* Hindi Notice Ticker Styling */
 .dashboard-container .hindi-notice-banner {
+  width: calc(100% - 32px);
   max-width: 1100px;
   margin: 0 auto 30px auto;
-  padding: 0 20px;
+  padding: 0;
   display: flex;
   align-items: center;
   background: #fffbeb;
   border: 1px solid #fde68a;
   border-radius: 12px;
-  overflow: hidden;
   box-shadow: 0 4px 12px rgba(245, 158, 11, 0.08);
 }
 
@@ -264,10 +325,12 @@
   letter-spacing: 0.5px;
   flex-shrink: 0;
   text-transform: uppercase;
+  border-radius: 11px 0 0 11px;
 }
 
 .dashboard-container .hindi-ticker-container {
-  width: 100%;
+  flex: 1;
+  min-width: 0;
   overflow: hidden;
   white-space: nowrap;
   display: flex;
@@ -305,10 +368,38 @@
   .dashboard-container .hindi-notice-banner {
     flex-direction: column;
     align-items: stretch;
+    width: calc(100% - 24px);
+    margin-bottom: 24px;
   }
 
   .dashboard-container .hindi-notice-badge {
     text-align: center;
+    padding: 8px 12px;
+    border-radius: 11px 11px 0 0;
+  }
+
+  .dashboard-container .hindi-ticker-container {
+    overflow: visible;
+    white-space: normal;
+    padding: 8px 12px;
+  }
+
+  .dashboard-container .hindi-ticker-track {
+    display: block;
+    padding-left: 0;
+    animation: none;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+  }
+
+  .dashboard-container .hindi-ticker-track span {
+    display: block;
+    margin: 0 0 6px;
+  }
+
+  .dashboard-container .hindi-ticker-track span:last-child {
+    margin-bottom: 0;
   }
 }
 
@@ -859,6 +950,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .dashboard-container .student-tool-card,
   .dashboard-container .student-tool-content,
   .dashboard-container .student-tool-content-inner,
@@ -955,7 +1047,7 @@
 /* Events Grid */
 .dashboard-container .horizontal-events-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
   gap: 20px;
   width: 100%;
 }
@@ -1065,6 +1157,30 @@
   color: #475569;
   font-weight: 600;
   gap: 6px;
+}
+
+.notice-time,
+.notice-location {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@keyframes pulse-dot {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+  }
+
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 6px rgba(239, 68, 68, 0);
+  }
+
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+  }
 }
 
 /* Scholarship Card Styling */
@@ -1275,6 +1391,7 @@
 .dashboard-container .enquiry-submit-btn:hover {
   background: #f1f5f9;
 }
+
 /* College Main Footer */
 .dashboard-container .college-main-footer {
   background: #ffffff;
@@ -1379,6 +1496,11 @@
     width: 100%;
     display: flex;
     justify-content: flex-start;
+    margin-left: 0;
+  }
+
+  .dashboard-container .header-support-contacts {
+    display: none;
   }
 
   .dashboard-container .hero-text-content h2 {
@@ -1815,4 +1937,40 @@
     display: none;
     /* Mobile par header clutter avoid karne ke liye hide kar sakte hain, floating widget already hai */
   }
+}
+
+.view-subjects-btn {
+  /* baaki purani properties jo hain wo rehne de, bas ye add kar: */
+  position: relative;
+  z-index: 2;
+  cursor: pointer;
+}
+
+.view-subjects-btn * {
+  pointer-events: none;
+  /* Ye ensure karega ki click seedha button par lage, span par nahi */
+}
+
+.notice-card {
+  display: flex;
+  flex-direction: column;
+  /* baaki jo purani properties hain jaise background, border, padding, wo sab rehne dena */
+}
+
+.notice-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  /* Ye sabhi cards ki height ko barabar kar dega */
+}
+
+/* Agar notice-card-desc (description) par koi margin-bottom hai toh usko auto kar sakte hain */
+.notice-card-desc {
+  flex-grow: 1;
+  /* Description jitna bhi chhota ho, bacha hua space le lega aur button ko neeche bhej dega */
+  margin-bottom: 15px;
+}
+
+.horizontal-events-grid * {
+  pointer-events: auto !important;
 }

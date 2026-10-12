@@ -717,7 +717,7 @@
 
 .bca-dashboard-theme .scholarship-title-area {
   flex: 1;
-  min-width: 260px;
+  min-width: min(100%, 260px);
 }
 
 .bca-dashboard-theme .scholarship-badge {
