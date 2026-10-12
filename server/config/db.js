@@ -4,24 +4,31 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const { Pool } = pkg;
+const databaseUrl = process.env.DATABASE_URL;
+
+if (!databaseUrl) {
+  throw new Error('DATABASE_URL is required to connect to PostgreSQL.');
+}
+
+let parsedDatabaseUrl;
+try {
+  parsedDatabaseUrl = new URL(databaseUrl);
+} catch {
+  throw new Error('DATABASE_URL must be a valid PostgreSQL connection string.');
+}
+
+if (!['postgres:', 'postgresql:'].includes(parsedDatabaseUrl.protocol)) {
+  throw new Error('DATABASE_URL must use the PostgreSQL protocol.');
+}
 
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+  connectionString: databaseUrl,
+  ssl: { rejectUnauthorized: true }
 });
 
-// Server start hote hi connection check karne ke liye
-pool.query('SELECT NOW()', (err, res) => {
-  if (err) {
-    console.error('Database connection error:', err.stack);
-  } else {
-    console.log('Connected to the PostgreSQL database successfully! Time:', res.rows[0].now);
-  }
-});
-
-pool.on('error', (err) => {
-  console.error('Unexpected error on idle client', err);
-  process.exit(-1);
+pool.on('error', (error) => {
+  console.error('Unexpected error on idle PostgreSQL client:', error.message);
+  process.exitCode = 1;
 });
 
 export default pool;

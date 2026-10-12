@@ -19,10 +19,15 @@ const loginAdmin = async (req, res) => {
             return res.status(401).json({ message: "Invalid username or password" });
         }
 
+        const secret = process.env.JWT_SECRET;
+        if (!secret || secret.length < 32) {
+            return res.status(503).json({ message: 'Admin login is not configured on the server.' });
+        }
+
         // JWT Token generate karein
         const token = jwt.sign(
             { id: user.rows[0].id, username: user.rows[0].username },
-            process.env.JWT_SECRET || 'fallback_secret',
+            secret,
             { expiresIn: '1h' }
         );
 

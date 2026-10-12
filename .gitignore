@@ -10,6 +10,7 @@ build/
 # Environment variables
 .env
 .env.local
+server/.env
 
 # Logs and OS files
 logs
