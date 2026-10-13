@@ -77,9 +77,9 @@ const BscPage = () => {
           <h2>Semester-wise Curriculum & Notes</h2>
         </div>
 
-        <CurriculumSemesterCards semesters={semesters} />
+        <CurriculumSemesterCards semesters={semesters} courseKey="bsc" />
       </div>
-      <CurriculumQuickAccess semesters={semesters} />
+      <CurriculumQuickAccess semesters={semesters} courseKey="bsc" />
 
       {/* Scholarship & Eligibility Hub */}
       <div className="ba-scholarship-card">

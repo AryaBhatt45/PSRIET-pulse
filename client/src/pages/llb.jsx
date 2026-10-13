@@ -67,9 +67,9 @@ const LlbPage = () => {
           <span className="section-badge">🚀 ROADMAP</span>
           <h2>Semester-wise Curriculum & Notes</h2>
         </div>
-        <CurriculumSemesterCards semesters={semesters} />
+        <CurriculumSemesterCards semesters={semesters} courseKey="llb" />
       </div>
-      <CurriculumQuickAccess semesters={semesters} />
+      <CurriculumQuickAccess semesters={semesters} courseKey="llb" />
 
       <div className="bca-section glory-wrapper">
         <div className="bca-section-header text-center">

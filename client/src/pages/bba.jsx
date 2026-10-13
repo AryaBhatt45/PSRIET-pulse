@@ -64,9 +64,9 @@ const BbaPage = () => {
           <span className="section-badge">🚀 ROADMAP</span>
           <h2>Semester-wise Curriculum & Notes</h2>
         </div>
-        <CurriculumSemesterCards semesters={semesters} />
+        <CurriculumSemesterCards semesters={semesters} courseKey="bba" />
       </div>
-      <CurriculumQuickAccess semesters={semesters} />
+      <CurriculumQuickAccess semesters={semesters} courseKey="bba" />
 
       {/* Scholarship & Eligibility Hub */}
       <div className="ba-scholarship-card" style={{ marginTop: '25px', marginBottom: '30px' }}>

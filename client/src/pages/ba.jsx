@@ -84,9 +84,9 @@ const BaPage = () => {
           <h2>Semester-wise Curriculum & Notes</h2>
         </div>
 
-        <CurriculumSemesterCards semesters={semesters} />
+        <CurriculumSemesterCards semesters={semesters} courseKey="ba" />
       </div>
-      <CurriculumQuickAccess semesters={semesters} />
+      <CurriculumQuickAccess semesters={semesters} courseKey="ba" />
 
       {/* Scholarship & Eligibility Hub */}
       <div className="ba-scholarship-card">

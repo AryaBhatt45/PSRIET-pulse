@@ -8,7 +8,8 @@ export const portalRecordTypes = {
   enquiry: 'enquiry',
   job: 'job',
   internship: 'internship',
-  certificationClaim: 'certification_claim'
+  certificationClaim: 'certification_claim',
+  curriculumLock: 'curriculum_lock'
 };
 
 export async function fetchPortalRecords(recordType) {

@@ -73,10 +73,36 @@ const BcaPage = () => {
   }, []);
 
   const semesters = [
-    { sem: 'Sem 1', subjects: ['Principles of Programming Using ‘C’- I ', 'Computer Fundamentals', 'Mathematical Foundations ', 'Digital Electronics', ' E-Commerce & Application'] },
-    { sem: 'Sem 2', subjects: ['Computer System Architecture', 'Principles of Programming Using ‘C’- II ', 'Statistics', 'Discrete Mathematics', 'Cyber Security'] },
-    { sem: 'Sem 3', subjects: ['Data Structures (DSA)', 'Data communo & Computer Network', 'Object Oriented Methodology using C++', 'Introduction to Artificial Intelligence', 'Block chain Technology'] },
-    { sem: 'Sem 4', subjects: ['Java Programming ', 'Software Engineering', 'Database Management Systems', 'Introduction to Python', 'Operating Systems'] },
+    {
+      sem: 'Sem 1',
+      subjects: ['Principles of Programming Using ‘C’- I ', 'Computer Fundamentals', 'Mathematical Foundations ', 'Digital Electronics', ' E-Commerce & Application'],
+      notesPdfs: {
+        'Principles of Programming Using ‘C’- I': '/c-programming.pdf',
+        'Computer Fundamentals': '/fundamentle.pdf',
+        'Mathematical Foundations': '/math.pdf',
+        'Digital Electronics': '/digital.pdf',
+        'E-Commerce & Application': '/e-com.pdf'
+      }
+    },
+    {
+      sem: 'Sem 2',
+      subjects: ['Computer System Architecture', 'Principles of Programming Using ‘C’- II ', 'Statistics', 'Discrete Mathematics', 'Cyber Security'],
+    },
+    {
+      sem: 'Sem 3',
+      subjects: ['Data Structures (DSA)', 'Data Communication & Computer Network', 'Object Oriented Methodology using C++', 'Introduction to Artificial Intelligence', 'Blockchain Technology'],
+      notesPdfs: {
+        'Data Structures (DSA)': '/DSA.pdf',
+        'Object Oriented Methodology using C++': '/cpp-programming.pdf'
+      }
+    },
+    {
+      sem: 'Sem 4',
+      subjects: ['Java Programming ', 'Software Engineering', 'Database Management Systems', 'Introduction to Python', 'Operating Systems'],
+      notesPdfs: {
+        'Introduction to Python': '/python-oop.pdf'
+      }
+    },
     { sem: 'Sem 5', subjects: ['Multimedia and Graphics ', 'Design and Analysis of Algorithm', 'Introduction to Data Science', 'Introduction to PHP'] },
     { sem: 'Sem 6', subjects: ['Cloud Computing', 'Data Mining', 'Soft Computing'] }
   ];
@@ -178,11 +204,11 @@ const BcaPage = () => {
           <span className="section-badge">🚀 ROADMAP</span>
           <h2>Semester-wise Curriculum & Notes</h2>
         </div>
-        <CurriculumSemesterCards semesters={semesters} syllabusPdf="/bca.pdf" />
+        <CurriculumSemesterCards semesters={semesters} syllabusPdf="/bca.pdf" courseKey="bca" />
       </div>
 
       {/* Yellow mark wala Quick Access / Cheatsheet Hub jahan C Programming ka PDF link jayega */}
-      <CurriculumQuickAccess semesters={semesters} cProgrammingPdf="/c-programming.pdf" />
+      <CurriculumQuickAccess semesters={semesters} courseKey="bca" />
       <CertificationClaimCard />
 
       <div className="opensource-hub-card" style={{ background: '#ffffff', border: '1px solid #cbd5e1', padding: '22px', borderRadius: '16px', marginTop: '25px', marginBottom: '25px', boxShadow: '0 4px 15px rgba(0,0,0,0.03)' }}>

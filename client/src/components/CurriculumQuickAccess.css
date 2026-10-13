@@ -1,4 +1,5 @@
 .curriculum-quick-access {
+  min-width: 0;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 0;
@@ -45,7 +46,7 @@
 
 .curriculum-quick-access-toggle {
   display: inline-flex;
-  min-height: 40px;
+  min-height: 44px;
   flex: 0 0 auto;
   align-items: center;
   justify-content: space-between;
@@ -75,37 +76,68 @@
 }
 
 .curriculum-quick-access-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
-  max-height: 280px;
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: nowrap;
+  min-width: 0;
   gap: 8px 16px;
   margin-top: 16px;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  scrollbar-color: #94a3b8 #f1f5f9;
+  padding: 4px 4px 16px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 4px;
+  overscroll-behavior-inline: contain;
+  -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
+  scrollbar-color: #94a3b8 #e2e8f0;
+}
+
+.curriculum-quick-access-list:focus-visible {
+  outline: 3px solid #93c5fd;
+  outline-offset: 2px;
 }
 
 .curriculum-quick-access-list::-webkit-scrollbar {
-  width: 8px;
+  height: 8px;
 }
 
 .curriculum-quick-access-list::-webkit-scrollbar-track {
   border-radius: 8px;
-  background: #f1f5f9;
+  background: #e2e8f0;
 }
 
 .curriculum-quick-access-list::-webkit-scrollbar-thumb {
-  border: 2px solid #f1f5f9;
+  border: 2px solid #e2e8f0;
   border-radius: 8px;
   background: #94a3b8;
 }
 
+.curriculum-quick-access-semester {
+  display: grid;
+  flex: 0 0 clamp(280px, 34vw, 380px);
+  scroll-snap-align: start;
+  min-width: 0;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: start;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.curriculum-quick-access-semester h4 {
+  margin: 4px 0;
+  color: #0f172a;
+  font-size: 0.9rem;
+}
+
 .curriculum-quick-access-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   min-width: 0;
   align-items: center;
-  justify-content: space-between;
   gap: 12px;
   padding: 10px 12px;
   border: 1px solid #e2e8f0;
@@ -124,7 +156,8 @@
 
 .curriculum-quick-access-link {
   display: inline-flex;
-  min-height: 36px;
+  min-width: 86px;
+  min-height: 44px;
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
@@ -152,6 +185,28 @@
   color: #ffffff;
 }
 
+.curriculum-quick-access-link.is-locked,
+.curriculum-quick-access-link.is-locked:hover {
+  border-color: #cbd5e1;
+  background: #e2e8f0;
+  color: #475569;
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+.curriculum-quick-access-link.is-unavailable,
+.curriculum-quick-access-link.is-unavailable:hover {
+  border-color: #cbd5e1;
+  background: #f1f5f9;
+  color: #64748b;
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+.curriculum-quick-access-link:disabled {
+  opacity: 1;
+}
+
 @media (max-width: 700px) {
   .curriculum-quick-access {
     padding: 18px;
@@ -164,5 +219,16 @@
   .curriculum-quick-access-toggle {
     gap: 8px;
     padding: 8px 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .curriculum-quick-access-semester {
+    flex-basis: min(86vw, 380px);
+  }
+
+  .curriculum-quick-access-toggle,
+  .curriculum-quick-access-link {
+    min-height: 44px;
   }
 }

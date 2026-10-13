@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './src/context/AuthContext';
+import { CurriculumLockProvider } from './src/context/CurriculumLockContext';
 
 // Main Portal & Courses Imports
 import Dashboard from "./src/pages/Dashboard";
@@ -29,8 +30,9 @@ import SupportWidget from './src/components/SupportWidget';
 function App() {
     return (
         <AuthProvider>
-            <Router>
-                <Routes>
+            <CurriculumLockProvider>
+              <Router>
+                  <Routes>
                     <Route path="/" element={<Dashboard />} />
                     <Route path="/login" element={<LoginPage />} />
 
@@ -56,10 +58,11 @@ function App() {
                             </ProtectedAdminRoute>
                         }
                     />
-                </Routes>
+                  </Routes>
 
-                <SupportWidget />
-            </Router>
+                  <SupportWidget />
+              </Router>
+            </CurriculumLockProvider>
         </AuthProvider>
     );
 }

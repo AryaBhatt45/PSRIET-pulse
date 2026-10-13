@@ -67,9 +67,9 @@ const BcomPage = () => {
           <span className="section-badge">🚀 ROADMAP</span>
           <h2>Semester-wise Curriculum & Notes</h2>
         </div>
-        <CurriculumSemesterCards semesters={semesters} />
+        <CurriculumSemesterCards semesters={semesters} courseKey="bcom" />
       </div>
-      <CurriculumQuickAccess semesters={semesters} />
+      <CurriculumQuickAccess semesters={semesters} courseKey="bcom" />
 
       <div className="bca-section glory-wrapper">
         <div className="bca-section-header text-center">

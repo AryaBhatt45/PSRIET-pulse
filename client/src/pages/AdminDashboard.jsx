@@ -2,6 +2,7 @@ import './style/AdminDashboard.css';
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { normalizeCurriculumValue, useCurriculumLocks } from '../context/CurriculumLockContext';
 import {
     createPortalRecord,
     deletePortalRecord,
@@ -9,10 +10,29 @@ import {
     portalRecordTypes,
     updatePortalRecord
 } from '../services/portalData';
+import { getRegisteredSemesters, getRegisteredSubjects } from '../utils/pdfRegistry';
+
+const curriculumCourses = [
+    { key: 'bca', name: 'BCA' },
+    { key: 'bba', name: 'BBA' },
+    { key: 'ba', name: 'BA' },
+    { key: 'bcom', name: 'B.Com' },
+    { key: 'bsc', name: 'B.Sc' },
+    { key: 'bed', name: 'B.Ed' },
+    { key: 'dled', name: 'D.El.Ed' },
+    { key: 'llb', name: 'LLB' },
+    { key: 'ma', name: 'M.A' }
+];
 
 export default function AdminDashboard() {
     const navigate = useNavigate();
     const { signOut } = useAuth();
+    const {
+        locks: curriculumLocks,
+        loading: curriculumLocksLoading,
+        error: curriculumLocksError,
+        refreshLocks
+    } = useCurriculumLocks();
     const [activeTab, setActiveTab] = useState('overview');
     const [dataError, setDataError] = useState('');
 
@@ -55,6 +75,14 @@ export default function AdminDashboard() {
     const [certificationClaims, setCertificationClaims] = useState([]);
     const [certificationClaimsError, setCertificationClaimsError] = useState('');
     const [claimPhoto, setClaimPhoto] = useState(null);
+    const [curriculumLockSaveError, setCurriculumLockSaveError] = useState('');
+    const [lockCourse, setLockCourse] = useState('bca');
+    const [lockSemester, setLockSemester] = useState('Sem 1');
+    const [lockSubject, setLockSubject] = useState('');
+    const [lockEnabled, setLockEnabled] = useState(true);
+    const [savingCurriculumLock, setSavingCurriculumLock] = useState(false);
+    const curriculumSemesters = getRegisteredSemesters(lockCourse);
+    const curriculumSubjects = getRegisteredSubjects(lockCourse, lockSemester);
 
     useEffect(() => {
         let isMounted = true;
@@ -103,6 +131,79 @@ export default function AdminDashboard() {
         loadPortalData();
         return () => { isMounted = false; };
     }, []);
+
+    const handleSaveCurriculumLock = async (event) => {
+        event.preventDefault();
+        const subject = lockSubject.trim();
+        const payload = {
+            courseKey: lockCourse,
+            semester: lockSemester,
+            subject,
+            isLocked: lockEnabled,
+            updatedAt: new Date().toISOString()
+        };
+        const existingRule = [...curriculumLocks]
+            .filter((rule) => (
+                normalizeCurriculumValue(rule.courseKey) === normalizeCurriculumValue(lockCourse)
+                && normalizeCurriculumValue(rule.semester) === normalizeCurriculumValue(lockSemester)
+                && normalizeCurriculumValue(rule.subject) === normalizeCurriculumValue(subject)
+            ))
+            .sort((first, second) => {
+                const firstTimestamp = Date.parse(first.updatedAt || first.createdAt || '') || 0;
+                const secondTimestamp = Date.parse(second.updatedAt || second.createdAt || '') || 0;
+                return secondTimestamp - firstTimestamp;
+            })[0];
+
+        setSavingCurriculumLock(true);
+        setCurriculumLockSaveError('');
+        try {
+            if (existingRule) {
+                await updatePortalRecord(portalRecordTypes.curriculumLock, existingRule.id, payload);
+            } else {
+                await createPortalRecord(portalRecordTypes.curriculumLock, payload);
+            }
+            await refreshLocks();
+            setLockSubject('');
+        } catch (error) {
+            console.error('Unable to save curriculum note access setting.', error);
+            setCurriculumLockSaveError(error.message || 'Unable to save the curriculum lock.');
+        } finally {
+            setSavingCurriculumLock(false);
+        }
+    };
+
+    const handleToggleCurriculumLock = async (rule) => {
+        const payload = { ...rule, isLocked: !rule.isLocked, updatedAt: new Date().toISOString() };
+        delete payload.id;
+        delete payload.createdAt;
+        setSavingCurriculumLock(true);
+        setCurriculumLockSaveError('');
+        try {
+            await updatePortalRecord(portalRecordTypes.curriculumLock, rule.id, payload);
+            await refreshLocks();
+        } catch (error) {
+            console.error('Unable to update curriculum note access setting.', error);
+            setCurriculumLockSaveError(error.message || 'Unable to update the curriculum lock.');
+        } finally {
+            setSavingCurriculumLock(false);
+        }
+    };
+
+    const handleDeleteCurriculumLock = async (rule) => {
+        if (!window.confirm(`Remove the access rule for ${rule.subject || 'all subjects'} in ${rule.courseKey} ${rule.semester}?`)) return;
+
+        setSavingCurriculumLock(true);
+        setCurriculumLockSaveError('');
+        try {
+            await deletePortalRecord(portalRecordTypes.curriculumLock, rule.id);
+            await refreshLocks();
+        } catch (error) {
+            console.error('Unable to remove curriculum note access setting.', error);
+            setCurriculumLockSaveError(error.message || 'Unable to remove the curriculum lock.');
+        } finally {
+            setSavingCurriculumLock(false);
+        }
+    };
 
     const handleLogout = async () => {
         try {
@@ -776,6 +877,90 @@ export default function AdminDashboard() {
                         </div>
                     </div>
                 );
+            case 'curriculum':
+                return (
+                    <div className="admin-action-section admin-curriculum-locks">
+                        <h3>🔐 Curriculum Notes Access</h3>
+                        <p>Lock or unlock notes for an entire course semester, or choose a subject to manage only that subject. Subject rules override semester rules.</p>
+                        <form className="admin-curriculum-lock-form" onSubmit={handleSaveCurriculumLock}>
+                            <label>
+                                Course
+                                <select
+                                    value={lockCourse}
+                                    onChange={(event) => {
+                                        const nextCourse = event.target.value;
+                                        setLockCourse(nextCourse);
+                                        setLockSemester(getRegisteredSemesters(nextCourse)[0] || 'Sem 1');
+                                        setLockSubject('');
+                                    }}
+                                >
+                                    {curriculumCourses.map((course) => <option key={course.key} value={course.key}>{course.name}</option>)}
+                                </select>
+                            </label>
+                            <label>
+                                Semester
+                                <select
+                                    value={lockSemester}
+                                    onChange={(event) => {
+                                        setLockSemester(event.target.value);
+                                        setLockSubject('');
+                                    }}
+                                >
+                                    {curriculumSemesters.map((semesterName) => <option key={semesterName}>{semesterName}</option>)}
+                                </select>
+                            </label>
+                            <label>
+                                Subject (optional)
+                                <select
+                                    value={lockSubject}
+                                    onChange={(event) => setLockSubject(event.target.value)}
+                                >
+                                    <option value="">All Subjects in Semester</option>
+                                    {curriculumSubjects.map((subject) => (
+                                        <option key={subject} value={subject}>{subject}</option>
+                                    ))}
+                                </select>
+                            </label>
+                            <label className="admin-curriculum-lock-checkbox">
+                                <input type="checkbox" checked={lockEnabled} onChange={(event) => setLockEnabled(event.target.checked)} />
+                                Lock this {lockSubject.trim() ? 'subject' : 'semester'}
+                            </label>
+                            <button type="submit" disabled={savingCurriculumLock || curriculumLocksLoading}>
+                                {savingCurriculumLock ? 'Saving…' : curriculumLocksLoading ? 'Loading rules…' : 'Save access setting'}
+                            </button>
+                        </form>
+                        {(curriculumLockSaveError || curriculumLocksError) && (
+                            <p role="alert" className="admin-certification-error">
+                                {curriculumLockSaveError || curriculumLocksError}
+                            </p>
+                        )}
+                        <div className="admin-curriculum-lock-list">
+                            <h4>Saved access rules ({curriculumLocks.length})</h4>
+                            {curriculumLocksLoading ? (
+                                <p>Loading curriculum access rules…</p>
+                            ) : curriculumLocks.length ? curriculumLocks.map((rule) => {
+                                const courseName = curriculumCourses.find((course) => course.key === rule.courseKey)?.name || rule.courseKey;
+                                return (
+                                    <article className="admin-curriculum-lock-item" key={rule.id}>
+                                        <div>
+                                            <strong>{courseName} · {rule.semester}</strong>
+                                            <span>{rule.subject || 'All subjects in semester'}</span>
+                                            <span className={rule.isLocked ? 'is-locked' : 'is-unlocked'}>
+                                                {rule.isLocked ? 'Locked' : 'Unlocked'}
+                                            </span>
+                                        </div>
+                                        <button type="button" disabled={savingCurriculumLock} onClick={() => handleToggleCurriculumLock(rule)}>
+                                            {rule.isLocked ? 'Unlock' : 'Lock'}
+                                        </button>
+                                        <button type="button" disabled={savingCurriculumLock} onClick={() => handleDeleteCurriculumLock(rule)}>
+                                            Delete
+                                        </button>
+                                    </article>
+                                );
+                            }) : <p>No custom access rules. Notes are unlocked by default.</p>}
+                        </div>
+                    </div>
+                );
             default:
                 return (
                     <>
@@ -835,6 +1020,9 @@ export default function AdminDashboard() {
                     </li>
                     <li className={activeTab === 'results' ? 'active' : ''} onClick={() => setActiveTab('results')}>
                         📝 Update Results
+                    </li>
+                    <li className={activeTab === 'curriculum' ? 'active' : ''} onClick={() => setActiveTab('curriculum')}>
+                        🔐 Curriculum Notes
                     </li>
                     <li className={activeTab === 'settings' ? 'active' : ''} onClick={() => setActiveTab('settings')}>
                         ⚙️ System Settings
