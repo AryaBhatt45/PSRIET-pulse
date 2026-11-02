@@ -1783,19 +1783,33 @@
 }
 
 .dashboard-container .uni-card-img-container {
+  position: relative;
   width: 110px;
   height: 110px;
   margin: 0 auto 15px auto;
   border-radius: 50%;
   overflow: hidden;
+  background: #e2e8f0;
   border: 3px solid #e2e8f0;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
+.dashboard-container .uni-profile-fallback {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #475569;
+  font-weight: 700;
+}
+
 .dashboard-container .uni-profile-img {
+  position: relative;
+  z-index: 1;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
 }
 
 .dashboard-container .uni-profile-card h3 {
@@ -2191,4 +2205,63 @@
 
 .creator-linkedin-btn:active {
   transform: translateY(0);
+}
+
+.creator-social-links {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  width: fit-content;
+  margin: 16px auto 0;
+  padding: 10px 24px;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  border-radius: 999px;
+  background: rgba(241, 245, 249, 0.8);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+}
+
+.creator-social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background: transparent;
+  text-decoration: none;
+  transition: transform 200ms ease;
+}
+
+.creator-social-link:hover {
+  transform: scale(1.1);
+}
+
+.creator-social-link:focus-visible {
+  border-radius: 4px;
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+
+.creator-social-link svg {
+  width: 21px;
+  height: 21px;
+}
+
+.creator-social-linkedin {
+  color: #0a66c2;
+}
+
+.creator-social-whatsapp {
+  color: #25d366;
+}
+
+.creator-social-discord {
+  color: #5865f2;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .creator-social-link {
+    transition: none;
+  }
 }
