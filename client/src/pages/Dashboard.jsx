@@ -38,6 +38,7 @@ const creatorsList = [
         name: "Arya Bhatt",
         description: "Visionary Founder & Full Stack Architect driving the PSRIET ecosystem.",
         linkedin: "https://www.linkedin.com/in/bhattarya4533",
+        whatsapp: "https://wa.me/9517471194",
         image: "/arya.jpg" // Public folder me jo image ka naam rakha ho, yahan change kar lena
     },
     {
@@ -45,6 +46,7 @@ const creatorsList = [
         name: "Nilesh Vishwakarma",
         description: "Leading technical architecture & core development for the platform.",
         linkedin: "https://www.linkedin.com/in/nilesh-vishwakarma-5ba748399",
+        whatsapp: "https://wa.me/7398663942",
         image: "/nilesh.jpg"
     },
     {
@@ -52,6 +54,7 @@ const creatorsList = [
         name: "Pradeep Pal",
         description: "Managing platform operations & scaling system workflows seamlessly.",
         linkedin: "https://www.linkedin.com/in/pradeep-pal-3a5871393",
+        whatsapp: "https://wa.me/7905626181",
         image: "/pradeep.jpg"
     }
 ];
@@ -65,6 +68,8 @@ const Dashboard = () => {
     const [dynamicEvents, setDynamicEvents] = useState([]);
     const [dynamicDataError, setDynamicDataError] = useState('');
     const [enquiryError, setEnquiryError] = useState('');
+    const [enquirySuccess, setEnquirySuccess] = useState('');
+    const [isSubmittingEnquiry, setIsSubmittingEnquiry] = useState(false);
     const [selectedEvent, setSelectedEvent] = useState(null);
 
     const [alumniIndex, setAlumniIndex] = useState(0);
@@ -213,20 +218,31 @@ const Dashboard = () => {
     const handleEnquirySubmit = async (event) => {
         event.preventDefault();
         setEnquiryError('');
+        setEnquirySuccess('');
+        setIsSubmittingEnquiry(true);
         const form = event.currentTarget;
         const formData = new FormData(form);
         try {
-            await createPortalRecord(portalRecordTypes.enquiry, {
+            await createPortalRecord('enquiry', {
                 name: formData.get('name').trim(),
                 phone: formData.get('phone').trim(),
                 course: formData.get('course'),
                 date: new Date().toLocaleDateString('hi-IN', { day: '2-digit', month: 'short', year: 'numeric' })
             }, null, false);
-            window.alert('Your enquiry was submitted successfully. Please contact the institute directly if you need an immediate response.');
+            setEnquirySuccess('Your enquiry was submitted successfully. The admission cell will contact you soon.');
             form.reset();
         } catch (error) {
-            console.error('Unable to submit admission enquiry to Supabase.', error);
-            setEnquiryError(error.message || 'Unable to submit your enquiry. Please try again.');
+            console.error('Unable to submit admission enquiry to the backend.', {
+                recordType: 'enquiry',
+                message: error?.message,
+                code: error?.code,
+                details: error?.details,
+                hint: error?.hint,
+                error
+            });
+            setEnquiryError(error?.message || 'Unable to submit your enquiry. Please try again.');
+        } finally {
+            setIsSubmittingEnquiry(false);
         }
     };
 
@@ -255,6 +271,7 @@ const Dashboard = () => {
                     </a>
                 </div>
                 <div className="header-right" style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+                    <Link to="/coding-test" className="header-coding-test-btn">Coding Test</Link>
                     <a
                         href="http://mresult.prsuprayagraj.in/prsu_Results.aspx"
                         target="_blank"
@@ -414,23 +431,60 @@ const Dashboard = () => {
                             <span className="creator-role">{creator.role}</span>
                             <h3>{creator.name}</h3>
                             <p>{creator.description}</p>
-                            <a
-                                href={creator.linkedin}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="creator-linkedin-btn"
-                            >
-                                <svg
-                                    className="linkedin-icon"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24"
-                                    fill="currentColor"
+                            <div className="creator-social-links">
+                                <a
+                                    href={creator.linkedin}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="creator-social-link creator-social-linkedin"
+                                    aria-label="LinkedIn"
+                                    title="LinkedIn"
                                 >
-                                    <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z" />
-                                </svg>
-                                <span>Connect on LinkedIn</span>
-                                <span className="btn-arrow">.</span>
-                            </a>
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 24 24"
+                                        fill="currentColor"
+                                        aria-hidden="true"
+                                    >
+                                        <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z" />
+                                    </svg>
+                                </a>
+                                <a
+                                    href={creator.whatsapp}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="creator-social-link creator-social-whatsapp"
+                                    aria-label="WhatsApp"
+                                    title="WhatsApp"
+                                >
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="2"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        aria-hidden="true"
+                                    >
+                                        <path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 21l2.1-5.4A8.4 8.4 0 1 1 21 11.5Z" />
+                                        <path d="M8.5 9.5c.5 2.5 2 4 4.5 4.5l1-1.2 2 .8c-.2 1.3-1.2 2.2-2.5 2.2-3.6-.4-6.4-3.2-6.8-6.8 0-1.3.9-2.3 2.2-2.5l.8 2-1.2 1Z" />
+                                    </svg>
+                                </a>
+                                <a
+                                    href="#"
+                                    className="creator-social-link creator-social-discord"
+                                    aria-label="Discord"
+                                    title="Discord"
+                                >
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        fill="currentColor"
+                                        aria-hidden="true"
+                                    >
+                                        <path d="M19.7 5.3a18.5 18.5 0 0 0-4.6-1.4l-.6 1.2a17 17 0 0 0-5 0l-.6-1.2a18.5 18.5 0 0 0-4.6 1.4C1.4 9.6.6 13.8 1 17.9a18.6 18.6 0 0 0 5.7 2.9l1.2-2a12 12 0 0 1-1.9-.9l.5-.4a13.3 13.3 0 0 0 11 0l.5.4a12 12 0 0 1-1.9.9l1.2 2a18.6 18.6 0 0 0 5.7-2.9c.5-4.8-.8-9-3.3-12.6ZM8.7 14.6c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2Zm6.6 0c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2Z" />
+                                    </svg>
+                                </a>
+                            </div>
                         </article>
                     ))}
                 </div>
@@ -440,6 +494,11 @@ const Dashboard = () => {
                     <span className="student-toolkit-badge">🎒 STUDENT TOOLKIT</span>
                     <h2 id="student-toolkit-title">Quick tools for your semester</h2>
                     <p>Check attendance, calculate marks, and keep your next exam in sight.</p>
+                    <Link to="/coding-test" className="student-tool-coding-link">
+                        <span aria-hidden="true">⌘</span>
+                        <span><strong>Coding Test</strong><small>Practice challenges with adaptive difficulty</small></span>
+                        <span aria-hidden="true">→</span>
+                    </Link>
                 </div>
                 <div className="student-toolkit-grid">
                     <article className={`student-tool-card${expandedTool === 'attendance' ? ' is-expanded' : ''}`}>
@@ -665,32 +724,10 @@ const Dashboard = () => {
                         <h2>Want to Join PTSRIET?</h2>
                         <p>Your enquiry will be shared with the institute. For an immediate response or fee details, please contact us directly.</p>
                     </div>
-                    <form className="enquiry-form" onSubmit={(e) => {
-                        e.preventDefault();
-
-                        const name = e.target[0].value;
-                        const phone = e.target[1].value;
-                        const course = e.target[2].value;
-
-                        const newEnquiry = {
-                            id: Date.now(),
-                            name: name,
-                            phone: phone,
-                            course: course,
-                            date: new Date().toLocaleDateString('hi-IN', { day: '2-digit', month: 'short', year: 'numeric' })
-                        };
-
-                        const existingEnquiries = JSON.parse(localStorage.getItem('pt_enquiries')) || [];
-                        const updatedEnquiries = [newEnquiry, ...existingEnquiries];
-
-                        localStorage.setItem('pt_enquiries', JSON.stringify(updatedEnquiries));
-
-                        alert('Query submitted successfully! Admission cell will contact you soon.');
-                        e.target.reset();
-                    }}>
-                        <input type="text" placeholder="Your Full Name" required className="enquiry-input" />
-                        <input type="tel" placeholder="Phone Number" required className="enquiry-input" />
-                        <select className="enquiry-input" required>
+                    <form className="enquiry-form" onSubmit={handleEnquirySubmit}>
+                        <input type="text" name="name" placeholder="Your Full Name" required className="enquiry-input" />
+                        <input type="tel" name="phone" placeholder="Phone Number" required className="enquiry-input" />
+                        <select name="course" className="enquiry-input" required>
                             <option value="">Select Interested Course</option>
                             <option value="bca">BCA (Computer Applications)</option>
                             <option value="bsc">BSc (Bachelor of Science)</option>
@@ -701,7 +738,10 @@ const Dashboard = () => {
                             <option value="ba">BA (Bachelor of Art)</option>
                         </select>
                         {enquiryError && <p className="portal-data-error" role="alert">{enquiryError}</p>}
-                        <button type="submit" className="enquiry-submit-btn">Request Callback 🚀</button>
+                        {enquirySuccess && <p role="status">{enquirySuccess}</p>}
+                        <button type="submit" className="enquiry-submit-btn" disabled={isSubmittingEnquiry}>
+                            {isSubmittingEnquiry ? 'Submitting...' : 'Request Callback 🚀'}
+                        </button>
                     </form>
                 </div>
             </section>
@@ -737,7 +777,15 @@ const Dashboard = () => {
 
                         <div className="uni-profile-card">
                             <div className="uni-card-img-container">
-                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYCea70h3XgTlVdYgvSMvtEf6QRfB0UlupRGpCE5edYQ&s=10" alt="HOD / Academic Head" className="uni-profile-img" />
+                                <span className="uni-profile-fallback" aria-hidden="true">PP</span>
+                                <img
+                                    src="/pradeeppandey.jpg"
+                                    alt="Pradeep Pandey, HOD - Computer Science"
+                                    className="uni-profile-img"
+                                    onError={(event) => {
+                                        event.currentTarget.style.display = 'none';
+                                    }}
+                                />
                             </div>
                             <h3>Pradeep Pandey</h3>
                             <p className="uni-role">HOD - Computer Science</p>
